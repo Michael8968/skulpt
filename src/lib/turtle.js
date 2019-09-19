@@ -1057,8 +1057,8 @@ function generateTurtleModule(_target) {
                     this._colorMode = 255;
                 } else {
                     this._colorMode = 1.0;
-                }   
-                return this.addUpdate(undefined, this._shown, {colorMode : this._colorMode});         
+                }
+                return this.addUpdate(undefined, this._shown, {colorMode : this._colorMode});
             }
 
             return this._colorMode;
@@ -1573,6 +1573,21 @@ function generateTurtleModule(_target) {
         };
         proto.$ontimer.minArgs = 0;
         proto.$ontimer.co_varnames = ["method", "interval"];
+
+        // proto.$getcanvas = function() {
+        //     var turtles = getFrameManager().turtles();
+        //     var turtle = turtles[0];
+        //     console.log('turtles', turtles);
+        //     console.log('turtle', turtle);
+        //     return turtle;
+        // };
+        proto.$winfo_width = function() {
+            return getWidth();
+        };
+
+        proto.$winfo_height = function() {
+            return getHeight();
+        };
     })(Screen.prototype);
 
     function ensureAnonymous() {
@@ -1620,6 +1635,7 @@ function generateTurtleModule(_target) {
     }
 
     function createLayer(zIndex, isHidden) {
+        console.log('createLayer', zIndex, isHidden);
         var canvas = document.createElement("canvas"),
             width  = getWidth(),
             height = getHeight(),
@@ -2056,7 +2072,7 @@ function generateTurtleModule(_target) {
                 for(i = 0; i < 3; i++) {
                     if(typeof color[i] === "number") {
                         color[i] = Math.max(0, Math.min(255, parseInt(color[i])));
-                    } else { 
+                    } else {
                         throw new Sk.builtin.ValueError("bad color sequence");
                     }
                 }
@@ -2287,6 +2303,19 @@ function generateTurtleModule(_target) {
         }
     }
 
+    // function GetCanvasWrapper($gbl, $loc) {
+    //     $loc.__init__ = new Sk.builtin.func(function (self) {
+    //         self.instance = getScreen();
+    //     });
+    //
+    //     for(var key in Screen.prototype) {
+    //         if (/^\$[a-z_]+/.test(key)) {
+    //             addModuleMethod(getcanvas, $loc, key);
+    //         }
+    //     }
+    // }
+
+
     for(var key in Turtle.prototype) {
         if (/^\$[a-z_]+/.test(key)) {
             addModuleMethod(Turtle, _module, key, ensureAnonymous);
@@ -2305,9 +2334,13 @@ function generateTurtleModule(_target) {
     addModuleMethod(Screen, _module, "$delay", getScreen);
     addModuleMethod(Screen, _module, "$window_width", getScreen);
     addModuleMethod(Screen, _module, "$window_height", getScreen);
+    addModuleMethod(Screen, _module, "$onscreenclick", getScreen);
+    
 
     _module.Turtle = Sk.misceval.buildClass(_module, TurtleWrapper, "Turtle", []);
     _module.Screen = Sk.misceval.buildClass(_module, ScreenWrapper, "Screen", []);
+    _module.getcanvas = _module.Screen;
+    // _module.Screen = Sk.misceval.buildClass(_module, GetCanvasWrapper, "getcanvas", []);
 
     // Calling focus(false) will block turtle key/mouse events
     // until focus(true) is called again or until the turtle DOM target
@@ -2366,7 +2399,8 @@ function generateTurtleModule(_target) {
         stop     : stopTurtle,
         focus    : focusTurtle,
         Turtle   : Turtle,
-        Screen   : Screen
+        Screen   : Screen,
+        getcanvas   : Screen
     };
 }
 
@@ -2387,7 +2421,8 @@ Sk.TurtleGraphics.stop   = currentTarget.turtleInstance.stop;
 Sk.TurtleGraphics.focus  = currentTarget.turtleInstance.focus;
 Sk.TurtleGraphics.raw = {
     Turtle : currentTarget.turtleInstance.Turtle,
-    Screen : currentTarget.turtleInstance.Screen
+    Screen : currentTarget.turtleInstance.Screen,
+    getcanvas  : currentTarget.turtleInstance.Screen
 };
 
 return currentTarget.turtleInstance.skModule;

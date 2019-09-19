@@ -8,8 +8,8 @@
       body { background-color: grey;}
       canvas { background-color: white;}
     </style>
-    <script src="../../dist/skulpt.js" type="text/javascript"></script>
-    <script src="../../dist/builtin.js" type="text/javascript"></script>
+    <script src="../../dist/skulpt.min.js" type="text/javascript"></script>
+    <script src="../../dist/skulpt-stdlib.js" type="text/javascript"></script>
   </head>
   <body>
     <h1>WebGL</h1>
@@ -20,11 +20,11 @@ import webgl
 
 gl = webgl.Context("my-canvas")
 
-vs = gl.createShader(gl.VERTEX_SHADER) 
+vs = gl.createShader(gl.VERTEX_SHADER)
 gl.shaderSource(vs, "attribute vec3 aVertexPosition; void main(void) { gl_Position = vec4(aVertexPosition, 1.0); }")
 gl.compileShader(vs)
 print "Vertex shader COMPILE_STATUS: " + str(gl.getShaderParameter(vs, gl.COMPILE_STATUS))
-fs = gl.createShader(gl.FRAGMENT_SHADER) 
+fs = gl.createShader(gl.FRAGMENT_SHADER)
 gl.shaderSource(fs, "void main(void) { gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); }")
 gl.compileShader(fs)
 print "Fragment shader COMPILE_STATUS: " + str(gl.getShaderParameter(fs, gl.COMPILE_STATUS))
