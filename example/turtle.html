@@ -145,7 +145,12 @@ turtle.onscreenclick(change, 1)
   <script>
     function runit() {
       var prog = document.getElementById("code").value;
-
+      if (prog.indexOf('turtle.mode("logo")') < 0) {
+        prog = prog.replace('import turtle', 'import turtle\nturtle.mode("logo")\nturtle.seth(0)')
+      } else  {
+        prog = prog.replace('turtle.mode("logo")', 'turtle.mode("logo")\nturtle.seth(0)')
+      }
+      // console.log(prog);
       function builtinRead(x) {
         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
           throw "File not found: '" + x + "'";

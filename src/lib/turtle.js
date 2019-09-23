@@ -571,7 +571,7 @@ function generateTurtleModule(_target) {
             this._undoBuffer = [];
             this._speed      = 3;
             this._computed_speed = 5;
-            this._colorMode  = 1.0;
+            this._colorMode  = 255; // 1.0;
             this._state      = undefined;
 
             for(var key in this._managers) {
@@ -1206,7 +1206,7 @@ function generateTurtleModule(_target) {
         this._frames    = 1;
         this._delay     = undefined;
         this._bgcolor   = "none";
-        this._mode      = "standard";
+        this._mode      = "logo"; //  "standard";
         this._managers  = {};
         this._keyLogger = {};
 
@@ -1266,7 +1266,7 @@ function generateTurtleModule(_target) {
                 this._managers[key].reset();
             }
 
-            this._mode = "standard";
+            this._mode = "logo"; //  "standard";
             removeLayer(this._sprites);
             this._sprites = undefined;
             removeLayer(this._background);
@@ -1629,10 +1629,13 @@ function generateTurtleModule(_target) {
           var height = getHeight();
           if (mode == "logo") {
               this._mode = "logo";
-              // var turtles = getFrameManager().turtles();
-              // for(var i = 0; i < turtles.length; i++) {
-              //     turtles[i].setheading(0);
-              // }
+              var promise = getFrameManager().willRenderNext() ? Promise.resolve() : new InstantPromise();
+              promise = promise.then(function() {
+                  var turtles = getFrameManager().turtles();
+                  for(var i = 0; i < turtles.length; i++) {
+                      turtles[i].setheading(0);
+                  }
+              });
               // console.log('$mode', this._mode, mode, turtles);
           } else if (mode == "standard") {
               this._mode = "standard";
@@ -2396,6 +2399,9 @@ function generateTurtleModule(_target) {
     addModuleMethod(Screen, _module, "$window_height", getScreen);
     addModuleMethod(Screen, _module, "$onscreenclick", getScreen);
     addModuleMethod(Screen, _module, "$mode", getScreen);
+    addModuleMethod(Screen, _module, "$bgcolor", getScreen);
+    addModuleMethod(Screen, _module, "$setup", getScreen);
+    addModuleMethod(Screen, _module, "$ontimer", getScreen);
 
     _module.Turtle = Sk.misceval.buildClass(_module, TurtleWrapper, "Turtle", []);
     _module.Screen = Sk.misceval.buildClass(_module, ScreenWrapper, "Screen", []);
