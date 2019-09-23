@@ -1,15 +1,19 @@
 <html>
-  <head>
-    <script src="../dist/skulpt.min.js" type="text/javascript"></script>
-    <script src="../dist/skulpt-stdlib.js" type="text/javascript"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
-  </head>
 
-  <body>
-    <div id="mycanvas"  height="500" width="800"
-	style="border-style: solid;"></div>
+<head>
+  <script src="../dist/skulpt.min.js" type="text/javascript"></script>
+  <script src="../dist/skulpt-stdlib.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
 
-<textarea id="code" rows="24" cols="80">
+<body>
+  <div class="container" style="height: 100%;">
+  <div class="row" style="height: 90%;">
+    <div class="col-lg">
+      <textarea id="code" rows="40" cols="80" >
 import turtle
 wn = turtle.Screen()
 
@@ -22,106 +26,106 @@ x = turtle.getcanvas().winfo_width()/2
 y = turtle.getcanvas().winfo_height()/2
 
 def head(color):
-    turtle.pu()
-    turtle.goto(0, 50)
-    turtle.fillcolor(color)
-    turtle.begin_fill()
-    turtle.pd()
-    turtle.seth(-90)
-    turtle.circle(80, 360)
-    turtle.end_fill()# 定义画脸函数
+  turtle.pu()
+  turtle.goto(0, 50)
+  turtle.fillcolor(color)
+  turtle.begin_fill()
+  turtle.pd()
+  turtle.seth(-90)
+  turtle.circle(80, 360)
+  turtle.end_fill()# 定义画脸函数
 
 
 j = 7
 flag = True
 def mouth():
-    global j, flag
-    turtle.pu()
-    turtle.goto(0, -65)
-    turtle.pd()
-    turtle.seth(90)
-    turtle.circle(40, 20 + j)
-    turtle.pu()
-    turtle.goto(0, -65)
-    turtle.pd()
-    turtle.seth(90)
-    turtle.circle(40, -20-j)
-    if j > 50 or j < 5:
-        flag = not flag
-    if flag == True:
-        j = j + 3
-    else:
-        j = j - 3
+  global j, flag
+  turtle.pu()
+  turtle.goto(0, -65)
+  turtle.pd()
+  turtle.seth(90)
+  turtle.circle(40, 20 + j)
+  turtle.pu()
+  turtle.goto(0, -65)
+  turtle.pd()
+  turtle.seth(90)
+  turtle.circle(40, -20-j)
+  if j > 50 or j < 5:
+      flag = not flag
+  if flag == True:
+      j = j + 3
+  else:
+      j = j - 3
 # 定义画嘴巴函数
 #head(colors[0])
 def eye(a, b):
-    turtle.pu()
-    turtle.goto(-20, 0)
-    turtle.pd()
-    turtle.fillcolor('white')
-    turtle.begin_fill()
-    turtle.seth(0)
-    turtle.circle(15, 360)
-    turtle.end_fill()# 左眼眶
+  turtle.pu()
+  turtle.goto(-20, 0)
+  turtle.pd()
+  turtle.fillcolor('white')
+  turtle.begin_fill()
+  turtle.seth(0)
+  turtle.circle(15, 360)
+  turtle.end_fill()# 左眼眶
 
-    turtle.pu()
-    turtle.goto(50, 0)
-    turtle.pd()
-    turtle.fillcolor('white')
-    turtle.begin_fill()
-    turtle.seth(0)
-    turtle.circle(15, 360)
-    turtle.end_fill()# 右眼眶
+  turtle.pu()
+  turtle.goto(50, 0)
+  turtle.pd()
+  turtle.fillcolor('white')
+  turtle.begin_fill()
+  turtle.seth(0)
+  turtle.circle(15, 360)
+  turtle.end_fill()# 右眼眶
 
-    turtle.pu()
-    turtle.goto(a, b)
-    turtle.pd()
-    turtle.dot(3)
-    turtle.pu()
-    turtle.goto(a+70, b)
-    turtle.pd()
-    turtle.dot(3)# 左眼珠+右眼珠
+  turtle.pu()
+  turtle.goto(a, b)
+  turtle.pd()
+  turtle.dot(3)
+  turtle.pu()
+  turtle.goto(a+70, b)
+  turtle.pd()
+  turtle.dot(3)# 左眼珠+右眼珠
 
 
 def emoji(color, a, b):
-    turtle.clear()
-    head(color)
-    mouth()
-    eye(a, b)# 定义整体函数
+  turtle.clear()
+  head(color)
+  mouth()
+  eye(a, b)# 定义整体函数
 
 
 def change(x, y):
-    global i
-    i += 1
-    if i > len(colors) - 1:
-        i = 0
-    emoji(colors[i], x, y)
-    #print(x,y)
+  global i
+  i += 1
+  if i > len(colors) - 1:
+      i = 0
+  emoji(colors[i], x, y)
+  #print(x,y)
 
 
 def change_eye(event):
 
-    if event.x-x > -300 and event.x-x< -100:
-        if y-event.y>100:
-            emoji(colors[i], -45, 2)
-        elif y-event.y<-100:
-            emoji(colors[i], -45, -2)
-        else:
-            emoji(colors[i], -45, 0)
-    elif event.x-x > 100 and event.x-x < 300:
-        if y - event.y > 100:
-            emoji(colors[i], -25, 2)
-        elif y-event.y < -100:
-            emoji(colors[i], -25, -2)
-        else:
-            emoji(colors[i], -25, 0)
-    else:
-        if y - event.y > 100:
-            emoji(colors[i], -35, 5)
-        elif y-event.y < -100:
-            emoji(colors[i], -35, -5)
-        else:
-            emoji(colors[i], -35, 0)
+  if event.x-x > -300 and event.x-x< -100:
+      if y-event.y>100:
+          emoji(colors[i], -45, 2)
+      elif y-event.y<-100:
+          emoji(colors[i], -45, -2)
+      else:
+          emoji(colors[i], -45, 0)
+  elif event.x-x > 100 and event.x-x < 300:
+      if y - event.y > 100:
+          emoji(colors[i], -25, 2)
+      elif y-event.y < -100:
+          emoji(colors[i], -25, -2)
+      else:
+          emoji(colors[i], -25, 0)
+  else:
+      if y - event.y > 100:
+          emoji(colors[i], -35, 5)
+      elif y-event.y < -100:
+          emoji(colors[i], -35, -5)
+      else:
+          emoji(colors[i], -35, 0)
 
 
 emoji(colors[i], -35, 0)
@@ -129,21 +133,35 @@ emoji(colors[i], -35, 0)
 turtle.onscreenclick(change, 1)
 # 点击鼠标后调用函数emoji
 
-</textarea>
-    <script>
-        var prog = document.getElementById("code").value;
-	function builtinRead(x) {
-	    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-		    throw "File not found: '" + x + "'";
-	    return Sk.builtinFiles["files"][x];
-	}
-    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+  </textarea>
+  <button onclick="runit()" type="button">Run</button>
+    </div>
 
-    Sk.configure({ read: builtinRead });
+    <div class="col-lg">
+      <div id="mycanvas" height="100%" width="100%" style="border-style: solid;"></div>
+    </div>
+  </div>
+</div>
+  <script>
+    function runit() {
+      var prog = document.getElementById("code").value;
 
-    Sk.misceval.asyncToPromise(function() {
-      return Sk.importMainWithBody("<stdin>",false,prog,true);
-    });
-    </script>
-  </body>
+      function builtinRead(x) {
+        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+          throw "File not found: '" + x + "'";
+        return Sk.builtinFiles["files"][x];
+      }
+      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+
+      Sk.configure({
+        read: builtinRead
+      });
+
+      Sk.misceval.asyncToPromise(function() {
+        return Sk.importMainWithBody("<stdin>", false, prog, true);
+      });
+    }
+  </script>
+</body>
+
 </html>

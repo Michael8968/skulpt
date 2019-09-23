@@ -25,8 +25,8 @@ function generateTurtleModule(_target) {
         Types                = {},
         _defaultSetup        = {
             target     : "turtle", // DOM element or id of parent container
-            width      : 400, // if set to 0 it will use the target width
-            height     : 400, // if set to 0 it will use the target height
+            width      : 600, // if set to 0 it will use the target width
+            height     : 600, // if set to 0 it will use the target height
             worldWidth : 0, // if set to 0 it will use config.width
             worldHeight: 0, // if set to 0 it will use config.height
             animate    : true, // enabled/disable all animated rendering
@@ -586,6 +586,11 @@ function generateTurtleModule(_target) {
 
             removeLayer(this._paper);
             this._paper = undefined;
+            if (this._screen) {
+              this._screen._mode = "logo";
+              this.setheading(0);
+            }
+
         };
 
         proto.$degrees = function(fullCircle) {
@@ -747,9 +752,31 @@ function generateTurtleModule(_target) {
         };
         proto.$left.co_varnames = proto.$lt.co_varnames = ["angle"];
 
+        proto.setheading = function(angle) {
+          /*
+          standard mode logo mode
+          0 - east      0 - north -> 90
+          90 - north    90 - east -> 0
+          180 - west    180 - south -> 270
+          270 - south   270 - west -> 180
+          */
+          var _angle = angle;
+          if (this._screen.getMode() == "logo") {
+            _angle = 90 - angle;
+          }
+          console.log('$seth', this._screen.getMode(), angle, _angle);
+          pushUndo(this);
+          return this.queueTurnTo(this._angle, _angle);
+        }
+
         proto.$setheading = proto.$seth = function(angle) {
-            pushUndo(this);
-            return this.queueTurnTo(this._angle, angle);
+            // var _angle = angle;
+            // if (this._screen.getMode() == "logo") {
+            //   _angle = 90 - angle;
+            // }
+            // pushUndo(this);
+            // return this.queueTurnTo(this._angle, _angle);
+            return this.setheading(angle);
         };
         proto.$setheading.co_varnames = proto.$seth.co_varnames = ["angle"];
 
@@ -1041,6 +1068,7 @@ function generateTurtleModule(_target) {
         };
 
         proto.$shape = function(shape) {
+          console.log('shape', shape);
             if (shape && SHAPES[shape]) {
                 this._shape = shape;
                 return this.addUpdate(undefined, this._shown, {shape : shape});
@@ -1588,6 +1616,38 @@ function generateTurtleModule(_target) {
         proto.$winfo_height = function() {
             return getHeight();
         };
+        // turtle.mode("logo")
+        /*
+        standard mode logo mode
+        0 - east      0 - north
+        90 - north    90 - east
+        180 - west    180 - south
+        270 - south   270 - west
+        */
+        proto.$mode = function(mode) {
+          var width = getWidth();
+          var height = getHeight();
+          if (mode == "logo") {
+              this._mode = "logo";
+              // var turtles = getFrameManager().turtles();
+              // for(var i = 0; i < turtles.length; i++) {
+              //     turtles[i].setheading(0);
+              // }
+              // console.log('$mode', this._mode, mode, turtles);
+          } else if (mode == "standard") {
+              this._mode = "standard";
+          } else {
+              this._mode = "world";
+          }
+          return this._mode;
+        };
+        proto.$mode.minArgs = 0;
+        proto.$mode.co_varnames = ["mode"];
+
+        proto.getMode = function() {
+          return this._mode;
+        };
+
     })(Screen.prototype);
 
     function ensureAnonymous() {
@@ -2335,7 +2395,7 @@ function generateTurtleModule(_target) {
     addModuleMethod(Screen, _module, "$window_width", getScreen);
     addModuleMethod(Screen, _module, "$window_height", getScreen);
     addModuleMethod(Screen, _module, "$onscreenclick", getScreen);
-    
+    addModuleMethod(Screen, _module, "$mode", getScreen);
 
     _module.Turtle = Sk.misceval.buildClass(_module, TurtleWrapper, "Turtle", []);
     _module.Screen = Sk.misceval.buildClass(_module, ScreenWrapper, "Screen", []);
