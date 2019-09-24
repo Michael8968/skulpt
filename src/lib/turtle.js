@@ -912,7 +912,9 @@ function generateTurtleModule(_target) {
         proto.$speed.co_varnames = ["speed"];
 
         proto.$pencolor = function(r,g,b,a) {
+          console.log('proto.$pencolor', r,g,b,a);
             if (r !== undefined) {
+              console.log('proto.$pencolor', r,g,b,a);
                 this._color = createColor(this._colorMode,r,g,b,a);
                 return this.addUpdate(undefined, this._shown, {color : this._color});
             }
@@ -1236,6 +1238,7 @@ function generateTurtleModule(_target) {
         this._mode      = "logo"; //  "standard";
         this._managers  = {};
         this._keyLogger = {};
+        this._colorMode = 255;
 
         w = (_config.worldWidth || _config.width || getWidth()) / 2;
         h = (_config.worldHeight || _config.height || getHeight()) / 2;
@@ -1491,7 +1494,9 @@ function generateTurtleModule(_target) {
 
         proto.$bgcolor = function(color, g, b, a) {
             if (color !== undefined) {
+                console.log('proto.$bgcolor', color, g, b, a, this._colorMode);
                 this._bgcolor = createColor(this._colorMode, color, g, b, a);
+                console.log('proto.$bgcolor', this._colorMode, this._bgcolor);
                 clearLayer(this.bgLayer(), this._bgcolor);
                 return;
             }
@@ -2239,10 +2244,12 @@ function generateTurtleModule(_target) {
         var i;
 
         if (g !== undefined) {
-            color = [color, g, b, a];
+            color = [color, g, b, a ? a : 255];
+            turtleColorMode = turtleColorMode ? turtleColorMode : 255;
         }
 
         if (color.constructor === Array && color.length) {
+          console.log('createColor', color, turtleColorMode);
             if(turtleColorMode === 255){//mode is 255
                 for(i = 0; i < 3; i++) {
                     if(typeof color[i] === "number") {
@@ -2254,7 +2261,7 @@ function generateTurtleModule(_target) {
             } else {//In python,if the colormode not equals 255,it should be 1.0
                 for(i = 0; i < 3; i++) {
                     if(typeof color[i] === "number") {
-                        if(color[i] <= 1){
+                        if(color[i] <= 0){
                             color[i] = Math.max(0, Math.min(255, parseInt(255 * color[i])));
                         } else {
                             //Raise TurtleGraphicsError,Here use ValueError instead
@@ -2275,6 +2282,7 @@ function generateTurtleModule(_target) {
         }
         else if (typeof color === "string" && !color.match(/\s*url\s*\(/i)) {
             color = color.replace(/\s+/g, "");
+            console.log('createColor', color);
         }
         else {
             return "black";
