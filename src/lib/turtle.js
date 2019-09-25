@@ -252,6 +252,8 @@ function generateTurtleModule(_target) {
                 !_config.animate ||
                 (this._buffer && this._frameCount === this.frameBuffer())
             );
+            console.log('addFrame _config.animate', _config.animate);
+
 
             return instant ? this.update() : new InstantPromise();
         };
@@ -383,7 +385,11 @@ function generateTurtleModule(_target) {
                         // var args = {"x":localX, "y":localY};
                         // var kwargs = new Sk.builtins['dict'](args);
                         // call
-                        managers[i].trigger([localX, localY]);
+                        // managers[i].trigger([localX, localY]);
+                        // var ent = Sk.misceval.callsim(_module.Event,localX,localY);
+                        e.x = localX;
+                        e.y = localY;
+                        Sk.misceval.callsim(managers[i], e);
                     }
                 }
             }
@@ -791,7 +797,7 @@ function generateTurtleModule(_target) {
           if (this._screen.getMode() == "logo") {
             _angle = 90 - angle;
           }
-          console.log('$seth', this._screen.getMode(), angle, _angle);
+          // console.log('$seth', this._screen.getMode(), angle, _angle);
           pushUndo(this);
           return this.queueTurnTo(this._angle, _angle);
         }
@@ -912,9 +918,9 @@ function generateTurtleModule(_target) {
         proto.$speed.co_varnames = ["speed"];
 
         proto.$pencolor = function(r,g,b,a) {
-          console.log('proto.$pencolor', r,g,b,a);
+          // console.log('proto.$pencolor', r,g,b,a);
             if (r !== undefined) {
-              console.log('proto.$pencolor', r,g,b,a);
+              // console.log('proto.$pencolor', r,g,b,a);
                 this._color = createColor(this._colorMode,r,g,b,a);
                 return this.addUpdate(undefined, this._shown, {color : this._color});
             }
@@ -1097,7 +1103,7 @@ function generateTurtleModule(_target) {
         };
 
         proto.$shape = function(shape) {
-          console.log('shape', shape);
+          // console.log('shape', shape);
             if (shape && SHAPES[shape]) {
                 this._shape = shape;
                 return this.addUpdate(undefined, this._shown, {shape : shape});
@@ -1381,7 +1387,7 @@ function generateTurtleModule(_target) {
         };
 
         proto.$tracer = function(frames, delay) {
-            console.log('$tracer', frames, delay);
+            // console.log('$tracer', frames, delay);
             if (frames !== undefined || delay !== undefined) {
                 if (typeof delay === "number") {
                     this._delay = delay;
@@ -1389,16 +1395,19 @@ function generateTurtleModule(_target) {
                 }
                 if (typeof frames === "number") {
                     this._frames = frames;
+                    setAnimate(true);
                     return getFrameManager().frameBuffer(frames);
                 }
                 else if (frames === false) {
                     frames = 10000;
                     this._frames = frames;
+                    setAnimate(false);
                     return getFrameManager().frameBuffer(frames);
                 }
                 else if (frames === true) {
                     frames = 0;
                     this._frames = frames;
+                    setAnimate(true);
                     return getFrameManager().frameBuffer(frames);
                 }
 
@@ -1496,9 +1505,9 @@ function generateTurtleModule(_target) {
 
         proto.$bgcolor = function(color, g, b, a) {
             if (color !== undefined) {
-                console.log('proto.$bgcolor', color, g, b, a, this._colorMode);
+                // console.log('proto.$bgcolor', color, g, b, a, this._colorMode);
                 this._bgcolor = createColor(this._colorMode, color, g, b, a);
-                console.log('proto.$bgcolor', this._colorMode, this._bgcolor);
+                // console.log('proto.$bgcolor', this._colorMode, this._bgcolor);
                 clearLayer(this.bgLayer(), this._bgcolor);
                 return;
             }
@@ -1841,7 +1850,7 @@ function generateTurtleModule(_target) {
     }
 
     function createLayer(zIndex, isHidden) {
-        console.log('createLayer', zIndex, isHidden);
+        // console.log('createLayer', zIndex, isHidden);
         var canvas = document.createElement("canvas"),
             width  = getWidth(),
             height = getHeight(),
@@ -2275,7 +2284,7 @@ function generateTurtleModule(_target) {
         }
 
         if (color.constructor === Array && color.length) {
-          console.log('createColor', color, turtleColorMode);
+          // console.log('createColor', color, turtleColorMode);
             if(turtleColorMode === 255){//mode is 255
                 for(i = 0; i < 3; i++) {
                     if(typeof color[i] === "number") {
@@ -2308,13 +2317,17 @@ function generateTurtleModule(_target) {
         }
         else if (typeof color === "string" && !color.match(/\s*url\s*\(/i)) {
             color = color.replace(/\s+/g, "");
-            console.log('createColor', color);
+            // console.log('createColor', color);
         }
         else {
             return "black";
         }
 
         return color;
+    }
+
+    function setAnimate(value) {
+      _config.animate = value;
     }
 
     function calculateHeading(turtle, value, heading) {
