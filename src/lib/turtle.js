@@ -1282,6 +1282,8 @@ function generateTurtleModule(_target) {
             var key;
 
             this._keyListeners = undefined;
+            this._keyPressListeners = undefined;
+            this._keyReleaseListeners = undefined;
 
             for (key in this._keyLogger) {
                 window.clearInterval(this._keyLogger[key]);
@@ -1559,9 +1561,11 @@ function generateTurtleModule(_target) {
             self._keyLogger[code] = window.setTimeout(function() {
                 // trigger the first repeat after the longer delay
                 self._keyListeners[key]();
+                self._keyPressListeners[key]();
                 // set up the repeat interval with the quick delay
                 self._keyLogger[code] = window.setInterval(function() {
                     self._keyListeners[key]();
+                    self._keyPressListeners[key]();
                 }, 50);
             }, 333);
         };
@@ -1590,6 +1594,16 @@ function generateTurtleModule(_target) {
                         break;
                     }
                 }
+                for (key in self._keyPressListeners) {
+                    inKeyMap = (key.length > 1 && KEY_MAP[code] && KEY_MAP[code].test(key));
+                    if (key === pressed || inKeyMap) {
+                        // trigger the intial keydown handler
+                        self._keyPressListeners[key]();
+                        self._createKeyRepeater(key, code);
+                        e.preventDefault();
+                        break;
+                    }
+                }
             };
 
             getTarget().addEventListener("keydown", this._keyDownListener);
@@ -1608,6 +1622,18 @@ function generateTurtleModule(_target) {
                     window.clearTimeout(interval);
                     delete(self._keyLogger[e.charCode || e.keyCode]);
                 }
+                for (key in self._keyReleaseListeners) {
+                    var code    = e.charCode || e.keyCode;
+                    var pressed = String.fromCharCode(code).toLowerCase();
+                    var inKeyMap = (key.length > 1 && KEY_MAP[code] && KEY_MAP[code].test(key));
+                    if (key === pressed || inKeyMap) {
+                        // trigger the intial keydown handler
+                        self._keyReleaseListeners[key]();
+                        e.preventDefault();
+                        break;
+                    }
+                }
+
             };
 
             getTarget().addEventListener("keyup", this._keyUpListener);
@@ -1648,11 +1674,11 @@ function generateTurtleModule(_target) {
             keyValue = String(keyValue).toLowerCase();
 
             if (method && typeof method === "function") {
-                if (!this._keyDownListener) this._keyDownListener = {};
-                this._keyDownListener[keyValue] = method;
+                if (!this._keyPressListeners) this._keyPressListeners = {};
+                this._keyPressListeners[keyValue] = method;
             }
             else {
-                delete this._keyDownListener[keyValue];
+                delete this._keyPressListeners[keyValue];
             }
         };
         proto.$onkeypress.minArgs = 2;
@@ -1668,11 +1694,11 @@ function generateTurtleModule(_target) {
             keyValue = String(keyValue).toLowerCase();
 
             if (method && typeof method === "function") {
-                if (!this._keyUpListener) this._keyUpListener = {};
-                this._keyUpListener[keyValue] = method;
+                if (!self._keyReleaseListeners) this._keyReleaseListeners = {};
+                this._keyReleaseListeners[keyValue] = method;
             }
             else {
-                delete this._keyUpListener[keyValue];
+                delete this._keyReleaseListeners[keyValue];
             }
         };
         proto.$onkeyrelease.minArgs = 2;
