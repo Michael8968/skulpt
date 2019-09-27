@@ -252,7 +252,7 @@ function generateTurtleModule(_target) {
                 !_config.animate ||
                 (this._buffer && this._frameCount === this.frameBuffer())
             );
-            console.log('addFrame _config.animate', _config.animate);
+            // console.log('addFrame _config.animate', _config.animate);
 
 
             return instant ? this.update() : new InstantPromise();
@@ -335,6 +335,7 @@ function generateTurtleModule(_target) {
         for (var key in this._handlers) {
             this._target.addEventListener(key, this._handlers[key]);
         }
+        this._curPosition = {};
     }
 
     (function(proto) {
@@ -357,6 +358,7 @@ function generateTurtleModule(_target) {
 
             if ((type === "mousedown" || type === "mouseup") && moveManagers && moveManagers.length) {
                 computeCoordinates();
+                this._curPosition = {"x": localX, "y": localY};
                 for (i = moveManagers.length; --i >= 0;) {
                     if (moveManagers[i].test(x, y, localX, localY)) {
                         moveManagers[i].canMove(type === "mousedown");
@@ -366,6 +368,7 @@ function generateTurtleModule(_target) {
 
             if ((type === "mousemove") && moveManagers && moveManagers.length) {
                 computeCoordinates();
+                this._curPosition = {"x": localX, "y": localY};
                 for (i = moveManagers.length; --i >= 0;) {
                     if (moveManagers[i].test(x, y, localX, localY)) {
                         moveManagers[i].canMove(type === "mousemove");
@@ -375,6 +378,7 @@ function generateTurtleModule(_target) {
 
             if (managers && managers.length) {
                 computeCoordinates();
+                this._curPosition = {"x": localX, "y": localY};
                 for (i = managers.length; --i >= 0;) {
                     if (type === "mousemove" && managers[i].canMove() && managers[i].test(x, y, localX, localY)) {
                         managers[i].trigger([localX, localY]);
@@ -382,14 +386,7 @@ function generateTurtleModule(_target) {
                         managers[i].trigger([localX, localY]);
                     }
                     else {
-                        // var args = {"x":localX, "y":localY};
-                        // var kwargs = new Sk.builtins['dict'](args);
-                        // call
-                        // managers[i].trigger([localX, localY]);
-                        // var ent = Sk.misceval.callsim(_module.Event,localX,localY);
-                        e.x = localX;
-                        e.y = localY;
-                        Sk.misceval.callsim(managers[i], e);
+                        managers[i].trigger([this._curPosition]);
                     }
                 }
             }
@@ -455,7 +452,7 @@ function generateTurtleModule(_target) {
             if (handlers && handlers.length) {
                 for (i = 0; i < handlers.length; i++) {
                     handlers[i].apply(args);
-                    console.log("proto.fire", handlers[i], args);
+                    // console.log("proto.fire", handlers[i], args);
                 }
             }
         };

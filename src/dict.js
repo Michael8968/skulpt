@@ -570,6 +570,39 @@ Sk.builtin.dict.$fromkeys = function fromkeys(self, seq, value) {
     return res;
 };
 
+Sk.builtin.dict.prototype._internalGenericGetAttr = Sk.builtin.object.prototype.GenericGetAttr;
+
+Sk.builtin.dict.prototype.tp$getattr = function (name) {
+    if (name != null && (Sk.builtin.checkString(name) || typeof name === "string")) {
+        // buckets -> 106 -> items -> lhs.v / rhs.v
+        if (_name === "x" || _name === "y") {
+            var _name = name;
+
+            // get javascript string
+            if (Sk.builtin.checkString(name)) {
+                _name = Sk.ffi.remapToJs(name);
+            }            var iter, k, items, value;
+            var ret = [];
+
+            for (iter = Sk.abstr.iter(this), k = iter.tp$iternext();
+                k !== undefined;
+                k = iter.tp$iternext()) {
+                ret.push(k);
+            }
+            // console.log("Sk.builtin.dict.prototype.tp$getattr", ret, _name);
+            if (_name === "x") {
+                value = this.mp$lookup(ret[0]);
+                return value;
+            } else if (_name === "y") {
+                value = this.mp$lookup(ret[1]);
+                return value;
+            }
+        }
+    }
+
+    // if we have not returned yet, try the genericgetattr
+    return this._internalGenericGetAttr(name);
+};
 
 Sk.builtin.dict.prototype["iteritems"] = new Sk.builtin.func(function (self) {
     throw new Sk.builtin.NotImplementedError("dict.iteritems is not yet implemented in Skulpt");
