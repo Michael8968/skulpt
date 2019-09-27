@@ -574,14 +574,14 @@ Sk.builtin.dict.prototype._internalGenericGetAttr = Sk.builtin.object.prototype.
 
 Sk.builtin.dict.prototype.tp$getattr = function (name) {
     if (name != null && (Sk.builtin.checkString(name) || typeof name === "string")) {
-        // buckets -> 106 -> items -> lhs.v / rhs.v
-        if (_name === "x" || _name === "y") {
-            var _name = name;
+        var _name = name;
 
-            // get javascript string
-            if (Sk.builtin.checkString(name)) {
-                _name = Sk.ffi.remapToJs(name);
-            }            var iter, k, items, value;
+        // get javascript string
+        if (Sk.builtin.checkString(name)) {
+            _name = Sk.ffi.remapToJs(name);
+        }        // buckets -> 106 -> items -> lhs.v / rhs.v
+        if (_name === "x" || _name === "y") {
+            var iter, k, items, value;
             var ret = [];
 
             for (iter = Sk.abstr.iter(this), k = iter.tp$iternext();
