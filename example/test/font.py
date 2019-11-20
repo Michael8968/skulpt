@@ -20,9 +20,6 @@ tekst = font.render(poruka, True, pg.Color("yellow"))
 # prikazujemo sličicu na odgovarajućem mestu na ekranu
 prozor.blit(tekst, (x, y))
 
-print(tekst.get_height())
-print(visina_teksta)
-
 # -*- acsection: after-main -*-
 # ažuriramo prikaz sadržaja ekrana
 pg.display.update()
@@ -33,3 +30,4 @@ while pg.event.wait().type != pg.QUIT:
 
 # isključivanje rada biblioteke PyGame
 pg.quit()
+

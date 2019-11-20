@@ -4,20 +4,20 @@ $builtinmodule = function (name) {
     mod.Font = Sk.misceval.buildClass(mod, font_Font, "FontType", []);
     PygameLib.FontType = mod.Font;
     mod.SysFont = new Sk.builtin.func(function (name, size, bold, italic) {
-        var font = Sk.misceval.callsim(PygameLib.FontType, size);
-        Sk.abstr.sattr(font, 'name', name, false);
-        Sk.abstr.sattr(font, 'sz', size, false);
+        var font = Sk.misceval.callsim(PygameLib.FontType, name, size)
+        font['name'] = name;
+        font['sz'] = size;
         if (bold === undefined) {
-            Sk.abstr.sattr(font, 'bold', Sk.ffi.remapToPy(false), false);
+            font['bold'] = Sk.ffi.remapToPy(false);
         } else {
-            Sk.abstr.sattr(font, 'bold', bold, false);
+            font['bold'] = bold;
         }
         if (italic === undefined) {
-            Sk.abstr.sattr(font, 'italic', Sk.ffi.remapToPy(false), false);
+            font['italic'] = Sk.ffi.remapToPy(false);
         } else {
-            Sk.abstr.sattr(font, 'italic', italic, false);
+            font['italic'] = italic;
         }
-        Sk.abstr.sattr(font, 'underline', Sk.ffi.remapToPy(false), false);
+        font['underline'] = Sk.ffi.remapToPy(false);
         return font;
     });
     mod.init = new Sk.builtin.func(function () {
@@ -46,54 +46,66 @@ $builtinmodule = function (name) {
 
 function font_Font($gbl, $loc) {
     $loc.__init__ = new Sk.builtin.func(function (self, filename, size) {
-        Sk.abstr.sattr(self, 'name', name, false);
-        Sk.abstr.sattr(self, 'sz', size, false);
-        Sk.abstr.sattr(self, 'bold', Sk.ffi.remapToPy(false), false);
-        Sk.abstr.sattr(self, 'italic', Sk.ffi.remapToPy(false), false);
-        Sk.abstr.sattr(self, 'underline', Sk.ffi.remapToPy(false), false);
+        Sk.builtin.pyCheckArgs('__init__', arguments, 2, 3, false, false);
+        self['name'] = filename;
+        self['sz'] = size;
+        self['bold'] = Sk.ffi.remapToPy(false);
+        self['italic'] = Sk.ffi.remapToPy(false);
+        self['underline'] = Sk.ffi.remapToPy(false);
         return Sk.builtin.none.none$;
     });
+    $loc.__init__.co_name = new Sk.builtins['str']('__init__');
+    $loc.__init__.co_varnames = ['self', 'filename', 'size'];
+
     $loc.render = new Sk.builtin.func(renderFont, $gbl);
     $loc.render.co_name = new Sk.builtins['str']('render');
     $loc.render.co_varnames = ['self', 'text', 'antialias', 'color', 'background'];
     $loc.render.$defaults = [Sk.builtin.none.none$];
+
+    $loc.set_name = new Sk.builtin.func(function (self, fontName) {
+        self['name'] = fontName;
+    }, $gbl);
+    $loc.get_name = new Sk.builtin.func(function (self) {
+        return self['name'];
+    }, $gbl);
 
     $loc.size = new Sk.builtin.func(fontSize, $gbl);
     $loc.get_height = new Sk.builtin.func(fontHeight, $gbl);
     $loc.size.co_name = new Sk.builtins['str']('size');
 
     $loc.set_underline = new Sk.builtin.func(function (self, bool) {
-        Sk.abstr.sattr(self, 'underline', bool, false);
+        self['underline'] = bool;
     }, $gbl);
     $loc.get_underline = new Sk.builtin.func(function (self) {
-        return Sk.abstr.gattr(self, 'underline', false);
+        return self['underline'];
     }, $gbl);
 
     $loc.set_italic = new Sk.builtin.func(function (self, bool) {
-        Sk.abstr.sattr(self, 'italic', bool, false);
+        self['italic'] = bool;
     }, $gbl);
     $loc.get_italic = new Sk.builtin.func(function (self) {
-        return Sk.abstr.gattr(self, 'italic', false);
+        return self['italic'];
     }, $gbl);
 
     $loc.set_bold = new Sk.builtin.func(function (self, bool) {
-        Sk.abstr.sattr(self, 'bold', bool, false);
+        self['bold'] = bool;
     }, $gbl);
     $loc.get_bold = new Sk.builtin.func(function (self) {
-        return Sk.abstr.gattr(self, 'bold', false);
+        return self['bold'];
     }, $gbl);
 }
+font_Font.co_name = new Sk.builtins['str']('FontType');
 
 function fontSize(self, text) {
     var msg = Sk.ffi.remapToJs(text);
-    var h = 1.01 * Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'sz', false));
-    var fontName = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'name', false));
+    var h = 1.01 * Sk.ffi.remapToJs(self['sz']);
+    var fontName = Sk.ffi.remapToJs(self['name']);
     fontName = "" + h + "px " + fontName;
-    var bold = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'bold', false));
+    var bold = Sk.ffi.remapToJs(self['bold']);
     if (bold) {
         fontName = 'bold ' + fontName;
     }
-    var italic = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'italic', false));
+    var italic = Sk.ffi.remapToJs(self['italic']);
     if (italic) {
         fontName = 'italic ' + fontName;
     }
@@ -109,14 +121,14 @@ function fontSize(self, text) {
 
 function fontHeight(self, text) {
     var msg = Sk.ffi.remapToJs(text);
-    var h = 1.01 * Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'sz', false));
-    var fontName = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'name', false));
+    var h = 1.01 * Sk.ffi.remapToJs(self['sz']);
+    var fontName = Sk.ffi.remapToJs(self['name']);
     fontName = "" + h + "px " + fontName;
-    var bold = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'bold', false));
+    var bold = Sk.ffi.remapToJs(self['bold']);
     if (bold) {
         fontName = 'bold ' + fontName;
     }
-    var italic = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'italic', false));
+    var italic = Sk.ffi.remapToJs(self['italic']);
     if (italic) {
         fontName = 'italic ' + fontName;
     }
@@ -137,18 +149,18 @@ function fontHeight(self, text) {
 function renderFont(self, text, antialias, color, background) {
     var msg = Sk.ffi.remapToJs(text);
     var STRETCH_CONST = 1.1;
-    var h = STRETCH_CONST * Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'sz', false));
-    var fontName = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'name', false));
+    var h = STRETCH_CONST * Sk.ffi.remapToJs(self['sz']);
+    var fontName = Sk.ffi.remapToJs(self['name']);
     fontName = "" + h + "px " + fontName;
-    var bold = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'bold', false));
+    var bold = Sk.ffi.remapToJs(self['bold']);
     if (bold) {
         fontName = 'bold ' + fontName;
     }
-    var italic = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'italic', false));
+    var italic = Sk.ffi.remapToJs(self['italic']);
     if (italic) {
         fontName = 'italic ' + fontName;
     }
-    var underline = Sk.ffi.remapToJs(Sk.abstr.gattr(self, 'underline', false));
+    var underline = Sk.ffi.remapToJs(self['underline']);
 
     var w = 300;
 

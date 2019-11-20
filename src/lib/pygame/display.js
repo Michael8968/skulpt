@@ -15,6 +15,7 @@ var $builtinmodule = function (name) {
         return Sk.ffi.remapToPy(false);
     });
     mod.set_mode = new Sk.builtin.func(function (size, flags) {
+        console.log('mod.set_mode ', size, flags);
         var f = 0;
         if (flags !== undefined) {
             f = Sk.ffi.remapToJs(flags);

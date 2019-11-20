@@ -45,13 +45,24 @@ var $builtinmodule = function (name) {
         }
 
     });
-    mod.name = new Sk.builtin.func(function (idx) {
+    // mod.name = new Sk.builtin.func(function (idx) {
+    //     console.log('mod.name', idx);
+    //     var i = Sk.ffi.remapToJs(idx);
+    //     if (i < 0 || i >= 323) {
+    //         return Sk.ffi.remapToPy("unknown key");
+    //     }
+    //     return Sk.ffi.remapToPy(keyToName[i]);
+    // });
+    mod.name_getter = new Sk.builtin.func(function (idx) {
         var i = Sk.ffi.remapToJs(idx);
         if (i < 0 || i >= 323) {
             return Sk.ffi.remapToPy("unknown key");
         }
         return Sk.ffi.remapToPy(keyToName[i]);
     });
+    mod.name_setter = new Sk.builtin.func(function (val) {
+    });
+    mod.name = Sk.misceval.callsimOrSuspend(Sk.builtins.property, mod.name_getter, mod.name_setter);
     return mod;
 };
 
@@ -92,4 +103,3 @@ var keyboardModifierKeys = [PygameLib.constants.K_LSHIFT, PygameLib.constants.K_
     PygameLib.constants.K_LCTRL, PygameLib.constants.K_RCTRL, PygameLib.constants.K_LALT, PygameLib.constants.K_RALT,
     PygameLib.constants.K_LMETA, PygameLib.constants.K_RMETA, 0, PygameLib.constants.K_CAPSLOCK,
     PygameLib.constants.K_NUMLOCK, PygameLib.constants.K_MODE];
-    

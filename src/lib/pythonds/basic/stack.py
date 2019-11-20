@@ -1,7 +1,7 @@
 # Bradley N. Miller, David L. Ranum
 # Introduction to Data Structures and Algorithms in Python
 # Copyright 2005
-# 
+#
 #stack.py
 
 class Stack:
@@ -22,4 +22,3 @@ class Stack:
 
     def size(self):
         return len(self.items)
-

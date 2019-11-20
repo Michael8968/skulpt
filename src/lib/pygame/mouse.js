@@ -38,5 +38,6 @@ var $builtinmodule = function (name) {
     mod.get_cursor = new Sk.builtin.func(function () {
         throw new Sk.builtin.NotImplementedError("Not yet implemented");
     });
+    mod.pos = Sk.misceval.callsimOrSuspend(Sk.builtins.property, mod.get_pos, mod.set_pos);
     return mod;
 };
