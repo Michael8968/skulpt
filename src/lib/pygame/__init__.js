@@ -2295,4 +2295,12 @@ function rect_type_f($gbl, $loc) {
         set_left(self, Sk.ffi.remapToJs(val));
     });
     $loc.left = Sk.misceval.callsimOrSuspend(Sk.builtins.property, left_getter, left_setter);
+
+    var top_getter = new Sk.builtin.func(function (self) {
+        return Sk.ffi.remapToPy(get_top(self));
+    });
+    var top_setter = new Sk.builtin.func(function (self, val) {
+        set_top(self, Sk.ffi.remapToJs(val));
+    });
+    $loc.top = Sk.misceval.callsimOrSuspend(Sk.builtins.property, top_getter, top_setter);
 };
