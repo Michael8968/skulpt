@@ -1148,7 +1148,7 @@ Sk.builtin.pow = function pow (a, b, c) {
 };
 
 Sk.builtin.quit = function quit (msg) {
-    var s = new Sk.builtin.str(msg).v;
+    var s = msg ? new Sk.builtin.str(msg).v : 'quit';
     throw new Sk.builtin.SystemExit(s);
 };
 
@@ -1419,7 +1419,24 @@ Sk.builtin.coerce = function coerce () {
 Sk.builtin.intern = function intern () {
     throw new Sk.builtin.NotImplementedError("intern is not yet implemented");
 };
-
+/**
+* Is thrown when the execution has been stopped by Ctrl+C or Del. The compiler
+* checks for an Sk.keyboardinterrupt flag, if set the exception is thrown.
+* @constructor
+* @extends Sk.builtin.BaseException
+* @param {...*} args
+*
+*/
+// Sk.builtin.KeyboardInterrupt = function (args) {
+//     var o;
+//     if (!(this instanceof Sk.builtin.KeyboardInterrupt)) {
+//         o = Object.create(Sk.builtin.KeyboardInterrupt.prototype);
+//         o.constructor.apply(o, arguments);
+//         return o;
+//     }
+//     Sk.builtin.BaseException.apply(this, arguments);
+// };
+// Sk.abstr.setUpInheritance("KeyboardInterrupt", Sk.builtin.KeyboardInterrupt, Sk.builtin.BaseException);
 /*
  Sk.builtinFiles = {};
  Sk.builtin.read = function read(x) {

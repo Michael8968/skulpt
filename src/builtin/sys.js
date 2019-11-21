@@ -70,5 +70,7 @@ var $builtinmodule = function (name) {
     sys.stdout = sys.__stdout__;
     sys.stdin = sys.__stdin__;
 
+    sys.exit = new Sk.builtin.func(Sk.builtin.quit);
+
     return sys;
 };

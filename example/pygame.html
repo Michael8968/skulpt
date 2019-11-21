@@ -85,8 +85,9 @@
     // // var basePath = 'https://cdn.rawgit.com/Petlja/pygame4skulpt/3435847b/pygame/';
     // var basePath = '../src/lib/pygame/';
     // // Sk.imgPath = 'http://192.168.0.105:8081/';
-    // Sk.imgPath = 'https://all-dream.com/pythonWeb/pages/moodle/upload/';
-    Sk.imgPath = './test/';
+    Sk.imgPath = 'https://all-dream.com/pythonWeb/pages/moodle/upload/';
+    // https://all-dream.com/pythonWeb/pages/moodle/upload/lesson23/saolei/images/0.png
+    // Sk.imgPath = './test/';
     // Sk.externalLibraries = {
     //     'pygame': {
     //         path: basePath + '__init__.js',
@@ -319,6 +320,7 @@
         Sk.main_canvas = document.createElement("canvas");
         Sk.quitHandler = function () {
             $('.modal').modal('hide');
+            // Sk.insertEvent("quit");
         };
         addModal();
         var prog = ace.edit("editor").getValue();
@@ -328,11 +330,11 @@
 
         Sk.misceval.asyncToPromise(function () {
             try {
-                return Sk.importMainWithBody("<stdin>", true, prog, true);
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
             } catch (e) {
                 console.error(e);
                 alert(e)
-                process.exit();
+                // process.exit();
             }
         });
     }
@@ -376,12 +378,24 @@
         runCode();
     });
 
-    var sourcePath = "./test/display_test.py";
+    var sourcePath = "./test/L13_dafuweng_af.py";
     if (window.location.search.substring(1).length > 0) {
         sourcePath = "./test/" + window.location.search.substring(1)
     }
     $.get(sourcePath, function (data) {
-        editor.setValue(data, -1);
+        if (data.indexOf('from L18_demo4def import') >= 0) {
+          sourcePath = "./test/L18_demo4def.py"
+          $.get(sourcePath, function (data2) {
+            data = data.replace('from L18_demo4def import *', data2)
+            editor.setValue(data, -1);
+          });
+        }
+        else {
+          data = data.replace(/ QUIT:/g," pygame.QUIT:")
+          data = data.replace(/ MOUSEBUTTONDOWN:/g," pygame.MOUSEBUTTONDOWN:")
+          data = data.replace(/K_ESCAPE/g,"pygame.K_ESCAPE")
+          editor.setValue(data, -1);
+        }
     });
 
 </script>

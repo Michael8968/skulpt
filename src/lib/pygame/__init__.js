@@ -103,7 +103,6 @@ function keyEventListener(event) {
     return false;
 }
 
-
 // constants
 PygameLib.constants = {
     '__doc__': 'Set of functions from PyGame that are handy to have in\nthe local namespace for your module',
@@ -1042,9 +1041,11 @@ var $builtinmodule = function (name) {
     mod.Rect = Sk.misceval.buildClass(mod, rect_type_f, 'Rect', []);
     PygameLib.RectType = mod.Rect;
     mod.quit = new Sk.builtin.func(function () {
-        console.log('mod.quit');
         PygameLib.running = false;
+        // Sk.builtin.quit();
         if (Sk.quitHandler) {
+            console.log('mod.quit');
+            // throw new Sk.builtin.SystemExit('quit');
             Sk.quitHandler();
         }
     });
@@ -1107,7 +1108,8 @@ function pygame_init() {
     PygameLib.running = true;
     PygameLib.repeatKeys = false;
     PygameLib.mouseData = { "button": [0, 0, 0], "pos": [0, 0], "rel": [0, 0] };
-    console.log('font_m', font_m);
+    // console.log('font_m', font_m);
+    // var locals = PygameLib.constants;
 }
 
 var mouseEventListener = function (event) {
@@ -2218,7 +2220,8 @@ function rect_type_f($gbl, $loc) {
         return Sk.ffi.remapToPy(contained);
     });
     $loc.collidepoint = new Sk.builtin.func(function (self, x, y) {
-        if (Sk.abstr.typeName(x) === "tuple" && y === undefined) {
+        console.log('collidepoint', x, y, Sk.abstr.typeName(x));
+        if ((Sk.abstr.typeName(x) === "tuple" || Sk.abstr.typeName(x) === "list") && y === undefined) {
             var xy = Sk.ffi.remapToJs(x);
             x = xy[0];
             y = xy[1];

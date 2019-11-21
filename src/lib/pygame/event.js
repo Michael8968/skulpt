@@ -30,6 +30,7 @@ var $builtinmodule = function (name) {
             Sk.setTimeout(f, 10);
         }));
     });
+    mod.poll = mod.wait;
     return mod;
 };
 
@@ -112,4 +113,12 @@ function event_EventType_f($gbl, $loc) {
         self['pos'] = val;
     });
     $loc.pos = Sk.misceval.callsimOrSuspend(Sk.builtins.property, pos_getter, pos_setter);
+
+    var button_getter = new Sk.builtin.func(function (self) {
+        return self['button'];
+    });
+    var button_setter = new Sk.builtin.func(function (self, val) {
+        self['button'] = val;
+    });
+    $loc.button = Sk.misceval.callsimOrSuspend(Sk.builtins.property, button_getter, button_setter);
 }
