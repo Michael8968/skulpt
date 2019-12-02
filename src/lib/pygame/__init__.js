@@ -1094,12 +1094,15 @@ function pygame_init() {
     var key_m = Sk.importModule("pygame.key", false, false);
     var version_m = Sk.importModule("pygame.version", false, false);
     var mouse_m = Sk.importModule("pygame.mouse", false, false);
+    var mixer_m = Sk.importModule("pygame.mixer", false, false);
     var transform_m = Sk.importModule("pygame.transform", false, false);
     PygameLib.initial_time = new Date();
     pygame_m.$d['display'] = display_m.$d['display'];
     pygame_m.$d['event'] = display_m.$d['event'];
     pygame_m.$d['draw'] = display_m.$d['draw'];
     pygame_m.$d['image'] = display_m.$d['image'];
+    pygame_m.$d['mixer'] = display_m.$d['mixer'];
+    pygame_m.$d['transform'] = display_m.$d['transform'];
     delete PygameLib.eventQueue;
     delete PygameLib.eventTimer;
     PygameLib.eventQueue = [];
@@ -2220,7 +2223,7 @@ function rect_type_f($gbl, $loc) {
         return Sk.ffi.remapToPy(contained);
     });
     $loc.collidepoint = new Sk.builtin.func(function (self, x, y) {
-        console.log('collidepoint', x, y, Sk.abstr.typeName(x));
+        // console.log('collidepoint', x, y, Sk.abstr.typeName(x));
         if ((Sk.abstr.typeName(x) === "tuple" || Sk.abstr.typeName(x) === "list") && y === undefined) {
             var xy = Sk.ffi.remapToJs(x);
             x = xy[0];

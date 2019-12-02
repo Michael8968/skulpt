@@ -1,5 +1,8 @@
 var $builtinmodule = function (name) {
     mod = {};
+    for (k in PygameLib.constants) {
+        mod[k] = Sk.ffi.remapToPy(PygameLib.constants[k]);
+    }
     mod.modifierStateChange = new Sk.builtin.func(function (eventtype, event) {
       let modifier = 0;
 

@@ -86,7 +86,10 @@
     // var basePath = '../src/lib/pygame/';
     // // Sk.imgPath = 'http://192.168.0.105:8081/';
     Sk.imgPath = 'https://all-dream.com/pythonWeb/pages/moodle/upload/';
-    // https://all-dream.com/pythonWeb/pages/moodle/upload/lesson23/saolei/images/0.png
+    Sk.audioPath = 'https://all-dream.com/pythonWeb/pages/moodle/upload/';
+
+    // https://all-dream.com/pythonWeb/pages/moodle/upload/lesson14/run/1.png
+    // https://all-dream.com/pythonWeb/pages/moodle/upload/lesson7/0.wav
     // Sk.imgPath = './test/';
     // Sk.externalLibraries = {
     //     'pygame': {
@@ -378,22 +381,22 @@
         runCode();
     });
 
-    var sourcePath = "./test/L13_dafuweng_af.py";
+    var sourcePath = "./test/L2_shouce_ide.py";
     if (window.location.search.substring(1).length > 0) {
         sourcePath = "./test/" + window.location.search.substring(1)
     }
     $.get(sourcePath, function (data) {
-        if (data.indexOf('from L18_demo4def import') >= 0) {
-          sourcePath = "./test/L18_demo4def.py"
+        if (data.indexOf('from L8_myClass import *') >= 0) {
+          sourcePath = "./test/L8_myClass.py"
           $.get(sourcePath, function (data2) {
-            data = data.replace('from L18_demo4def import *', data2)
+            data = data.replace('from L8_myClass import *', data2)
             editor.setValue(data, -1);
           });
         }
         else {
-          data = data.replace(/ QUIT:/g," pygame.QUIT:")
-          data = data.replace(/ MOUSEBUTTONDOWN:/g," pygame.MOUSEBUTTONDOWN:")
-          data = data.replace(/K_ESCAPE/g,"pygame.K_ESCAPE")
+          // data = data.replace(/ QUIT:/g," pygame.QUIT:")
+          // data = data.replace(/ MOUSEBUTTONDOWN:/g," pygame.MOUSEBUTTONDOWN:")
+          // data = data.replace(/K_ESCAPE/g,"pygame.K_ESCAPE")
           editor.setValue(data, -1);
         }
     });
