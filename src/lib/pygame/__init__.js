@@ -99,7 +99,7 @@ function keyEventListener(event) {
         }
 
     }
-    if (PygameLib.running) event.preventDefault();
+    if (PygameLib.running) {event.preventDefault();}
     return false;
 }
 
@@ -1096,6 +1096,7 @@ function pygame_init() {
     var mouse_m = Sk.importModule("pygame.mouse", false, false);
     var mixer_m = Sk.importModule("pygame.mixer", false, false);
     var transform_m = Sk.importModule("pygame.transform", false, false);
+    var sprite_m = Sk.importModule("pygame.sprite", false, false);
     PygameLib.initial_time = new Date();
     pygame_m.$d['display'] = display_m.$d['display'];
     pygame_m.$d['event'] = display_m.$d['event'];
@@ -1103,6 +1104,7 @@ function pygame_init() {
     pygame_m.$d['image'] = display_m.$d['image'];
     pygame_m.$d['mixer'] = display_m.$d['mixer'];
     pygame_m.$d['transform'] = display_m.$d['transform'];
+    pygame_m.$d['sprite'] = display_m.$d['sprite'];
     delete PygameLib.eventQueue;
     delete PygameLib.eventTimer;
     PygameLib.eventQueue = [];

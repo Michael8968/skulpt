@@ -22,7 +22,7 @@ var $builtinmodule = function (name) {
             }));
         }
         else
-            throw new Sk.builtin.RuntimeError("Image does not exist.");
+            {throw new Sk.builtin.RuntimeError("Image does not exist.");}
     });
     mod.get_extended = new Sk.builtin.func(function () {
         return Sk.ffi.remapToPy(false);
