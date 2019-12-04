@@ -7,6 +7,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -64,11 +65,11 @@ turtle.done()
   <script>
     function runit() {
       var prog = document.getElementById("code").value;
-      if (prog.indexOf('turtle.mode("logo")') < 0) {
-        prog = prog.replace('import turtle', 'import turtle\nturtle.mode("logo")\nturtle.seth(0)')
-      } else  {
-        prog = prog.replace('turtle.mode("logo")', 'turtle.mode("logo")\nturtle.seth(0)')
-      }
+      // if (prog.indexOf('turtle.mode("logo")') < 0) {
+      //   prog = prog.replace('import turtle', 'import turtle\nturtle.mode("logo")\nturtle.seth(0)')
+      // } else  {
+      //   prog = prog.replace('turtle.mode("logo")', 'turtle.mode("logo")\nturtle.seth(0)')
+      // }
       // console.log(prog);
       function builtinRead(x) {
         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
@@ -86,6 +87,27 @@ turtle.done()
         return Sk.importMainWithBody("<stdin>", false, prog, true);
       });
     }
+
+    var editor =document.getElementById("code");
+    var sourcePath = "./test/T23_xuankuzhengfangxing.py";
+    if (window.location.search.substring(1).length > 0) {
+        sourcePath = "./test/" + window.location.search.substring(1)
+    }
+    $.get(sourcePath, function (data) {
+        if (data.indexOf('from L8_myClass import *') >= 0) {
+          sourcePath = "./test/L8_myClass.py"
+          $.get(sourcePath, function (data2) {
+            data = data.replace('from L8_myClass import *', data2)
+            editor.value = data;
+          });
+        }
+        else {
+          // data = data.replace(/ QUIT:/g," pygame.QUIT:")
+          // data = data.replace(/ MOUSEBUTTONDOWN:/g," pygame.MOUSEBUTTONDOWN:")
+          // data = data.replace(/K_ESCAPE/g,"pygame.K_ESCAPE")
+          editor.value = data;
+        }
+    });
   </script>
 </body>
 

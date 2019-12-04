@@ -336,6 +336,10 @@ var $builtinmodule = function(name) {
             };
 
             proto.update = function() {
+                if (window.isTracer == false) {
+                  getFrameManager().refreshInterval(1);
+                  getFrameManager().frameBuffer(0);
+                }
                 return (this._frames && this._frames.length) ?
                     this.requestAnimationFrame() :
                     new InstantPromise();
@@ -621,6 +625,7 @@ var $builtinmodule = function(name) {
                     .then(function(heading) {
                         self._angle = heading.angle;
                         self._radians = heading.radians;
+                        console.log('self._angle', self._angle);
                     });
             };
 
@@ -680,11 +685,11 @@ var $builtinmodule = function(name) {
 
                 removeLayer(this._paper);
                 this._paper = undefined;
-                if (this._screen) {
-                    this._screen._mode = "logo";
-                    this.setheading(0);
+                if (this._screen && this._screen._mode === "logo") {
+                    // this.setheading(0);
+                    // this.rotate(0, 90);
+                    this._angle = 90;
                 }
-
             };
 
             proto.$degrees = function(fullCircle) {
@@ -799,6 +804,8 @@ var $builtinmodule = function(name) {
             proto.$goto_$rw$ = proto.$setpos = proto.$setposition = function(x, y) {
                 var coords = getCoordinates(x, y);
 
+                console.log('$goto_$rw$', coords);
+
                 pushUndo(this);
 
                 return this.translate(
@@ -849,15 +856,17 @@ var $builtinmodule = function(name) {
 
             proto.setheading = function(angle) {
                 /*
-        standard mode logo mode
-        0 - east      0 - north -> 90
-        90 - north    90 - east -> 0
-        180 - west    180 - south -> 270
-        270 - south   270 - west -> 180
-        */
+                standard mode logo mode
+                0 - east      0 - north -> 90
+                90 - north    90 - east -> 0
+                180 - west    180 - south -> 270
+                270 - south   270 - west -> 180
+                */
                 var _angle = angle;
                 if (this._screen.getMode() == "logo") {
                     _angle = 90 - angle;
+                    console.log('proto.setheading', _angle);
+                    // _angle = angle*-1;
                 }
                 // console.log('$seth', this._screen.getMode(), angle, _angle);
                 pushUndo(this);
@@ -865,14 +874,11 @@ var $builtinmodule = function(name) {
             };
 
             proto.$setheading = proto.$seth = function(angle) {
-                // var _angle = angle;
-                // if (this._screen.getMode() == "logo") {
-                //   _angle = 90 - angle;
-                // }
                 // pushUndo(this);
-                // return this.queueTurnTo(this._angle, _angle);
+                // return this.queueTurnTo(this._angle, angle);
                 return this.setheading(angle);
             };
+
             proto.$setheading.co_varnames = proto.$seth.co_varnames = ["angle"];
 
             function circleRotate(turtle, angle, radians) {
@@ -1224,15 +1230,15 @@ var $builtinmodule = function(name) {
                 return this._screen.$window_height();
             };
 
-            proto.$tracer = function(n, delay) {
-                return this._screen.$tracer(n, delay);
-            };
-            proto.$tracer.minArgs = 0;
-            proto.$tracer.co_varnames = ["n", "delay"];
-
-            proto.$update = function() {
-                return this._screen.$update();
-            };
+            // proto.$tracer = function(n, delay) {
+            //     return this._screen.$tracer(n, delay);
+            // };
+            // proto.$tracer.minArgs = 0;
+            // proto.$tracer.co_varnames = ["n", "delay"];
+            //
+            // proto.$update = function() {
+            //     return this._screen.$update();
+            // };
 
             proto.$delay = function(delay) {
                 return this._screen.$delay(delay);
@@ -1325,7 +1331,7 @@ var $builtinmodule = function(name) {
             this._frames = 1;
             this._delay = undefined;
             this._bgcolor = "none";
-            this._mode = "logo"; //  "standard";
+            this._mode = "standard"; // "logo"; //
             this._managers = {};
             this._keyLogger = {};
             this._colorMode = 255;
@@ -1400,7 +1406,7 @@ var $builtinmodule = function(name) {
                     this._managers[key].reset();
                 }
 
-                this._mode = "logo"; //  "standard";
+                this._mode = "standard"; // "logo"; //
                 removeLayer(this._sprites);
                 this._sprites = undefined;
                 removeLayer(this._background);
@@ -1471,6 +1477,28 @@ var $builtinmodule = function(name) {
 
             proto.$tracer = function(frames, delay) {
                 // console.log('$tracer', frames, delay);
+                if (typeof frames === "boolean" && typeof delay === "undefined") {
+                  // 开关动画
+                  if (!frames) {
+                    //frames==False
+                    frames = 0;
+                    delay = 1;
+                    window.isTracer = false;
+                  } else {
+                    //frames==True
+                    frames = 1;
+                    delay = 1;
+                    window.isTracer = true;
+                  }
+                } else {
+                  if (typeof frames === "undefined" || frames <= 0) {
+                    frames = 1;
+                  }
+                  if (typeof delay === "undefined" || delay <= 0) {
+                    delay = 1;
+                  }
+                }
+
                 if (frames !== undefined || delay !== undefined) {
                     if (typeof delay === "number") {
                         this._delay = delay;
@@ -1834,15 +1862,25 @@ var $builtinmodule = function(name) {
       270 - south   270 - west
       */
             proto.$mode = function(mode) {
-                var width = getWidth();
-                var height = getHeight();
+                // var width = getWidth();
+                // var height = getHeight();
                 if (mode == "logo") {
+                    // if (getScreen().spriteLayer()!=null) {//3
+                    //   getScreen().spriteLayer().rotate( 90 * Math.PI / 180);
+                    // }
+                    // if (getScreen().bgLayer()!=null){
+                    //   getScreen().bgLayer().rotate( 90 * Math.PI / 180);
+                    // }
+                    // if (getScreen().hitTestLayer()!=null) {
+                    //   getScreen().hitTestLayer().rotate( 90 * Math.PI / 180);
+                    // }
                     this._mode = "logo";
                     var promise = getFrameManager().willRenderNext() ? Promise.resolve() : new InstantPromise();
                     promise = promise.then(function() {
                         var turtles = getFrameManager().turtles();
                         for (var i = 0; i < turtles.length; i++) {
                             turtles[i].setheading(0);
+                            console.log('$mode', i);
                         }
                     });
                     // console.log('$mode', this._mode, mode, turtles);
@@ -2068,6 +2106,7 @@ var $builtinmodule = function(name) {
             if (color) {
                 context.fillStyle = color;
                 context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+                console.log('clearLayer', color, context.canvas.width, context.canvas.height);
             } else {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             }

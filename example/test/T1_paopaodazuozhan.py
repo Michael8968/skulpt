@@ -1,0 +1,111 @@
+import turtle, random
+turtle.mode("logo")
+turtle.shape("turtle")
+turtle.fillcolor("green")
+turtle.pensize(5)
+turtle.speed(1)
+
+
+def move(x, y):
+	turtle.pu()
+	turtle.goto(x, y)
+	turtle.pd()
+
+
+def arrow(size):
+	turtle.left(135)
+	turtle.forward(size)
+	turtle.forward(-1*size)
+	turtle.left(90)
+	turtle.forward(size)
+
+
+move(0, 0)
+turtle.seth(90)
+
+turtle.pencolor('red')
+move(100,60)
+turtle.circle(60)
+move(55,130)
+turtle.forward(30)
+move(115,130)
+turtle.forward(30)
+move(85,85)
+turtle.forward(30)
+
+turtle.pencolor('green')
+move(-80,50)
+turtle.circle(40)
+move(-100,90)
+turtle.circle(8)
+move(-80,80)
+turtle.circle(5)
+move(-60,90)
+turtle.circle(8)
+move(-100,98)
+turtle.dot(4)
+move(-60,98)
+turtle.dot(4)
+move(-90,70)
+turtle.forward(20)
+
+turtle.pencolor('orange')
+move(-110,-160)
+turtle.circle(50)
+move(-145,-110)
+turtle.seth(70)
+turtle.forward(25)
+turtle.left(140)
+turtle.forward(25)
+move(-75,-110)
+turtle.seth(-70)
+turtle.forward(25)
+turtle.right(140)
+turtle.forward(25)
+move(-125,-140)
+turtle.seth(90)
+turtle.forward(30)
+
+turtle.pencolor("lightslateblue")
+move(80,-130)
+turtle.circle(40)
+move(50,-80)
+turtle.forward(20)
+arrow(10)
+turtle.seth(90)
+move(90,-80)
+turtle.forward(20)
+arrow(10)
+turtle.seth(90)
+move(70,-110)
+turtle.forward(20)
+move(0,0)
+turtle.speed(1)
+
+
+###################练习代码
+turtle.pu()
+turtle.goto(100,120)
+turtle.pd()
+turtle.pencolor('red')
+turtle.dot(120)
+
+turtle.pu()
+turtle.goto(-80,90)
+turtle.pd()
+turtle.pencolor('green')
+turtle.dot(80)
+
+turtle.pu()
+turtle.goto(-110,-110)
+turtle.pd()
+turtle.pencolor('orange')
+turtle.dot(100)
+
+turtle.pu()
+turtle.goto(80,-90)
+turtle.pencolor('lightslateblue')
+turtle.dot(80)
+#####################
+
+turtle.done()
