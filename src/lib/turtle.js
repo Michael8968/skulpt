@@ -652,7 +652,16 @@ var $builtinmodule = function(name) {
             };
 
             proto.getPaper = function() {
-                return this._paper || (this._paper = createLayer(2));
+                if (this._paper) {
+                  return this._paper;
+                } else {
+                  this._paper = createLayer(2)
+                  if (this._screen._mode === "logo") {
+                    this._paper.rotate( Math.PI / 2);
+                  }
+                  return this._paper;
+                }
+                // return this._paper || (this._paper = createLayer(2));
             };
 
             proto.reset = function() {
@@ -685,11 +694,11 @@ var $builtinmodule = function(name) {
 
                 removeLayer(this._paper);
                 this._paper = undefined;
-                if (this._screen && this._screen._mode === "logo") {
-                    // this.setheading(0);
-                    // this.rotate(0, 90);
-                    this._angle = 90;
-                }
+                // if (this._screen && this._screen._mode === "logo") {
+                //     this.setheading(0);
+                //     // this.rotate(0, 90);
+                //     // this._angle = 90;
+                // }
             };
 
             proto.$degrees = function(fullCircle) {
@@ -862,15 +871,18 @@ var $builtinmodule = function(name) {
                 180 - west    180 - south -> 270
                 270 - south   270 - west -> 180
                 */
-                var _angle = angle;
-                if (this._screen.getMode() == "logo") {
-                    _angle = 90 - angle;
-                    console.log('proto.setheading', _angle);
-                    // _angle = angle*-1;
-                }
+                // var _angle = angle;
+                // if (this._screen.getMode() == "logo") {
+                //     // _angle = 90 - angle;
+                //     // _angle = angle*-1;
+                //     console.log('proto.setheading', _angle);
+                // }
                 // console.log('$seth', this._screen.getMode(), angle, _angle);
                 pushUndo(this);
-                return this.queueTurnTo(this._angle, _angle);
+                if(getScreen()._mode === "logo"){
+                  angle = angle*-1;
+                }
+                return this.queueTurnTo(this._angle, angle);
             };
 
             proto.$setheading = proto.$seth = function(angle) {
@@ -1455,7 +1467,7 @@ var $builtinmodule = function(name) {
                     return this._setworldcoordinates(this.llx, this.lly, this.urx, this.ury);
                 }
 
-                return this._setworldcoordinates(-width / 2, -height / 2, width / 2, height / 2);
+                // return this._setworldcoordinates(-width / 2, -height / 2, width / 2, height / 2);
             };
             proto.$setup.minArgs = 0;
             proto.$setup.co_varnames = ["width", "height", "startx", "starty"];
@@ -1865,24 +1877,38 @@ var $builtinmodule = function(name) {
                 // var width = getWidth();
                 // var height = getHeight();
                 if (mode == "logo") {
-                    // if (getScreen().spriteLayer()!=null) {//3
-                    //   getScreen().spriteLayer().rotate( 90 * Math.PI / 180);
-                    // }
-                    // if (getScreen().bgLayer()!=null){
-                    //   getScreen().bgLayer().rotate( 90 * Math.PI / 180);
-                    // }
-                    // if (getScreen().hitTestLayer()!=null) {
-                    //   getScreen().hitTestLayer().rotate( 90 * Math.PI / 180);
-                    // }
+                    var spriteLayer = getScreen().spriteLayer();
+                    var bgLayer = getScreen().bgLayer();
+                    var hitTestLayer = getScreen().hitTestLayer();
+                    if (spriteLayer) {
+                      // translate context to center of canvas
+                      // spriteLayer.translate(spriteLayer.canvas.width / 2, spriteLayer.canvas.height / 2);
+                      spriteLayer.rotate( Math.PI / 2);
+                      // spriteLayer.scale(1, -1);
+                      // console.log('rotate spriteLayer');
+                    }
+                    if (bgLayer) {
+                      // bgLayer.translate(bgLayer.canvas.width / 2, bgLayer.canvas.height / 2);
+                      bgLayer.rotate( Math.PI / 2);
+                      // bgLayer.scale(1, -1);
+                      // console.log('rotate bgLayer');
+                    }
+                    if (hitTestLayer) {
+                      // hitTestLayer.translate(hitTestLayer.canvas.width / 2, hitTestLayer.canvas.height / 2);
+                      hitTestLayer.rotate( Math.PI / 2);
+                      // hitTestLayer.scale(1, -1);
+                    // console.log('rotate hitTestLayer');
+                    }
                     this._mode = "logo";
-                    var promise = getFrameManager().willRenderNext() ? Promise.resolve() : new InstantPromise();
-                    promise = promise.then(function() {
-                        var turtles = getFrameManager().turtles();
-                        for (var i = 0; i < turtles.length; i++) {
-                            turtles[i].setheading(0);
-                            console.log('$mode', i);
-                        }
-                    });
+                    // var promise = getFrameManager().willRenderNext() ? Promise.resolve() : new InstantPromise();
+                    // promise = promise.then(function() {
+                    //     var turtles = getFrameManager().turtles();
+                    //     for (var i = 0; i < turtles.length; i++) {
+                    //         turtles[i].setheading(0);
+                    //         // turtles[i]._angle = 90;
+                    //         // console.log('$mode', i);
+                    //     }
+                    // });
                     // console.log('$mode', this._mode, mode, turtles);
                 } else if (mode == "standard") {
                     this._mode = "standard";
@@ -2356,6 +2382,12 @@ var $builtinmodule = function(name) {
             if (y === undefined) {
                 y = (x && (x.y || x._y || x[1])) || 0;
                 x = (x && (x.x || x._x || x[0])) || 0;
+            }
+            //调整坐标系的位置
+            if (getScreen()._mode === "logo") {
+              var b = x;
+              x = y;
+              y = -1 * b;
             }
             return {
                 x: x,
