@@ -160,6 +160,7 @@ var SoundClass = function (gbl) {
 
 //初始化Sound
 var initSound = function (self, filename) {
+    // console.log('initSound', filename);
     var soundJS = "";
     if (isValid(filename)) {
       soundJS = Sk.ffi.remapToJs(filename);
@@ -180,7 +181,8 @@ initSound.co_name = new Sk.builtins['str']('__init__');
 initSound.co_varnames = ['self', 'filename'];
 
 //开始播放声音
-function play(self, loops, maxtime, fade_ms) {
+var play = function (self, loops, maxtime, fade_ms) {
+    // Sk.builtin.pyCheckArgs('play', arguments, 0, 4, false, false);
     if (isValid(self._sound)) {
         self._loops = 0;
         if (isValid(loops)) {
@@ -204,16 +206,19 @@ function play(self, loops, maxtime, fade_ms) {
         if (self._maxtime > 0) {
             setTimeout(function () {
                 self._sound.pause();
+                console.log('pause', loops, maxtime, fade_ms);
             }, self._maxtime);
         }
     }
 }
 
+play.minArgs = 0;
 play.co_name = new Sk.builtins['str']('play');
-play.co_varnames = ['self'];
+play.co_varnames = ['self', 'loops', 'maxtime', 'fade_ms'];
+play.$defaults = [new Sk.builtin.int_(0), new Sk.builtin.int_(0), new Sk.builtin.int_(0)];
 
 //结束播放声音
-function stop(self) {
+var stop = function (self) {
     if (isValid(self._sound)) {
       self._sound.pause();
     }
@@ -223,7 +228,7 @@ stop.co_name = new Sk.builtins['str']('stop');
 stop.co_varnames = ['self'];
 
 //淡出结束播放声音
-function fadeout(self) {
+var fadeout = function (self) {
     if (isValid(self._sound)) {
       self._sound.pause();
     }
@@ -233,7 +238,7 @@ fadeout.co_name = new Sk.builtins['str']('fadeout');
 fadeout.co_varnames = ['self'];
 
 //设置此声音的播放音量
-function set_volume(self, value) {
+var set_volume = function (self, value) {
     if (isValid(self._sound)) {
         if (isValid(value)) {
           Volume = Sk.ffi.remapToJs(value);
@@ -247,7 +252,7 @@ set_volume.co_name = new Sk.builtins['str']('set_volume');
 set_volume.co_varnames = ['self', 'value'];
 
 //获取播放音量
-function get_volume(self) {
+var get_volume = function (self) {
     var Volume = 0;
     if (isValid(self._sound)) {
         Volume = self._sound.volume;
@@ -259,7 +264,7 @@ get_volume.co_name = new Sk.builtins['str']('get_volume');
 get_volume.co_varnames = ['self'];
 
 //计算此声音播放的次数
-function get_num_channels(self) {
+var get_num_channels = function (self) {
     return Sk.ffi.remapToPy(self._num);
 }
 
@@ -291,35 +296,35 @@ initChannel.co_name = new Sk.builtins['str']('__init__');
 initChannel.co_varnames = ['self'];
 
 //开始播放声音
-function play1(self, loops, maxtime, fade_ms) {
+var play1 = function (self, loops, maxtime, fade_ms) {
 }
 
 play1.co_name = new Sk.builtins['str']('play1');
 play1.co_varnames = ['self', 'loops', 'maxtime', 'fade_ms'];
 
 //结束播放声音
-function stop1() {
+var stop1 = function () {
 }
 
 stop1.co_name = new Sk.builtins['str']('stop1');
 stop1.co_varnames = ['self'];
 
 //结束播放声音
-function fadeout1() {
+var fadeout1 = function () {
 }
 
 fadeout1.co_name = new Sk.builtins['str']('fadeout1');
 fadeout1.co_varnames = ['self'];
 
 //设置此声音的播放音量
-function set_volume1(value) {
+var set_volume1 = function (value) {
 }
 
 set_volume1.co_name = new Sk.builtins['str']('set_volume1');
 set_volume1.co_varnames = ['self', 'value'];
 
 //获取播放音量
-function get_volume1() {
+var get_volume1 = function () {
 }
 
 get_volume1.co_name = new Sk.builtins['str']('get_volume1');

@@ -88,7 +88,6 @@ class Cowboy(pygame.sprite.Sprite):
             self.image = self.img[self.frame]
             self.old_frame = self.frame
         ####
-
         if self.num >= 3:
             self.mov = self.a
             self.num = 0
@@ -115,6 +114,9 @@ class Cowboy(pygame.sprite.Sprite):
 
     def moved(self, point):
         self.a += point
+
+
+
 
 pygame.init()
 screen = pygame.display.set_mode((1000,600))
@@ -169,9 +171,9 @@ while True:
 
     ##################################
     if dice and dice.end:      #当投了骰子且骰子的动画播放结束
-        #print(dice.point)
-        if dice.point == 6 or dice.point==3:
-            break
+        print(dice.point)
+        #if dice.point == 6 or dice.point==3:
+            #break
 
     #提高：改代码写成不止为6的时候跳出循环
 
@@ -212,6 +214,8 @@ for i in range(60):
     times.tick(15)
     pygame.display.update()
 
+
+
 #cb = Cowboy()
 group.add(cb)
 dice = 0
@@ -220,6 +224,7 @@ while True:
     screen.blit(bac, (bacx,0))
     ticks = pygame.time.get_ticks()
     #screen.blit(zao, (0,0))
+
     #diceNum = 0
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -246,6 +251,9 @@ while True:
 
     #############################
 
+
+
+    '''
     if dice and dice.end:
 
         if dice.point == 6:
@@ -265,7 +273,9 @@ while True:
     if step >= 20 and cb.x >= 850: #当步数大于或等于，且牛仔的横坐标大于850的时候
         game = 'win'
         break
+    '''
 
+    #############################
     times.tick(15)
     pygame.display.update()
 
@@ -282,12 +292,12 @@ while True:
             sys.exit()
 
     if game == 'win':
-        #print(game)
+        print(game)
         font3 = pygame.font.Font(None, 60 + i * 10)
         img3 = font3.render('YOU  WIN!', 1, (255, 0, 0))
         screen.blit(img3, (230, 270))
     elif game == 'lose':
-        #print(game)
+        print(game)
         font2 = pygame.font.Font(None, 60 + i * 10)
         img2 = font2.render('YOU  LOSE!', 1, (255, 0, 0))
         screen.blit(img2, (210, 270))

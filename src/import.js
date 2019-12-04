@@ -22,10 +22,27 @@ Sk.importSearchPathForName = function (name, ext, searchPath) {
     var tryPathAndBreakOnSuccess = function(filename, packagePath) {
         return Sk.misceval.chain(
             Sk.misceval.tryCatch(function() {
-                return Sk.read(filename);
+                // https://all-dream.com/pythonWeb/pages/moodle/lesson/
+                if (filename.indexOf('.py') > 0 && filename.indexOf('https://all-dream.com/pythonWeb/pages/moodle/lesson/') >= 0)
+                {
+                    if (filename.indexOf('__init__.py') > 0) {
+                        return undefined;
+                    }
+                    var request = new XMLHttpRequest();
+                    request.open('GET', filename, false);
+                    request.send(null);
+                    if (request.status === 200) {
+                        return request.responseText;
+                    }
+                    return undefined;
+                } else {
+                    // console.log('Sk.importSearchPathForName', filename, Sk.read(filename));
+                    return Sk.read(filename);
+                }
             }, function(e) { /* Exceptions signal "not found" */ }),
             function(code) {
                 if (code !== undefined) {
+                    // console.log('Sk.importSearchPathForName', filename, code);
                     // This will cause the iterFor() to return the specified value
                     return new Sk.misceval.Break({filename: filename, code: code, packagePath: packagePath});
                 }
@@ -43,6 +60,7 @@ Sk.importSearchPathForName = function (name, ext, searchPath) {
         return Sk.misceval.chain(
             tryPathAndBreakOnSuccess(pathStr.v + "/" + nameAsPath + ext, false), // module
             function(r) {
+                // console.log('Sk.importSearchPathForName',nameAsPath, r);
                 return r ? r : tryPathAndBreakOnSuccess(pathStr.v + "/" + nameAsPath + "/__init__" + ext,
                                                         pathStr.v + "/" + nameAsPath); // package
             }
@@ -136,7 +154,8 @@ Sk.importSetUpPath = function (canSuspend) {
         paths = [
             new Sk.builtin.str("src/builtin"),
             new Sk.builtin.str("src/lib"),
-            new Sk.builtin.str(".")
+            new Sk.builtin.str("."),
+            new Sk.builtin.str("https://all-dream.com/pythonWeb/pages/moodle/lesson"),
         ];
         for (i = 0; i < Sk.syspath.length; ++i) {
             paths.push(new Sk.builtin.str(Sk.syspath[i]));
@@ -267,6 +286,7 @@ Sk.importModuleInternal_ = function (name, dumpJS, modname, suppliedPyBody, rela
                     return Sk.misceval.chain(Sk.importSearchPathForName(searchFileName, ".py", searchPath), function(codeAndPath_) {
                         codeAndPath = codeAndPath_; // We'll want it in a moment
                         if (codeAndPath) {
+                            // console.log('codeAndPath', codeAndPath.code, codeAndPath.filename);
                             return Sk.compile(codeAndPath.code, codeAndPath.filename, "exec", canSuspend);
                         }
                     }, function(co) {
@@ -355,6 +375,7 @@ Sk.importModuleInternal_ = function (name, dumpJS, modname, suppliedPyBody, rela
             if (returnUndefinedOnTopLevelNotFound && !topLevelModuleToReturn) {
                 return undefined;
             } else {
+                //  尝试加载本地py文件
                 throw new Sk.builtin.ImportError("No module named " + name);
             }
         }
@@ -521,6 +542,7 @@ Sk.builtin.__import__ = function (name, globals, locals, fromlist, level) {
             // either-way import that just fell through.
             relativeToPackage = undefined;
             relativeToPackageName = undefined;
+            // console.log('builtin.__import__ 1', name, level);
             return Sk.importModuleInternal_(name, undefined, undefined, undefined, undefined, false, true);
         } else {
             return ret;
@@ -549,6 +571,7 @@ Sk.builtin.__import__ = function (name, globals, locals, fromlist, level) {
                 // "ret" is the module we're importing from
                 // Only import from file system if we have not found the fromName in the current module
                 if (fromName != "*" && leafModule.tp$getattr(new Sk.builtin.str(fromName)) === undefined) {
+                    // console.log('builtin.__import__ 2', name, fromName, leafModule);
                     importChain = Sk.misceval.chain(importChain,
                                                     Sk.importModuleInternal_.bind(null, fromName, undefined, undefined, undefined, leafModule, true, true)
                     );

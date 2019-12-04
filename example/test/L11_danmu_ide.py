@@ -20,8 +20,7 @@ list = ['666','66666','厉害厉害','好好学习，天天向上','大吉大利
 
 bac = []
 for i in range(7):
-    file = 'lesson11/bac' + str(i+1) + '.png'
-    aa = pygame.image.load(file)
+    aa = pygame.image.load('lesson11/bac' + str(i+1) + '.png')
     aa = pygame.transform.smoothscale(aa, (800,600))
     bac.append(aa)
 num = 0

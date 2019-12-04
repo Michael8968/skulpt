@@ -16,7 +16,7 @@ words_list = [['老虎', '狮子', '蛇', '蛤蟆', '老鼠', '蜘蛛'],
               ['脸', '手臂', '毛发', '四肢', '触角', '尾巴'],
               ['鸡腿', '薯片', '火锅', '饺子', '苹果', '西瓜'],
               ['跑', '走', '跳', '散步', '躺下', '蹲下']]
-pygame.init()
+
 long1 = pygame.image.load('lesson2/long1.png').convert_alpha()
 long1 = pygame.transform.smoothscale(long1, (x,y))
 pillar = pygame.image.load('lesson2/pillar.png').convert_alpha()
@@ -245,8 +245,6 @@ def ask(screen, question,num_question):
             string = ''.join(current_string)
             lis = string.split(' ')
             result = dag(dagparams, lis, 3)
-            print(result[0])
-            print(result[0].path)
             display_box(screen, ''.join(result[num].path))
             print(''.join(result[0].path))
         elif len(result) and inkey == K_RETURN:

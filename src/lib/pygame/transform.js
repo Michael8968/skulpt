@@ -1,12 +1,12 @@
 var $builtinmodule = function (name) {
     mod = {};
     mod.flip = new Sk.builtin.func(function (surf, xbool, ybool) {
-        if (Sk.abstr.typeName(surf) !== "Surface") {
-            throw new Sk.builtin.TypeError("Wrong arguments");
-        }
-        if (Sk.abstr.typeName(xbool) !== "bool" || Sk.abstr.typeName(ybool) !== "bool") {
-            throw new Sk.builtin.TypeError("Wrong arguments");
-        }
+        // if (Sk.abstr.typeName(surf) !== "Surface") {
+        //     throw new Sk.builtin.TypeError("Wrong arguments");
+        // }
+        // if (Sk.abstr.typeName(xbool) !== "bool" || Sk.abstr.typeName(ybool) !== "bool") {
+        //     throw new Sk.builtin.TypeError("Wrong arguments");
+        // }
         var t = Sk.builtin.tuple([surf.width, surf.height]);
         var ret = Sk.misceval.callsim(PygameLib.SurfaceType, t);
         ret.context2d.save();

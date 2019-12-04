@@ -36,7 +36,7 @@ PygameLib.extract_color = function (color) {
         color_js[3] = Sk.ffi.remapToJs(color['a']);
     } else {
         color_js = Sk.ffi.remapToJs(color);
-        if (color_js.length === 3) color_js.push(1);
+        if (color_js.length === 3) {color_js.push(1);}
     }
     return color_js;
 };
@@ -53,6 +53,15 @@ PygameLib.extract_rect = function (rect) {
     }
     return rect_js;
 };
+
+//判断对象非空且已经定义
+function isVaild(obj) {
+    if (typeof(obj) != "undefined" && Object.keys(obj).length > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 var createKeyboardEvent = function (event) {
     var e;
@@ -1077,6 +1086,7 @@ var $builtinmodule = function (name) {
     mod.encode_file_path = new Sk.builtin.func(function () {
         throw new Sk.builtin.NotImplementedError("Not yet implemented");
     });
+    pygame_init();
     return mod;
 };
 
@@ -1285,17 +1295,52 @@ get_flags.co_varnames = ['self'];
 function update(self) {
     self.main_canvas.width = self.offscreen_canvas.width;
     self.main_canvas.height = self.offscreen_canvas.height;
-    self.main_context.drawImage(self.offscreen_canvas, 0, 0);
+    if (self.main_canvas.width > 0 && self.main_canvas.height > 0) {
+        self.main_context.drawImage(self.offscreen_canvas, 0, 0);      
+    }
 }
 
 update.co_name = new Sk.builtins['str']('update');
 update.co_varnames = ['self'];
 
-function blit(self, other, pos) {
-    var target_pos_js = Sk.ffi.remapToJs(pos);
-    self.context2d.drawImage(other.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
-    return Sk.misceval.callsim(PygameLib.RectType,
-        Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([other.offscreen_canvas.width, other.offscreen_canvas.height]))
+function blit(self, source, dest, area, special_flags) {
+    var target_pos_js = [0, 0]; // Sk.ffi.remapToJs(pos);
+    if (Sk.builtin.checkIterable(dest)) {
+        target_pos_js = Sk.ffi.remapToJs(dest);
+    } else {
+        target_pos_js[0] = Sk.ffi.remapToJs(dest.left);
+        target_pos_js[1] = Sk.ffi.remapToJs(dest.top);
+    }
+    // console.log('blit', target_pos_js, pos);
+    //判断area的Rect对象，并限定绘制范围
+    var isclip = false;
+    if (!isVaild(area)) {
+        area = Sk.misceval.callsim(PygameLib.RectType,
+            Sk.ffi.remapToPy(0),
+            Sk.ffi.remapToPy(0),
+            Sk.ffi.remapToPy(source.offscreen_canvas.width),
+            Sk.ffi.remapToPy(source.offscreen_canvas.height));
+    } else {
+        isclip = true;
+    }
+    //获取将要被绘制的画布并绘制
+    if (!source.offscreen_canvas) {
+      throw new Sk.builtin.TypeError("source.canvas无效");
+    }
+    var ctx = self.context2d;
+    if (!isclip)
+        {ctx.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);}
+    else {
+        var sx = Sk.ffi.remapToJs(area.left);
+        var sy = Sk.ffi.remapToJs(area.top);
+        var swidth = Sk.ffi.remapToJs(area.width);
+        var sheight = Sk.ffi.remapToJs(area.height);
+        ctx.drawImage(source.canvas, sx, sy, source.offscreen_canvas.width, source.canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
+        // self.context2d.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
+    }
+    return area;
+    // return Sk.misceval.callsim(PygameLib.RectType,
+    //     Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([source.offscreen_canvas.width, source.offscreen_canvas.height]))
 }
 
 function convert(self) {

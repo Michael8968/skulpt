@@ -213,51 +213,7 @@ fruit = {
         'sold': '87695',
         'packaging': '份',
         'describe': '果皮光滑无果斑',
-        },
-    'orange':{
-        'name': '精选冰糖橙',
-        'image': orange1,
-        'big_image': orange2,
-        'price': '￥28.8',
-        'made_in': '湖南黔阳',
-        'standard' : '3个',
-        'sold': '125423',
-        'packaging': '份',
-        'describe': '味浓香甜、果皮薄',
-        },
-    'pitaya':{
-        'name': '越南红心火龙果',
-        'image': pitaya1,
-        'big_image': pitaya2,
-        'price': '￥28.9',
-        'made_in': '越南',
-        'standard' : '2个',
-        'sold': '35347',
-        'packaging': '份',
-        'describe': '富含花青素',
-        },
-    'strawberry':{
-        'name': '奉贤大草莓',
-        'image': strawberry1,
-        'big_image': strawberry2,
-        'price': '￥33',
-        'made_in': '上海奉贤',
-        'standard' : '公斤',
-        'sold': '236324',
-        'packaging': '份',
-        'describe': '个大味甜',
-        },
-    'tangerine':{
-        'name': '精选帝王柑',
-        'image': tangerine1,
-        'big_image': tangerine2,
-        'price': '￥49.9',
-        'made_in': '广东',
-        'standard' : '6个',
-        'sold': '135347',
-        'packaging': '份',
-        'describe': '想象不到的好吃',
-        },
+        }
 
     }
 
@@ -639,18 +595,19 @@ show_list = list(show_dict.keys())
 show_details = ''
 time = pygame.time.Clock()
 while True:
-
+    #########################
     if show == 0:
         show_dict = fruit
     elif show == 1:
         show_dict = vegetable
-
     elif show == 2:
         show_dict = seafood
     elif show == 3:
         show_dict = meat
     elif show == 4:
         show_dict = poultry
+    ##############################
+
     show_list = list(show_dict.keys())
 
     #screen.fill((100,100,100))
@@ -660,31 +617,24 @@ while True:
     #pygame.draw.rect(screen, (0,255,0), (show*120 + 20, 390,80,3), 3)
     pygame.draw.rect(screen, (60,170,80), (show*120 + 20, 390,80,3), 3)
 
+    time.tick(15)
+    #######################################################练习1
     n = 0
     '''
     for a in show_dict:
         if n < 4:
             screen.blit(show_dict[a]['image'], (n*150, 250))
-            print_text(font_zh, n*150, 400, show_dict[a]['name'], color=(0,0,0))
-            print_text(font, n*150, 420, show_dict[a]['price'], color=(0,0,0))
         else:
             screen.blit(value['image'], ((n-4)*150, 450))
-            print_text(font_zh, (n-4)*150, 600, show_dict[a]['name'], color=(0,0,0))
-            print_text(font, (n-4)*150, 620, show_dict[a]['price'], color=(0,0,0))
-
         n += 1
     '''
     for value in show_dict.values():
         if n < 4:
-            screen.blit(value['image'], (n*140 + 20, 405),Rect(0,0,100,100))
-            print_text(font_zh, n*140 + 25, 525, value['name'], color=(0,0,0))
-            print_text(font_zh, n*140 + 25, 550, value['price'], color=(255,0,0))
+            screen.blit(value['image'], (n*140 + 20, 405))
         else:
-            screen.blit(value['image'], ((n-4)*140 + 20, 600),Rect(0,0,100,100))
-            print_text(font_zh, (n-4)*140 + 25, 720, value['name'], color=(0,0,0))
-            print_text(font_zh, (n-4)*140 + 25, 745, value['price'], color=(255,0,0))
+            screen.blit(value['image'], ((n-4)*140 + 20, 600))
         n += 1
-
+    ########################################################################
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -756,18 +706,25 @@ while True:
     if suf1:
         screen.blit(bac2, (0,0))
         screen.blit(show_dict[show_details]['big_image'], (0,0))
+        ############################练习2###################################
+        '''
+        price = font_zh2.render(show_dict[show_details]['price'], True, (255,69,0))
+        screen.blit(price, (12,555))
+
+        describe = font_zh3.render(show_dict[show_details]['describe'], True, (50,50,50))
+        screen.blit(describe, (187,635))
+
+        made_in = font_zh3.render(show_dict[show_details]['made_in'], True, (50,50,50))
+        screen.blit(made_in, (357,635))
+        '''
+
+        ##########################################################################
         print_text(font_zh, 50, 400, show_dict[show_details]['standard'] + '装', color=(100,100,100))
-        print_text(font_zh2, 12, 555, show_dict[show_details]['price'], color=(255,69,0))
         print_text(font_zh4, 16, 595, show_dict[show_details]['name'], color=(0,0,0))
         print_text(font_zh3, 17, 635, show_dict[show_details]['standard'] + '*1' + show_dict[show_details]['packaging'], color=(50,50,50))
         print_text(font_zh5, 17, 665, '规格', color=(180,180,180))
-
-        print_text(font_zh3, 187, 635, show_dict[show_details]['describe'], color=(50,50,50))
         print_text(font_zh5, 187, 665, '产品特点', color=(180,180,180))
-
-        print_text(font_zh3, 357, 635, show_dict[show_details]['made_in'], color=(50,50,50))
         print_text(font_zh5, 357, 665, '产地', color=(180,180,180))
-
         print_text(font_zh3, 18, 720, '满88包邮(10kg内)                        月销 ' + str(show_dict[show_details]['sold']) + '笔', color=(180,180,180))
 
     keys = pygame.key.get_pressed()
@@ -775,5 +732,4 @@ while True:
         pygame.quit()
         sys.exit()
 
-    time.tick(15)
     pygame.display.update()

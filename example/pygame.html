@@ -347,6 +347,7 @@
       read: builtinRead,
       output: printString,
       __future__: Sk.python3,
+      inputfunTakesPrompt: true
       // read: function(filename) {
       //     console.log('Sk.configure', filename);
       //     if ('src/lib/pygame/__init__.js' === filename) {
@@ -381,24 +382,24 @@
         runCode();
     });
 
-    var sourcePath = "./test/T22_zuoye1.py";
+    var sourcePath = "./test/L16_shopzhanshi.py";
     if (window.location.search.substring(1).length > 0) {
         sourcePath = "./test/" + window.location.search.substring(1)
     }
     $.get(sourcePath, function (data) {
-        if (data.indexOf('from L8_myClass import *') >= 0) {
-          sourcePath = "./test/L8_myClass.py"
-          $.get(sourcePath, function (data2) {
-            data = data.replace('from L8_myClass import *', data2)
-            editor.setValue(data, -1);
-          });
-        }
-        else {
+        // if (data.indexOf('from L8_myClass import *') >= 0) {
+        //   // sourcePath = "./test/L8_myClass.py"
+        //   // $.get(sourcePath, function (data2) {
+        //   //   data = data.replace('from L8_myClass import *', data2)
+        //   //   editor.setValue(data, -1);
+        //   // });
+        // }
+        // else {
           // data = data.replace(/ QUIT:/g," pygame.QUIT:")
           // data = data.replace(/ MOUSEBUTTONDOWN:/g," pygame.MOUSEBUTTONDOWN:")
           // data = data.replace(/K_ESCAPE/g,"pygame.K_ESCAPE")
           editor.setValue(data, -1);
-        }
+        // }
     });
 
 </script>
