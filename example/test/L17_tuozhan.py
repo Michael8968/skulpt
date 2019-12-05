@@ -1,7 +1,6 @@
 import pygame,random,math,sys
 from pygame.locals import *
 from datetime import datetime
-from pygame import Rect
 
 def print_text(font, x, y, text, color=(0,0,0)):
     imgText = font.render(text, True, color)
@@ -27,7 +26,7 @@ bac = pygame.image.load('lesson17/image/bac.png').convert_alpha()
 bac = pygame.transform.smoothscale(bac, (800,600))
 kabac = pygame.image.load('lesson17/image/kaface.png').convert_alpha()
 kabac = pygame.transform.smoothscale(kabac, (80,80))
-#bac = pygame.image.load('lesson17/image/bac.png').convert_alpha()
+#bac = pygame.image.load('image/bac.png').convert_alpha()
 #bac = pygame.transform.smoothscale(bac, (800,600))
 
 ka0 = pygame.image.load('lesson17/image/0.png').convert_alpha()
@@ -53,8 +52,8 @@ ka9 = pygame.transform.smoothscale(ka9, (80,80))
 
 
 
-
-
+############################################ 学生可以完成的部分
+'''
 matrix = [
             [0,0,0,0],
             [0,0,0,0],
@@ -75,15 +74,15 @@ dddd = {
            9: ka9,
         }
 
-hi = [i for i in range(1,9) for j in range(2)]
+hi = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]
 random.shuffle(hi)
 n = 0
 for i in range(4):
     for j in range(4):
         matrix[i][j] = hi[n]
         n += 1
-
-
+'''
+####################################################
 font1 = pygame.font.Font(None, 400)
 font2 = pygame.font.Font('simhei.ttf', 200)
 font3 = pygame.font.Font(None, 80)
@@ -100,21 +99,18 @@ game_over = False
 true_list = []
 times = pygame.time.Clock()
 game = ''
+
 while not game_over:
     screen.blit(bac, (0,0))
 
-    #for i in range(6):
-        #for j in range(6):
-            #pygame.draw.rect(screen, dddd[matrix[i][j]], (50 + 100*j,50 + 100*i,100,100))
-    #pygame.draw.rect(screen, (200,200,200), (50,50,600,600))
+    ########################################## 学生可以完成的部分（加载全部的背面图）
+    '''
     for i in range(4):
         for j in range(4):
             if [i,j] not in true_list:
                 screen.blit(kabac, (210 + j*100, 130 + i*100))
-
-    #for true in true_list:
-        #pygame.draw.rect(screen, (255,255,255), (50 + 100*true[1],50 + 100*true[0],100,100))
-    ################倒计时1
+    '''
+    #############################################
     if count_down:
         current = (datetime.now() - clock_start).seconds
         if seconds - current >= 1:
@@ -159,7 +155,8 @@ while not game_over:
 
     #print((x1,y1,x2,y2))
     #print(aaa) 鼠标事件
-#########################################
+######################################### 学生可以完成的部分
+    '''
     if x1 >= 0:
         screen.blit(dddd[matrix[x1][y1]], (210 + 100*y1,130 + 100*x1))
     if x2 >= 0 and not [x1,y1] == [x2,y2]:
@@ -174,9 +171,13 @@ while not game_over:
                 true_list.append([x1,y1])
             if [x2,y2] not in true_list:
                 true_list.append([x2,y2])
-######################################################
+    '''
+######################################################学生可以完成的部分
 
-        x1,y1,x2,y2 = -1,-1,-1,-1
+    x1=-1
+    y1=-1
+    x2=-1
+    y2=-1
 
 
     if len(true_list) == 16:
@@ -195,7 +196,6 @@ while not game_over:
 
 while True:
     screen.blit(bac, (0,0))
-
     for i in range(4):
         for j in range(4):
             screen.blit(dddd[random.randint(0,9)], (210 + i*100, 130 + j*100))

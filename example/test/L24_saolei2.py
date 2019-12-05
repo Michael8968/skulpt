@@ -217,12 +217,12 @@ while True:
         screen.blit(other_img[0], (42 + question_mark[1]*30, 172 + question_mark[0]*30))
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == pygame.MOUSEMOTION and not game_lose and not game_win:  # 鼠标移动
+        if event.type == MOUSEMOTION and not game_lose and not game_win:  # 鼠标移动
             first, second = get()
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == MOUSEBUTTONDOWN:
             if not game_lose and not game_win:
                 first2, second2 = get()
                 if first2 >= 0:       #将鼠标点击事件控制在9x9的格子内，排除超出的部分
@@ -324,7 +324,7 @@ while True:
         current_time = (datetime.now() - clock_start).seconds
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
+    if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
 

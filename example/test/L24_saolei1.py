@@ -5,12 +5,10 @@ from pygame import Rect
 
 #sys.setrecursionlimit(1000000)
 
-def get(event):
+def get():
     for i in range(9):
         for j in range(9):
-            x = 42+ 30*j
-            y = 142+ i*30
-            if Rect(x, y, 30, 30).collidepoint(event.pos):
+            if Rect(42+ 30*j, 142+ i*30, 30, 30).collidepoint(event.pos):
                 print(str(i) + '   ' +   str(j))
                 return i,j
 
@@ -192,14 +190,14 @@ while True:
 
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == pygame.MOUSEMOTION and not game_lose and not game_win:  # 鼠标移动
-            first, second = get(event)
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == MOUSEMOTION and not game_lose and not game_win:  # 鼠标移动
+            first, second = get()
+        if event.type == MOUSEBUTTONDOWN:
             if not game_lose and not game_win:
-                first2, second2 = get(event)
+                first2, second2 = get()
                 if first2 >= 0:       #将鼠标点击事件控制在9x9的格子内，排除超出的部分
                     if not game_start:    # 计时
                         clock_start = datetime.now()
@@ -207,11 +205,11 @@ while True:
 
                     print(event.button)
 
-                    if event.button == 1:
+                    if event.button[0] == 1:
                         if cover[first2][second2] and [first2,second2] not in flag_list:
                             game_lose = open_block([first2,second2])
                             game_win = is_win()
-                    elif event.button == 1:
+                    elif event.button[2] == 1:
                         if cover[first2][second2] and [first2,second2] not in flag_list:
                             flag_list.append([first2,second2])
                             mine_num -= 1
@@ -255,7 +253,7 @@ while True:
         current_time = (datetime.now() - clock_start).seconds
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
+    if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
 

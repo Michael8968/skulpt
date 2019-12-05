@@ -112,9 +112,9 @@ def game():
         times.tick(24)
         screen.fill((x,73,100))
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == MOUSEBUTTONDOWN:
                 poslist.append(event.pos)
 
         stars(screen,poslist)
@@ -134,7 +134,7 @@ def game():
         mousex,y = pygame.mouse.get_pos()    #获取当前鼠标坐标点
         x = transform(mousex)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_ESCAPE]:
+        if keys[K_ESCAPE]:
             pygame.quit()
         pygame.display.update()
 
@@ -142,8 +142,7 @@ def game():
 
 
 pygame.init()
-#screen = pygame.display.set_mode((700, 700),NOFRAME)
-screen = pygame.display.set_mode((700, 700))
+screen = pygame.display.set_mode((700, 700),NOFRAME)
 pic = pygame.image.load('lesson19/sun.png')#.convert_alpha()
 pic1 = pygame.transform.smoothscale(pic, (160,160))
 pic2 = pygame.transform.smoothscale(pic, (140,140))

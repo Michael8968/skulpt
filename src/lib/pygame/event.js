@@ -24,7 +24,7 @@ var $builtinmodule = function (name) {
                     resolve(e);
                 }
                 else
-                    Sk.setTimeout(f, 10);
+                    {Sk.setTimeout(f, 10);}
             };
 
             Sk.setTimeout(f, 10);

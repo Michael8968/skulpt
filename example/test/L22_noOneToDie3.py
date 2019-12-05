@@ -1,5 +1,4 @@
 import pygame,random,sys
-
 from pygame.locals import *
 from pygame import Rect
 
@@ -19,49 +18,6 @@ def showEnd():
     fontimg2 = font.render('press return to restart', True, (255,0,0))
     screen.blit(fontimg2, (100,350))
 
-def reset():       #设置初始值跟重置初始值的函数
-    jump = 0
-    high = 0
-    can_jump = True
-    rect_list = []
-    random_time = 0
-    return jump, high, can_jump, rect_list, random_time
-
-def judge(rect_list, man_rect, gameover, score):    #判断是否游戏结束跟加分的函数
-    for r in rect_list:
-        pygame.draw.rect(screen, (0,0,0), r)
-        if man_rect.colliderect(Rect(r[0],r[1],r[2],r[3])):
-            gameover = True
-        if r[0] <= -30:
-            score += 1
-            rect_list.pop(0)
-    return gameover, score
-
-def create(random_time, rect_list, place):        # 随机时间生成随机大小障碍物的函数，并使其向左移动
-    pygame.draw.rect(screen, (0,0,0), (0, place, 800, 5))
-    if random_time == 0:
-        random_time = random.randint(110,150)
-        rectx = random.randint(10,25)
-        recty = random.randint(30,45)
-        rect_l = [800, place-recty, rectx, recty]
-        rect_list.append(rect_l)
-    else:
-        random_time -= 1
-
-    for r in rect_list:
-        r[0] -= 6
-    return random_time
-
-def jumping(jump, high, can_jump):
-    if jump > -24:
-        jump -= 2
-    if high >= 24:
-        high += jump
-    else:
-        can_jump = True
-    return jump, high, can_jump
-
-
 img = []
 for i in range(15):
     aa = pygame.image.load('lesson22/noOneToDie/h' + str(i+1) + '.png').convert_alpha()
@@ -74,7 +30,6 @@ img3 = img[10:15]
 times = pygame.time.Clock()
 n = 0
 score = 0
-'''
 ##########1P
 jump = 0
 high = 0
@@ -101,24 +56,18 @@ rect_list3 = []
 rectx3 = 0
 recty3 = 0
 random_time3 = 0
-'''
-jump,high,can_jump,rect_list,random_time = reset()
-jump2,high2,can_jump2,rect_list2,random_time2 = reset()
-jump3,high3,can_jump3,rect_list3,random_time3 = reset()
+
 
 #man_rect = img[0].get_rect()
 gameover = False
 
 while True:
-    times.tick(30)
-    screen.fill((255,255,255))
-
-    man_rect = Rect(35, 213 -high, 40, 60)
-    man2_rect = Rect(35, 463 -high2, 40, 60)
-    man3_rect = Rect(35, 713 -high3, 40, 60)
+    man_rect = Rect(40, 213 -high, 35, 60)
+    man2_rect = Rect(40, 463 -high2, 35, 60)
+    man3_rect = Rect(40, 713 -high3, 35, 60)
     #print(man_rect)
+    n += 1
 
-    '''
     if random_time == 0:
         random_time = random.randint(110,150)
         rectx = random.randint(10,25)
@@ -147,36 +96,23 @@ while True:
         rect_list3.append(rect_l3)
     else:
         random_time3 -= 1
-    '''
-    random_time = create(random_time,rect_list, 270)
-    random_time2 = create(random_time2,rect_list2, 520)
-    random_time3 = create(random_time3,rect_list3, 770)
 
 
-    n += 1
+    times.tick(30)
+    screen.fill((255,255,255))
+
     screen.blit(img1[n%5], (30, 213 - high))
-    #pygame.draw.rect(screen, (0,0,0), (0, 270, 800, 5))
+    pygame.draw.rect(screen, (0,0,0), (0, 270, 800, 5))
 
     screen.blit(img2[n%5], (30, 463 - high2))
-    #pygame.draw.rect(screen, (0,0,0), (0, 520, 800, 5))
+    pygame.draw.rect(screen, (0,0,0), (0, 520, 800, 5))
 
     screen.blit(img3[n%5], (30, 713 - high3))
-    #pygame.draw.rect(screen, (0,0,0), (0, 770, 800, 5))
+    pygame.draw.rect(screen, (0,0,0), (0, 770, 800, 5))
 
-    '''
-    for r in rect_list:
-        r[0] -= 6
-
-    for r2 in rect_list2:
-        r2[0] -= 6
-
-    for r3 in rect_list3:
-        r3[0] -= 6
-    '''
-    '''
     for r in rect_list:
         pygame.draw.rect(screen, (0,0,0), r)
-        if man_rect.colliderect(Rect(r)):
+        if man_rect.colliderect(Rect(r[0],r[1],r[2],r[3])):
             gameover = True
         if r[0] <= -30:
             score += 1
@@ -185,7 +121,7 @@ while True:
 
     for r2 in rect_list2:
         pygame.draw.rect(screen, (0,0,0), r2)
-        if man2_rect.colliderect(Rect(r2)):
+        if man2_rect.colliderect(Rect(r2[0],r2[1],r2[2],r2[3])):
             gameover = True
         if r2[0] <= -30:
             score += 1
@@ -194,24 +130,24 @@ while True:
 
     for r3 in rect_list3:
         pygame.draw.rect(screen, (0,0,0), r3)
-        if man3_rect.colliderect(Rect(r3)):
+        if man3_rect.colliderect(Rect(r3[0],r3[1],r3[2],r3[3])):
             gameover = True
         if r3[0] <= -30:
             score += 1
             rect_list3.pop(0)
-    '''
-    gameover, score = judge(rect_list, man_rect, gameover, score)
-    gameover, score = judge(rect_list2, man2_rect, gameover,score)
-    gameover, score = judge(rect_list3, man3_rect, gameover,score)
 
     print(rect_list)
     print(score)
 
+    for r in rect_list:
+        r[0] -= 6
 
-    jump, high, can_jump = jumping(jump, high, can_jump)
-    jump2, high2, can_jump2 = jumping(jump2, high2, can_jump2)
-    jump3, high3, can_jump3 = jumping(jump3, high3, can_jump3)
-    '''
+    for r2 in rect_list2:
+        r2[0] -= 6
+
+    for r3 in rect_list3:
+        r3[0] -= 6
+
     high = high + jump
     jump -= 3
 
@@ -236,7 +172,6 @@ while True:
         high3 = 0
         jump3 = 0
         can_jump3 = True
-    '''
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -274,10 +209,6 @@ while True:
                 sys.exit()
             elif event.type == KEYDOWN:
                 if event.key == K_RETURN:
-                    jump,high,can_jump,rect_list,random_time = reset()
-                    jump2,high2,can_jump2,rect_list2,random_time2 = reset()
-                    jump3,high3,can_jump3,rect_list3,random_time3 = reset()
-                    '''
                     jump = 0
                     high = 0
                     rect_list = []
@@ -301,7 +232,7 @@ while True:
                     recty3 = 0
                     random_time3 = 0
                     can_jump3 = True
-                    '''
+
 
                     n = 0
                     gameover = False

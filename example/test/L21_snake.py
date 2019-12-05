@@ -73,37 +73,37 @@ def showEnd():
             screen.blit(fontimg3, (250,450))# 明天问为什么要写两遍
 
 def control_1p(aa):
-    if event.key == pygame.K_RIGHT:
+    if event.key == K_RIGHT:
         if aa != 'LEFT':
             aa = 'RIGHT'
 
-    if event.key == pygame.K_LEFT:
+    if event.key == K_LEFT:
         if aa != 'RIGHT':
             aa = 'LEFT'
 
-    if event.key == pygame.K_UP:
+    if event.key == K_UP:
         if aa != 'DOWN':
             aa = 'UP'
 
-    if event.key == pygame.K_DOWN:
+    if event.key == K_DOWN:
         if aa != 'UP':
             aa = 'DOWN'
     return aa
 
 def control_2p(aa):
-    if event.key == pygame.K_d:
+    if event.key == K_d:
         if aa != 'LEFT':
             aa = 'RIGHT'
 
-    if event.key == pygame.K_a:
+    if event.key == K_a:
         if aa != 'RIGHT':
             aa = 'LEFT'
 
-    if event.key == pygame.K_w:
+    if event.key == K_w:
         if aa != 'DOWN':
             aa = 'UP'
 
-    if event.key == pygame.K_s:
+    if event.key == K_s:
         if aa != 'UP':
             aa = 'DOWN'
     return aa
@@ -232,8 +232,8 @@ while True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()  #游戏结束！咕咕咕
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+            elif event.type == KEYDOWN:
+                if event.key == K_RETURN:
                     snakePos = [100, 50]
                     snakeBody = [[100, 50], [90, 50], [80, 50]]
                     snakePos2 = [100, 350]
@@ -248,13 +248,13 @@ while True:
                     winner = ''
                     break #重制 reset everything
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_ESCAPE]:
+            if keys[K_ESCAPE]:
                 pygame.quit()
                 sys.exit()
             pygame.display.flip()
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
+    if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
 

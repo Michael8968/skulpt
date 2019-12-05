@@ -1144,12 +1144,23 @@ var mouseEventListener = function (event) {
     canvasY = event.clientY - totalOffsetY;
 
     var button = event.button;
+    var _mouseButton = [0, 0, 0];    // 当前鼠标按键状态
+    if (event.buttons & (1 << 0)) {
+        _mouseButton = [1, 0, 0]; // 左键
+    }
+    if (event.buttons & (1 << 1)) {
+        _mouseButton = [0, 1, 0]; // 右键
+    }
+    if (event.buttons & (1 << 2)) {
+        _mouseButton = [0, 0, 1]; // 中间
+    }
+
     if (event.type === "mousedown") {
         var e = [PygameLib.constants.MOUSEBUTTONDOWN,
             {
                 key: PygameLib.constants.MOUSEBUTTONDOWN,
                 pos: [canvasX, canvasY],
-                button: button + 1
+                button: _mouseButton
             }];
         PygameLib.mouseData["button"][button] = 1;
     } else if (event.type === "mouseup") {
@@ -1157,7 +1168,7 @@ var mouseEventListener = function (event) {
             {
                 key: PygameLib.constants.MOUSEBUTTONUP,
                 pos: [canvasX, canvasY],
-                button: button + 1
+                button: _mouseButton
             }];
         PygameLib.mouseData["button"][button] = 0;
     } else if (event.type === "mousemove") {
@@ -1193,6 +1204,7 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = true)
     self.width = Math.round(tuple_js[0]);
     self.height = Math.round(tuple_js[1]);
     self.main_canvas = document.createElement("canvas");
+    // self._blitAlpha = 1.0;
 
     if (main) {
         self.main_canvas = Sk.main_canvas;
@@ -1295,9 +1307,9 @@ get_flags.co_varnames = ['self'];
 function update(self) {
     self.main_canvas.width = self.offscreen_canvas.width;
     self.main_canvas.height = self.offscreen_canvas.height;
-    if (self.main_canvas.width > 0 && self.main_canvas.height > 0) {
-        self.main_context.drawImage(self.offscreen_canvas, 0, 0);      
-    }
+    // if (self.main_canvas.width > 0 && self.main_canvas.height > 0) {
+        self.main_context.drawImage(self.offscreen_canvas, 0, 0);
+    // }
 }
 
 update.co_name = new Sk.builtins['str']('update');
@@ -1314,12 +1326,16 @@ function blit(self, source, dest, area, special_flags) {
     // console.log('blit', target_pos_js, pos);
     //判断area的Rect对象，并限定绘制范围
     var isclip = false;
+    var ctx = self.context2d;
+    // ctx.globalAlpha = source._blitAlpha;
     if (!isVaild(area)) {
         area = Sk.misceval.callsim(PygameLib.RectType,
             Sk.ffi.remapToPy(0),
             Sk.ffi.remapToPy(0),
-            Sk.ffi.remapToPy(source.offscreen_canvas.width),
-            Sk.ffi.remapToPy(source.offscreen_canvas.height));
+            // Sk.ffi.remapToPy(source.offscreen_canvas.width),
+            // Sk.ffi.remapToPy(source.offscreen_canvas.height));
+            Sk.ffi.remapToPy(self.width),
+            Sk.ffi.remapToPy(self.height));
     } else {
         isclip = true;
     }
@@ -1327,7 +1343,7 @@ function blit(self, source, dest, area, special_flags) {
     if (!source.offscreen_canvas) {
       throw new Sk.builtin.TypeError("source.canvas无效");
     }
-    var ctx = self.context2d;
+
     if (!isclip)
         {ctx.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);}
     else {
@@ -1335,7 +1351,7 @@ function blit(self, source, dest, area, special_flags) {
         var sy = Sk.ffi.remapToJs(area.top);
         var swidth = Sk.ffi.remapToJs(area.width);
         var sheight = Sk.ffi.remapToJs(area.height);
-        ctx.drawImage(source.canvas, sx, sy, source.offscreen_canvas.width, source.canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
+        ctx.drawImage(source.canvas, sx, sy, source.offscreen_canvas.width, source.offscreen_canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
         // self.context2d.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
     }
     return area;
@@ -1407,7 +1423,17 @@ var surface$1 = function $Surface$class_outer(gbl, loc) {
     loc.get_bounding_rect = new Sk.builtin.func(function (self) {
         return Sk.misceval.callsim(PygameLib.RectType,
             Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([self.offscreen_canvas.width, self.offscreen_canvas.height]))
-    })
+    });
+    // loc.get_alpha = new Sk.builtin.func(function (self) {
+    //    return new Sk.builtin.int_((1 - self._blitAlpha)*255);
+    // })
+    // loc.set_alpha = new Sk.builtin.func(function (self, alpha) {
+    //    var jsalpha = Sk.ffi.remapToJs(alpha);
+    //    if (!jsalpha || jsalpha < 0 || jsalpha > 255) {
+    //       throw new Sk.builtin.TypeError("alpha must between 0 - 255");
+    //    }
+    //    self._blitAlpha = (1 - alpha/255);
+    // })
 };
 
 surface$1.co_name = new Sk.builtins['str']('Surface');

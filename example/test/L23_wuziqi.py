@@ -163,13 +163,13 @@ while True:
 
     # 控制
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
 
         # 重置游戏
-        elif event.type == pygame.KEYDOWN:# and winner: #如果不想游戏还没结束就可以按回车重来，则加上
-            if event.key == pygame.K_RETURN:
+        elif event.type == KEYDOWN:# and winner: #如果不想游戏还没结束就可以按回车重来，则加上
+            if event.key == K_RETURN:
                 for i in range(19):
                     for j in range(19):
                         map1[i][j] = 0
@@ -179,7 +179,7 @@ while True:
                 put_black = True
                 winner = ''
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not winner:   # 鼠标按下且得是左键且游戏还没胜利者的时候
+        elif event.type == MOUSEBUTTONDOWN and event.button[0] == 1 and not winner:   # 鼠标按下且得是左键且游戏还没胜利者的时候
 
             print('鼠标点击2')
 
@@ -235,7 +235,7 @@ while True:
 
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
+    if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
 

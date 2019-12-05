@@ -21,7 +21,7 @@ items = {
             "chuizi" : 0,    #镐
             "futou" : 0,        #斧头
 
-            "huodui" : 0,    #火堆
+            "huodui" : 1,    #火堆
             "zhangpeng" : 0,       #帐篷
 
             "huoba" : 0,      #火把
@@ -45,6 +45,7 @@ iwant = ''
 leo = Player()
 times = pygame.time.Clock()
 while True:
+    times.tick(15)
     ticks = pygame.time.get_ticks()
     keys = pygame.key.get_pressed()
     draw_map(screen)
@@ -76,7 +77,7 @@ while True:
                 if not suf:
                     suf = pygame.Surface((700, 500))
                     suf.fill((50,50,50))
-                    #suf.set_alpha(210)
+                    suf.set_alpha(210)
                 elif suf:
                     suf = ''
             elif suf and Rect(145,100,50,50).collidepoint(event.pos):
@@ -89,36 +90,37 @@ while True:
 
     if suf:
         drawing(suf,items)
+        #################################################################半成品中的核心代码部分
+        #注释部分是学生可以写出来的
         if iwant in craft :
-            suf.blit(my_dict[iwant], (480,125))
+            suf.blit(eval(iwant), (480,125))
             num = 0
             for i in craft[iwant]:
-                suf.blit(my_dict[i], (392+num*60,225))
+                suf.blit(eval(i), (392+num*60,225))
                 print_text(suf, 392+num*60, 225, str(craft[iwant][i]))
                 num += 1
-            kaiguan = True
-            for i in craft[iwant]:
-                if craft[iwant][i] > items[i]:
-                    kaiguan = False
-                    break
+            #kaiguan = True
+            #for i in craft[iwant]:
+                #if craft[iwant][i] > items[i]:
+                    #kaiguan = False
+                    #break
 
-            if kaiguan and make:
-                for i in craft[iwant]:
-                    items[i] -= craft[iwant][i]
-                items[iwant] += 1
+            #if kaiguan and make:
+                #for i in craft[iwant]:
+                    #items[i] -= craft[iwant][i]
+                #items[iwant] += 1
 
                 print("iwant crafted\n")
 
 
-            if items["zhangpeng"] >= 1 and items["huodui"] >= 1:
-                final = pygame.image.load('lesson18/image/cunhuo.png').convert_alpha()
-                final = pygame.transform.smoothscale(final, (700,500))
-                suf.blit(final,(8,12))
-
+            #if items["zhangpeng"] >= 1 and items["huodui"] >= 1:
+                #final = pygame.image.load('image/cunhuo.png').convert_alpha()
+                #final = pygame.transform.smoothscale(final, (700,500))
+                #suf.blit(final,(8,12))
+        ########################################################################半成品中的核心代码部分
 
     if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
 
-    times.tick(15)
     pygame.display.update()
