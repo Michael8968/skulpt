@@ -105,7 +105,8 @@ Sk.builtins = {
     "apply_$rn$": Sk.builtin.apply_,
     "buffer"    : Sk.builtin.buffer,
     "coerce"    : Sk.builtin.coerce,
-    "intern"    : Sk.builtin.intern
+    "intern"    : Sk.builtin.intern,
+    "guiBox"    : Sk.builtin.guiBox
 };
 
 Sk.setupObjects = function (py3) {

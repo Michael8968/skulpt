@@ -1,0 +1,250 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 32744 bytes for ChunkPool::allocate
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:272), pid=26264, tid=0x00000000000080a0
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_231-b11) (build 1.8.0_231-b11)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.231-b11 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000017aca000):  JavaThread "C1 CompilerThread2" daemon [_thread_in_native, id=32928, stack(0x0000000019c90000,0x0000000019d90000)]
+
+Stack: [0x0000000019c90000,0x0000000019d90000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+Current CompileTask:
+C1:    536  898       3       com.google.javascript.jscomp.parsing.parser.Scanner::scanToken (1470 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000000001a2fa000 JavaThread "jscompiler" daemon [_thread_in_vm, id=45776, stack(0x000000001a990000,0x000000001e990000)]
+  0x000000001956f800 JavaThread "Service Thread" daemon [_thread_blocked, id=460, stack(0x0000000019d90000,0x0000000019e90000)]
+=>0x0000000017aca000 JavaThread "C1 CompilerThread2" daemon [_thread_in_native, id=32928, stack(0x0000000019c90000,0x0000000019d90000)]
+  0x0000000017ac8000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=34568, stack(0x0000000019b90000,0x0000000019c90000)]
+  0x00000000194ed800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=4448, stack(0x0000000019a90000,0x0000000019b90000)]
+  0x000000001949e800 JavaThread "Attach Listener" daemon [_thread_blocked, id=35416, stack(0x0000000019990000,0x0000000019a90000)]
+  0x000000001949c800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=41140, stack(0x0000000019890000,0x0000000019990000)]
+  0x0000000002d0a800 JavaThread "Finalizer" daemon [_thread_blocked, id=33512, stack(0x0000000019330000,0x0000000019430000)]
+  0x0000000002d09800 JavaThread "Reference Handler" daemon [_thread_blocked, id=3384, stack(0x0000000019230000,0x0000000019330000)]
+  0x0000000002c16800 JavaThread "main" [_thread_blocked, id=35488, stack(0x0000000002b10000,0x0000000002c10000)]
+
+Other Threads:
+  0x0000000017a77800 VMThread [stack: 0x0000000019130000,0x0000000019230000] [id=2940]
+  0x000000001958e000 WatcherThread [stack: 0x0000000019e90000,0x0000000019f90000] [id=42308]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x0000000081c00000, size: 2020 MB, Compressed Oops mode: 32-bit
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x0000000100000000
+
+Heap:
+ PSYoungGen      total 38400K, used 10325K [0x00000000d5f00000, 0x00000000d8980000, 0x0000000100000000)
+  eden space 33280K, 15% used [0x00000000d5f00000,0x00000000d6419f60,0x00000000d7f80000)
+  from space 5120K, 99% used [0x00000000d8480000,0x00000000d897b798,0x00000000d8980000)
+  to   space 5120K, 0% used [0x00000000d7f80000,0x00000000d7f80000,0x00000000d8480000)
+ ParOldGen       total 87552K, used 12846K [0x0000000081c00000, 0x0000000087180000, 0x00000000d5f00000)
+  object space 87552K, 14% used [0x0000000081c00000,0x000000008288bb68,0x0000000087180000)
+ Metaspace       used 11105K, capacity 11322K, committed 11392K, reserved 1058816K
+  class space    used 1303K, capacity 1397K, committed 1408K, reserved 1048576K
+
+Card table byte_map: [0x00000000120d0000,0x00000000124d0000] byte_map_base: 0x0000000011cc2000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000062d96d90
+ Begin Bits: [0x0000000012d80000, 0x0000000014d10000)
+ End Bits:   [0x0000000014d10000, 0x0000000016ca0000)
+
+Polling page: 0x0000000000960000
+
+CodeCache: size=245760Kb used=3348Kb max_used=3359Kb free=242412Kb
+ bounds [0x0000000002d10000, 0x0000000003060000, 0x0000000011d10000]
+ total_blobs=1217 nmethods=907 adapters=223
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 0.525 Thread 0x00000000194ed800 nmethod 914 0x0000000003051f10 code [0x0000000003052040, 0x0000000003052118]
+Event: 0.525 Thread 0x00000000194ed800  915       4       java.util.ArrayList::rangeCheck (22 bytes)
+Event: 0.525 Thread 0x00000000194ed800 nmethod 915 0x000000000303bcd0 code [0x000000000303be00, 0x000000000303be78]
+Event: 0.525 Thread 0x00000000194ed800  917       4       com.google.javascript.jscomp.parsing.parser.Scanner::isWhitespace (104 bytes)
+Event: 0.525 Thread 0x00000000194ed800 nmethod 917 0x0000000003051cd0 code [0x0000000003051e00, 0x0000000003051e98]
+Event: 0.525 Thread 0x00000000194ed800  920       4       com.google.javascript.jscomp.parsing.parser.Parser::peek (7 bytes)
+Event: 0.527 Thread 0x0000000017ac8000 nmethod 907 0x00000000030511d0 code [0x0000000003051340, 0x0000000003051828]
+Event: 0.527 Thread 0x0000000017ac8000  922       4       com.google.javascript.jscomp.parsing.parser.Parser::peekType (9 bytes)
+Event: 0.530 Thread 0x00000000194ed800 nmethod 920 0x0000000003054850 code [0x00000000030549c0, 0x0000000003054e88]
+Event: 0.530 Thread 0x00000000194ed800  921       4       com.google.javascript.jscomp.parsing.parser.Parser::peek (15 bytes)
+
+GC Heap History (4 events):
+Event: 0.416 GC heap before
+{Heap before GC invocations=1 (full 0):
+ PSYoungGen      total 38400K, used 32674K [0x00000000d5f00000, 0x00000000d8980000, 0x0000000100000000)
+  eden space 33280K, 98% used [0x00000000d5f00000,0x00000000d7ee8ab8,0x00000000d7f80000)
+  from space 5120K, 0% used [0x00000000d8480000,0x00000000d8480000,0x00000000d8980000)
+  to   space 5120K, 0% used [0x00000000d7f80000,0x00000000d7f80000,0x00000000d8480000)
+ ParOldGen       total 87552K, used 0K [0x0000000081c00000, 0x0000000087180000, 0x00000000d5f00000)
+  object space 87552K, 0% used [0x0000000081c00000,0x0000000081c00000,0x0000000087180000)
+ Metaspace       used 9930K, capacity 10122K, committed 10496K, reserved 1058816K
+  class space    used 1078K, capacity 1169K, committed 1280K, reserved 1048576K
+Event: 0.421 GC heap after
+Heap after GC invocations=1 (full 0):
+ PSYoungGen      total 38400K, used 5105K [0x00000000d5f00000, 0x00000000d8980000, 0x0000000100000000)
+  eden space 33280K, 0% used [0x00000000d5f00000,0x00000000d5f00000,0x00000000d7f80000)
+  from space 5120K, 99% used [0x00000000d7f80000,0x00000000d847c578,0x00000000d8480000)
+  to   space 5120K, 0% used [0x00000000d8480000,0x00000000d8480000,0x00000000d8980000)
+ ParOldGen       total 87552K, used 3530K [0x0000000081c00000, 0x0000000087180000, 0x00000000d5f00000)
+  object space 87552K, 4% used [0x0000000081c00000,0x0000000081f728e0,0x0000000087180000)
+ Metaspace       used 9930K, capacity 10122K, committed 10496K, reserved 1058816K
+  class space    used 1078K, capacity 1169K, committed 1280K, reserved 1048576K
+}
+Event: 0.474 GC heap before
+{Heap before GC invocations=2 (full 0):
+ PSYoungGen      total 38400K, used 38385K [0x00000000d5f00000, 0x00000000d8980000, 0x0000000100000000)
+  eden space 33280K, 100% used [0x00000000d5f00000,0x00000000d7f80000,0x00000000d7f80000)
+  from space 5120K, 99% used [0x00000000d7f80000,0x00000000d847c578,0x00000000d8480000)
+  to   space 5120K, 0% used [0x00000000d8480000,0x00000000d8480000,0x00000000d8980000)
+ ParOldGen       total 87552K, used 3530K [0x0000000081c00000, 0x0000000087180000, 0x00000000d5f00000)
+  object space 87552K, 4% used [0x0000000081c00000,0x0000000081f728e0,0x0000000087180000)
+ Metaspace       used 10258K, capacity 10476K, committed 10752K, reserved 1058816K
+  class space    used 1117K, capacity 1202K, committed 1280K, reserved 1048576K
+Event: 0.479 GC heap after
+Heap after GC invocations=2 (full 0):
+ PSYoungGen      total 38400K, used 5101K [0x00000000d5f00000, 0x00000000d8980000, 0x0000000100000000)
+  eden space 33280K, 0% used [0x00000000d5f00000,0x00000000d5f00000,0x00000000d7f80000)
+  from space 5120K, 99% used [0x00000000d8480000,0x00000000d897b798,0x00000000d8980000)
+  to   space 5120K, 0% used [0x00000000d7f80000,0x00000000d7f80000,0x00000000d8480000)
+ ParOldGen       total 87552K, used 12846K [0x0000000081c00000, 0x0000000087180000, 0x00000000d5f00000)
+  object space 87552K, 14% used [0x0000000081c00000,0x000000008288bb68,0x0000000087180000)
+ Metaspace       used 10258K, capacity 10476K, committed 10752K, reserved 1058816K
+  class space    used 1117K, capacity 1202K, committed 1280K, reserved 1048576K
+}
+
+Deoptimization events (6 events):
+Event: 0.237 Thread 0x0000000002c16800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000002ec9b88 method=sun.misc.MetaIndex.mayContain(Ljava/lang/String;)Z @ 13
+Event: 0.238 Thread 0x0000000002c16800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000002ec577c method=java.util.HashMap.getNode(ILjava/lang/Object;)Ljava/util/HashMap$Node; @ 126
+Event: 0.240 Thread 0x0000000002c16800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000002edf66c method=java.lang.String.indexOf([CII[CIII)I @ 134
+Event: 0.240 Thread 0x0000000002c16800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000002ea5f3c method=java.lang.String.replace(CC)Ljava/lang/String; @ 26
+Event: 0.440 Thread 0x0000000002c16800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000002ff1694 method=com.google.gson.stream.JsonReader.nextQuotedValue(C)Ljava/lang/String; @ 48
+Event: 0.480 Thread 0x0000000002c16800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000000300f058 method=com.google.debugging.sourcemap.SourceMapConsumerV3$StringCharIterator.hasNext()Z @ 8
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 0.112 Thread 0x0000000002c16800 Exception <a 'java/lang/ArrayIndexOutOfBoundsException': 40> (0x00000000d6268e60) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp, line 368]
+Event: 0.186 Thread 0x0000000002c16800 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'> (0x00000000d66146e0) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\runtime\sharedRuntime.cpp, line 605]
+Event: 0.238 Thread 0x0000000002c16800 Exception <a 'java/security/PrivilegedActionException'> (0x00000000d69e89f0) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\jvm.cpp, line 1502]
+Event: 0.238 Thread 0x0000000002c16800 Exception <a 'java/security/PrivilegedActionException'> (0x00000000d69e8c00) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\jvm.cpp, line 1502]
+Event: 0.238 Thread 0x0000000002c16800 Exception <a 'java/security/PrivilegedActionException'> (0x00000000d69eccf8) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\jvm.cpp, line 1502]
+Event: 0.238 Thread 0x0000000002c16800 Exception <a 'java/security/PrivilegedActionException'> (0x00000000d69ecf08) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\jvm.cpp, line 1502]
+Event: 0.303 Thread 0x0000000002c16800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x00000000d6d44590) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\methodHandles.cpp, line 1167]
+Event: 0.304 Thread 0x0000000002c16800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x00000000d6d518b0) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspot\src\share\vm\prims\methodHandles.cpp, line 1167]
+Event: 0.316 Thread 0x0000000002c16800 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$comparingInt$7b0bb60$1(Ljava/util/function/ToIntFunction;Ljava/lang/Object;Ljava/lang/Object;)I> (0x00000000d6de8c98) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13
+Event: 0.318 Thread 0x0000000002c16800 Exception <a 'java/lang/NoSuchMethodError': java.lang.Object.lambda$thenComparing$36697e65$1(Ljava/util/Comparator;Ljava/lang/Object;Ljava/lang/Object;)I> (0x00000000d6e01e90) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u231\13620\hotspo
+
+Events (10 events):
+Event: 0.517 loading class com/google/javascript/jscomp/parsing/parser/trees/ParseTreeType
+Event: 0.517 loading class com/google/javascript/jscomp/parsing/parser/trees/ParseTreeType done
+Event: 0.518 loading class com/google/javascript/jscomp/parsing/parser/Parser$1
+Event: 0.518 loading class com/google/javascript/jscomp/parsing/parser/Parser$1 done
+Event: 0.519 loading class com/google/javascript/jscomp/parsing/parser/Parser$Expression
+Event: 0.519 loading class com/google/javascript/jscomp/parsing/parser/Parser$Expression done
+Event: 0.519 loading class com/google/javascript/jscomp/parsing/parser/trees/ParseTree$1
+Event: 0.519 loading class com/google/javascript/jscomp/parsing/parser/trees/ParseTree$1 done
+Event: 0.521 loading class com/google/javascript/jscomp/parsing/parser/trees/VariableDeclarationTree
+Event: 0.521 loading class com/google/javascript/jscomp/parsing/parser/trees/VariableDeclarationTree done
+
+
+Dynamic libraries:
+0x00007ff7744f0000 - 0x00007ff774527000 	D:\Program Files\Java\jdk1.8.0_231\bin\java.exe
+0x00007ffc82540000 - 0x00007ffc8272d000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffc82280000 - 0x00007ffc82333000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffc7e800000 - 0x00007ffc7ea93000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffc811f0000 - 0x00007ffc81293000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffc82360000 - 0x00007ffc823fe000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffc7f7d0000 - 0x00007ffc7f86e000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffc81690000 - 0x00007ffc817b2000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffc81f80000 - 0x00007ffc82117000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffc7ebd0000 - 0x00007ffc7ebf0000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffc7f760000 - 0x00007ffc7f789000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffc7ec50000 - 0x00007ffc7ede9000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffc7f570000 - 0x00007ffc7f610000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffc7f660000 - 0x00007ffc7f75a000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffc6b890000 - 0x00007ffc6bb09000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17763.864_none_05b3441807210760\COMCTL32.dll
+0x00007ffc81360000 - 0x00007ffc8168c000 	C:\WINDOWS\System32\combase.dll
+0x00007ffc7eaa0000 - 0x00007ffc7eb1e000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffc7f7a0000 - 0x00007ffc7f7ce000 	C:\WINDOWS\System32\IMM32.DLL
+0x0000000062e20000 - 0x0000000062ef2000 	D:\Program Files\Java\jdk1.8.0_231\jre\bin\msvcr100.dll
+0x0000000062570000 - 0x0000000062e16000 	D:\Program Files\Java\jdk1.8.0_231\jre\bin\server\jvm.dll
+0x00007ffc7f790000 - 0x00007ffc7f798000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ffc7dfe0000 - 0x00007ffc7dfe9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffc7f870000 - 0x00007ffc7f8dd000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffc7a6d0000 - 0x00007ffc7a6f4000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffc7dbd0000 - 0x00007ffc7dbda000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffc7a6a0000 - 0x00007ffc7a6cd000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffc7f610000 - 0x00007ffc7f65a000 	C:\WINDOWS\System32\cfgmgr32.dll
+0x00007ffc7dfd0000 - 0x00007ffc7dfdf000 	D:\Program Files\Java\jdk1.8.0_231\jre\bin\verify.dll
+0x00007ffc7a750000 - 0x00007ffc7a779000 	D:\Program Files\Java\jdk1.8.0_231\jre\bin\java.dll
+0x00007ffc794c0000 - 0x00007ffc794d6000 	D:\Program Files\Java\jdk1.8.0_231\jre\bin\zip.dll
+0x00007ffc7fb40000 - 0x00007ffc81034000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007ffc82400000 - 0x00007ffc824a8000 	C:\WINDOWS\System32\shcore.dll
+0x00007ffc7ee20000 - 0x00007ffc7f56d000 	C:\WINDOWS\System32\windows.storage.dll
+0x00007ffc7e530000 - 0x00007ffc7e554000 	C:\WINDOWS\System32\profapi.dll
+0x00007ffc7e580000 - 0x00007ffc7e5dd000 	C:\WINDOWS\System32\powrprof.dll
+0x00007ffc7fae0000 - 0x00007ffc7fb32000 	C:\WINDOWS\System32\shlwapi.dll
+0x00007ffc7e560000 - 0x00007ffc7e571000 	C:\WINDOWS\System32\kernel.appcore.dll
+0x00007ffc7e600000 - 0x00007ffc7e617000 	C:\WINDOWS\System32\cryptsp.dll
+
+VM Arguments:
+java_command: D:\OpenSource\skulpt\skulpt\node_modules\google-closure-compiler-java\compiler.jar --language_in=ECMASCRIPT_NEXT --language_out=ECMASCRIPT5_STRICT --source_map_include_content=true --jscomp_error=accessControls --jscomp_error=checkRegExp --jscomp_error=checkTypes --jscomp_error=checkVars --jscomp_error=invalidCasts --jscomp_error=missingProperties --jscomp_error=nonStandardJsDocs --jscomp_error=strictModuleDepCheck --jscomp_error=undefinedVars --jscomp_error=unknownDefines --jscomp_error=visibility --jscomp_off=fileoverviewTags --jscomp_off=deprecated --language_out=ECMASCRIPT_2015 --externs=D:\OpenSource\skulpt\skulpt\node_modules\closure-webpack-plugin\src\standard-externs.js --externs=support/externs/sk.js --chunk=skulpt.min:1 --chunk_wrapper=skulpt.min:(function(){%s}).call(this || window) --error_format=JSON --json_streams=BOTH
+java_class_path (initial): D:\OpenSource\skulpt\skulpt\node_modules\google-closure-compiler-java\compiler.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=D:\Program Files\Java\jdk1.8.0_231
+CLASSPATH=D:\Program Files\Java\jdk1.8.0_231\lib;D:\Program Files\Java\jdk1.8.0_231\lib\tools.jar
+USERNAME=lenovo
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 17763 (10.0.17763.475)
+
+CPU:total 6 (initial active 6) (6 cores per cpu, 1 threads per core) family 6 model 158 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 8268576k(973836k free), swap 21185028k(2064k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.231-b11) for windows-amd64 JRE (1.8.0_231-b11), built on Oct  5 2019 03:11:30 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Thu Dec 05 11:01:31 2019
+timezone: 中国标准时间
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

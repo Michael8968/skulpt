@@ -293,6 +293,8 @@ Sk.builtin.func.prototype.tp$call = function (posargs, kw) {
     // This function is a logical Javascript port of
     // _PyEval_EvalCodeWithName, and follows its logic.
 
+    // console.log('Sk.builtin.func.prototype.tp$call', posargs, kw);
+
     let co_argcount = this.func_code.co_argcount;
 
     if (co_argcount === undefined) {
@@ -338,6 +340,7 @@ Sk.builtin.func.prototype.tp$call = function (posargs, kw) {
                 }
                 args[idx] = value;
             } else if (kwargs) {
+                if (name === 'default') { name = '_default'}
                 kwargs.push(new Sk.builtin.str(name), value);
             } else {
                 throw new Sk.builtin.TypeError(this.tp$getname() + "() got an unexpected keyword argument '" + name + "'");

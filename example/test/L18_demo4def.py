@@ -10,7 +10,7 @@ def draw_map(screen):
     screen.blit(bac,(0,0))
     for i in range(20):
         for j in range(30):
-            screen.blit(map_dict[map[i][j]][0], (0+30*j,0+30*i))
+            screen.blit(map_dict[map[i][j]][0], (0+30*j,0+30*i))    
 
 def draw_lan(screen, items, craft):
     lan_suf = pygame.Surface((670, 60))

@@ -895,6 +895,12 @@ Sk.builtin.jsmillis = function jsmillis () {
 
 Sk.builtin.eval_ = function eval_ () {
     throw new Sk.builtin.NotImplementedError("eval is not yet implemented");
+    // var result = eval(code.v);
+    // if (typeof result == "string")
+    // {
+    //      return Sk.builtin.str(result);
+    // }
+    // else {return result};
 };
 
 Sk.builtin.map = function map (fun, seq) {

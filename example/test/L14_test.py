@@ -82,7 +82,7 @@ def ask(screen, question):
             if event.type == KEYDOWN:
                 inkey = event.key
 
-        #print(inkey)
+
         if inkey == K_BACKSPACE:
             current_string = current_string[0:-1]
         elif inkey == K_RETURN:
@@ -93,6 +93,7 @@ def ask(screen, question):
             current_string.append(':')
         elif inkey <= 127:
             current_string.append(chr(inkey))
+            print(chr(inkey))
         if i%100 in range(50):
             display_box(screen, question + " " + ''.join(current_string))
         else:

@@ -1,4 +1,4 @@
-var globalScope = typeof window !== 'undefined' ? window : global;
+// var globalScope = typeof window !== 'undefined' ? window : global;
 
 var $builtinmodule = function (name) {
     var mod = {};
@@ -7,7 +7,33 @@ var $builtinmodule = function (name) {
 
     mod.buttonbox = new Sk.builtins.function(showbuttonbox);
 
-    mod.enterbox = new Sk.builtins.function(showenterbox);
+    mod.enterbox = new Sk.builtin.func(showenterbox);
+
+    // mod.enterbox = new Sk.builtin.func(function (msg, title, _default, strip, image) {
+    //   console.log('showenterbox', msg, title, _default, strip, image);
+    //   // Sk.builtin.pyCheckArgs('showenterbox', arguments, 0, 5, true, false);
+    //   var msgJS = "(Your message goes here)";
+    //   if (isValid(msg)) {msgJS = Sk.ffi.remapToJs(msg);}
+    //   var titleJS = "";
+    //   if (isValid(title)) {titleJS = Sk.ffi.remapToJs(title);}
+    //   var defaultJS = "";
+    //   if (isValid(_default)) {defaultJS = Sk.ffi.remapToJs(_default);}
+    //   var stripJS = "";
+    //   if (isValid(strip)) {stripJS = Sk.ffi.remapToJs(strip);}
+    //   var imgJS = "";
+    //   if (isValid(image)) {imgJS = Sk.ffi.remapToJs(image);}
+    //   console.log('#dialog .content', $("#dialog .content"));
+    //   $("#dialog .content").text(msgJS);//弹出文本
+    //   $("#dialog .imgcontent").empty();
+    //   if (imgJS.length > 0){ //关联图像
+    //     var path = getResImage(imgJS);
+    //     $("#dialog .imgcontent").html("<img src='" + path + "' />");
+    //   }
+    //   $("#dialog .attach").show();
+    //   $("#dialog .attach").html("<input id='usercontent' type='text' value='" + defaultJS + "'>");
+    //   var sys = Sk.importModule("sys");
+    //   return Sk.misceval.callsimOrSuspend(Sk.builtin.guiBox, sys["$d"]["stdin"], 2, titleJS, stripJS);
+    // });
 
     return mod;
 };
@@ -61,6 +87,7 @@ showbuttonbox.co_name = new Sk.builtins['str']('buttonbox');
 showbuttonbox.co_varnames = ['msg', 'title', 'choices', 'image'];
 
 var showenterbox = function (msg, title, _default, strip, image) {
+    console.log('showenterbox', msg, title, _default, strip, image);
     Sk.builtin.pyCheckArgs('showenterbox', arguments, 0, 5, true, false);
     var msgJS = "(Your message goes here)";
     if (isValid(msg)) {msgJS = Sk.ffi.remapToJs(msg);}
@@ -81,11 +108,16 @@ var showenterbox = function (msg, title, _default, strip, image) {
     $("#dialog .attach").show();
     $("#dialog .attach").html("<input id='usercontent' type='text' value='" + defaultJS + "'>");
     var sys = Sk.importModule("sys");
-    return Sk.misceval.callsimOrSuspend(Sk.builtin.guiBox, sys["$d"]["stdin"], 2, titleJS, stripJS);
+    var guiBox = Sk.importModule("guiBox", false, false);
+    console.log('guiBox', guiBox);
+    return Sk.misceval.callsimOrSuspend(guiBox, sys["$d"]["stdin"], 2, titleJS, stripJS);
 }
 
 showenterbox.co_name = new Sk.builtins['str']('enterbox');
-showenterbox.co_varnames = ['msg', 'title', 'default'];
+// showenterbox.co_varnames = ['msg', 'title'];
+showenterbox.co_kwargs = true;
+// showenterbox.$defaults = [new Sk.builtin.str(''), new Sk.builtin.str('')];
+
 
 function isValid(o) {
     if (typeof(o) != 'undefined' && o != null) {

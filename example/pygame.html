@@ -65,6 +65,13 @@
         </div>
     <div class="col-md-5"></div>
 
+    <!------------这是easyGUI包使用的弹出窗口的模板----------->
+    <div id="dialog" title="">
+        <p class="content"></p>
+        <p class="imgcontent"></p>
+        <p class="attach"></p>
+    </div>
+
 </div>
 <div class="col-md-2"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -382,7 +389,7 @@
         runCode();
     });
 
-    var sourcePath = "./test/L18_banchengpin.py";
+    var sourcePath = "./test/simplegui.py";
     if (window.location.search.substring(1).length > 0) {
         sourcePath = "./test/" + window.location.search.substring(1)
     }
