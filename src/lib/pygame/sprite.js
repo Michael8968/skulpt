@@ -346,7 +346,8 @@ has.co_varnames = ['self', 'sprites'];
 //绘制精灵图像
 function drawgroup(self, Surface) {
     // var ctx = Surface.canvas.getContext("2d");
-    var ctx = Sk.main_canvas.getContext("2d");
+    // var ctx = Sk.main_canvas.getContext("2d");
+    var ctx = Surface.offscreen_canvas.getContext("2d");
 
     self.spritelist.forEach(function (sprite) {
         var img = sprite.image;
@@ -357,6 +358,7 @@ function drawgroup(self, Surface) {
         // var rect = Sk.abstr.gattr(sprite, 'rect', false);
         // var image = Sk.abstr.gattr(sprite, 'image', false);
         var rect = sprite.rect;
+        // console.log('drawgroup', rect);
 
         var sx = Sk.ffi.remapToJs(rect.left);
         var sy = Sk.ffi.remapToJs(rect.top);
@@ -381,7 +383,8 @@ function clear(self, background) {
     var g = color_Js3[1];
     var b = color_Js3[2];
     //获取将要被绘制的画布并绘制
-    var ctx = self.image.canvas.getContext("2d");
+    // var ctx = self.image.canvas.getContext("2d");
+    var ctx = self.image.offscreen_canvas.getContext("2d");
     ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
     self.spritelist.forEach(function (sprite) {
         var left = Sk.ffi.remapToJs(sprite.rect.left);

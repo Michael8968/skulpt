@@ -854,22 +854,26 @@ var $builtinmodule = function(name) {
       // Create frame window
       var winwidth = self.width + self.ctrlWidth + self.margin * 3 + 4;
       var winheight = self.height + self.margin * 2 + 4;
-      self.frame_window = window.open(
-        "",
-        "myframe",
-        "width=" +
-          winwidth +
-          ",height=" +
-          winheight +
-          ",location=0" +
-          ",menubar=0" +
-          ",toolbar=0" +
-          ",directories=0" +
-          ",status=0" +
-          ",titlebar=0" +
-          ",scrollbars=0" +
-          ",resizeable=1"
-      );
+      var windowFeatures = "width=" +
+        winwidth +
+        ",height=" +
+        winheight +
+        ",location=no" +
+        ",menubar=no" +
+        ",toolbar=no" +
+        ",directories=no" +
+        ",status=no" +
+        ",titlebar=no" +
+        ",scrollbars=no" +
+        ",resizable=no"+
+        ",centerscreen=yes"+
+        ",modal=yes"+
+        ",alwaysOnTop=yes"+
+        ",alwaysRaised=yes"+
+        ",dialog=yes";
+      var params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+      self.frame_window = window.open("", "myframe", windowFeatures);
+      console.log('windowFeatures', windowFeatures);
       // Build empty document
       // Escape title
       // var jstitle = title.html$deentify();

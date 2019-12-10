@@ -1316,6 +1316,12 @@ function update(self) {
 update.co_name = new Sk.builtins['str']('update');
 update.co_varnames = ['self'];
 
+// function blit(self, other, pos) {
+//     var target_pos_js = Sk.ffi.remapToJs(pos);
+//     self.context2d.drawImage(other.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
+//     return Sk.misceval.callsim(PygameLib.RectType,
+//         Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([other.offscreen_canvas.width, other.offscreen_canvas.height]))
+// }
 function blit(self, source, dest, area, special_flags) {
     var target_pos_js = [0, 0]; // Sk.ffi.remapToJs(pos);
     if (Sk.builtin.checkIterable(dest)) {
@@ -1341,7 +1347,7 @@ function blit(self, source, dest, area, special_flags) {
       throw new Sk.builtin.TypeError("source.canvas无效");
     }
     var ctx = self.context2d;
-    ctx.globalAlpha = Sk.ffi.remapToJs(source._blitAlpha);
+    // ctx.globalAlpha = Sk.ffi.remapToJs(source._blitAlpha);
     if (!isclip)
         {ctx.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);}
     else {
@@ -1883,12 +1889,12 @@ function rect_type_f($gbl, $loc) {
 
     var topleft_getter = new Sk.builtin.func(function (self) {
 
-        return Sk.builtin.tuple([get_top(self), get_left(self)]);
+        return Sk.builtin.tuple([get_left(self), get_top(self)]);
     });
     var topleft_setter = new Sk.builtin.func(function (self, val) {
         var tl = Sk.ffi.remapToJs(val);
-        set_top(self, tl[0]);
-        set_left(self, tl[1]);
+        set_left(self, tl[0]);
+        set_top(self, tl[1]);
     });
     $loc.topleft = Sk.misceval.callsimOrSuspend(Sk.builtins.property, topleft_getter, topleft_setter);
 
@@ -2323,17 +2329,34 @@ function rect_type_f($gbl, $loc) {
         return Sk.ffi.remapToPy(inside);
     });
 
-    function do_rects_intersect(self, argrect) {
-        var argx = get_left(argrect);
-        var argy = get_top(argrect);
-        var argw = get_width(argrect);
-        var argh = get_height(argrect);
-        var selfx = get_left(self);
-        var selfy = get_top(self);
-        var selfw = get_width(self);
-        var selfh = get_height(self);
-        return (selfx < argx + argw && selfy < argy + argh &&
-            selfx + selfw > argx && selfy + selfh > argy);
+    function do_rects_intersect(self, rect) {
+        // var argx = get_left(argrect);
+        // var argy = get_top(argrect);
+        // var argw = get_width(argrect);
+        // var argh = get_height(argrect);
+        // var selfx = get_left(self);
+        // var selfy = get_top(self);
+        // var selfw = get_width(self);
+        // var selfh = get_height(self);
+        // return (selfx < argx + argw && selfy < argy + argh &&
+        //     selfx + selfw > argx && selfy + selfh > argy);
+        //     var rect1, rect2, maxX, maxY, minX, minY = {};
+        rect1 = {};
+        rect1.x = Sk.ffi.remapToJs(rect.left);
+        rect1.y = Sk.ffi.remapToJs(rect.top);
+        rect1.width = Sk.ffi.remapToJs(rect.width);
+        rect1.height = Sk.ffi.remapToJs(rect.height);
+        rect2 = {};
+        rect2.x = Sk.ffi.remapToJs(self.left);
+        rect2.y = Sk.ffi.remapToJs(self.top);
+        rect2.width = Sk.ffi.remapToJs(self.width);
+        rect2.height = Sk.ffi.remapToJs(self.height);
+
+        maxX = rect1.x + rect1.width >= rect2.x + rect2.width ? rect1.x + rect1.width : rect2.x + rect2.width
+        maxY = rect1.y + rect1.height >= rect2.y + rect2.height ? rect1.y + rect1.height : rect2.y + rect2.height
+        minX = rect1.x <= rect2.x ? rect1.x : rect2.x
+        minY = rect1.y <= rect2.y ? rect1.y : rect2.y
+        return (maxX - minX <= rect1.width + rect2.width && maxY - minY <= rect1.height + rect2.height);
     }
 
     $loc.colliderect = new Sk.builtin.func(function (self, argrect) {

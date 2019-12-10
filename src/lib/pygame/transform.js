@@ -21,6 +21,7 @@ var $builtinmodule = function (name) {
     });
 
     function scale(surf, size, dest) {
+        // console.log('surf', surf);
         if (Sk.abstr.typeName(surf) !== "Surface") {
             throw new Sk.builtin.TypeError("Wrong arguments");
         }
@@ -47,6 +48,14 @@ var $builtinmodule = function (name) {
         if (dest !== undefined && dest !== Sk.builtins.none.none$) {
             dest.context2d.drawImage(ret.offscreen_canvas, 0, 0);
         }
+        // surf.offscreen_canvas.width = w;
+        // surf.offscreen_canvas.height = h;
+        // var ctx = surf.offscreen_canvas.getContext("2d");
+        // ctx.clearRect(0, 0, surf.width, surf.height);  //清空画布
+        // ctx.save();
+        // ctx.scale(xs, ys);
+        // ctx.drawImage(ret.offscreen_canvas, 0, 0);
+        // ctx.restore();
         return ret;
     }
 

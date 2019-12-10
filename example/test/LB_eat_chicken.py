@@ -385,7 +385,7 @@ class Bullet(pygame.sprite.Sprite):
         self.block = block # 子弹移动像素
 
     def update(self, n):
-        self.rect.left += self.block
+        self.rect.left = self.rect.left + self.block
         if self.rect.left < 0 and self in enemyBulletGroup.sprites():
             enemyBulletGroup.remove(self)
         if self.rect.left > 960 and self in peopleBulletGroup.sprites():
