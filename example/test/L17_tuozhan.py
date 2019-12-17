@@ -53,7 +53,7 @@ ka9 = pygame.transform.smoothscale(ka9, (80,80))
 
 
 ############################################ 学生可以完成的部分
-'''
+
 matrix = [
             [0,0,0,0],
             [0,0,0,0],
@@ -81,7 +81,7 @@ for i in range(4):
     for j in range(4):
         matrix[i][j] = hi[n]
         n += 1
-'''
+
 ####################################################
 font1 = pygame.font.Font(None, 400)
 font2 = pygame.font.Font('simhei.ttf', 200)
@@ -156,7 +156,7 @@ while not game_over:
     #print((x1,y1,x2,y2))
     #print(aaa) 鼠标事件
 ######################################### 学生可以完成的部分
-    '''
+
     if x1 >= 0:
         screen.blit(dddd[matrix[x1][y1]], (210 + 100*y1,130 + 100*x1))
     if x2 >= 0 and not [x1,y1] == [x2,y2]:
@@ -171,7 +171,7 @@ while not game_over:
                 true_list.append([x1,y1])
             if [x2,y2] not in true_list:
                 true_list.append([x2,y2])
-    '''
+
 ######################################################学生可以完成的部分
 
     x1=-1

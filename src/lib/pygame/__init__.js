@@ -1373,6 +1373,8 @@ function blit(self, source, dest, area, special_flags) {
 function convert(self) {
     return self;
 }
+convert.co_name = new Sk.builtins['str']('convert');
+convert.co_varnames = ['self'];
 
 var surface$1 = function $Surface$class_outer(gbl, loc) {
     loc.__init__ = new Sk.builtins.function(init$1, gbl);

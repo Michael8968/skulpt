@@ -52,6 +52,18 @@ function font_Font($gbl, $loc) {
         self['bold'] = Sk.ffi.remapToPy(false);
         self['italic'] = Sk.ffi.remapToPy(false);
         self['underline'] = Sk.ffi.remapToPy(false);
+        self.family = Sk.ffi.remapToJs(self['name']);
+        if (typeof(self.family) == undefined || self.family == null || self.family.length <= 0) {self.family = "Arial"};
+
+        var STRETCH_CONST = 1.1;
+        var h = STRETCH_CONST * Sk.ffi.remapToJs(self['sz']);
+        var w = 300;
+        // Create a dummy canvas in order to exploit its measureText() method
+        var t = Sk.builtin.tuple([w, h]);
+        console.log('font_Font', w, h);
+        self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
+
+        self.text = '';
         return Sk.builtin.none.none$;
     });
     $loc.__init__.co_name = new Sk.builtins['str']('__init__');
@@ -150,7 +162,7 @@ function renderFont(self, text, antialias, color, background) {
     var msg = Sk.ffi.remapToJs(text);
     var STRETCH_CONST = 1.1;
     var h = STRETCH_CONST * Sk.ffi.remapToJs(self['sz']);
-    var fontName = Sk.ffi.remapToJs(self['name']);
+    var fontName = self.family; // Sk.ffi.remapToJs(self['name']);
     fontName = "" + h + "px " + fontName;
     var bold = Sk.ffi.remapToJs(self['bold']);
     if (bold) {
@@ -160,20 +172,31 @@ function renderFont(self, text, antialias, color, background) {
     if (italic) {
         fontName = 'italic ' + fontName;
     }
+    // ctx.font = self.style1 + " " + self.weight + " " + self.size + " " + self.family;
     var underline = Sk.ffi.remapToJs(self['underline']);
 
     var w = 300;
 
     // Create a dummy canvas in order to exploit its measureText() method
     var t = Sk.builtin.tuple([w, h]);
-    var s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
-    var ctx = s.offscreen_canvas.getContext("2d");
+    // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
+    // var ctx = s.offscreen_canvas.getContext("2d");
+    var ctx = Sk.main_canvas.getContext("2d");
     ctx.font = fontName;
     w = ctx.measureText(msg).width;
 
     t = Sk.builtin.tuple([w, h]);
-    s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
-    ctx = s.offscreen_canvas.getContext("2d");
+    // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
+    // self.surface.offscreen_canvas.width = Sk.ffi.remapToPy(w);
+    // self.surface.offscreen_canvas.height = Sk.ffi.remapToPy(h);
+    if (self.text === text) {
+      ctx = self.surface.offscreen_canvas.getContext("2d");
+    } else {
+      console.log('renderFont', self.text, text);
+      self.text = text;
+      self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
+      ctx = self.surface.offscreen_canvas.getContext("2d");
+    }
     if (background !== undefined) {
         var background_js = PygameLib.extract_color(background);
         ctx.fillStyle = 'rgba(' + background_js[0] + ', ' + background_js[1] + ', ' + background_js[2] + ', '
@@ -182,6 +205,7 @@ function renderFont(self, text, antialias, color, background) {
     }
     ctx.font = fontName;
     var color_js = PygameLib.extract_color(color);
+    // console.log('renderFont', msg, w, h, fontName, color_js);
     ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
     ctx.fillText(msg, 0, 1 / STRETCH_CONST * h);
     if (underline) {
@@ -192,7 +216,7 @@ function renderFont(self, text, antialias, color, background) {
         ctx.lineTo(w, h - 1);
         ctx.stroke();
     }
-    return s;
+    return self.surface;
 }
 
 var fonts_osx = ['applecoloremojiui', 'cochin', 'raanana', 'franklingothicmedium', 'signpainter', 'iowanoldstyle', 'corbel', 'avenir', 'birchstd', 'bitstreamverasansmono', 'sfcompacttext', 'albayan', 'applesdgothicneo', 'damascus', 'malayalammn', 'kohinoortelugu', 'minionpro', 'estrangelomidyat', 'lucidagrandeui', 'hiraginokakugothicpro', 'diwankufi', 'calibri', 'arialnarrow', 'applesdgothicneoi', 'gillsans', 'stixsizefoursym', 'adobehebrew', 'farisi', 'ptsanscaption', 'hiraginomarugothicpron', 'avenirnextcondensed', 'couriernew', 'myriadhebrew', 'hiraginominchopron', 'laomn', 'estrangeloantioch', 'damascuspua', 'hiraginosans', 'avenirnext', 'gohatibebzemen', 'altarikhpua', 'arial', 'itfdevanagari', 'hiraginokakugothicstd', 'adobegaramondpro', 'oratorstd', 'kozukagothicpro', 'skia', 'chaparralpro', 'sfnsdisplaycondensed', 'geezapro', 'lithospro', 'heitisc', 'gujaratimt', 'corsivahebrew', 'hoeflertext', 'athelas', 'lucidagrande', 'timesnewroman', 'decotypenaskhpua', 'webdings', 'inaimathi', 'myriadarabic', 'lettergothicstd', 'kozukagothicpr6n', 'lucidasansunicode', 'geezaprointerface', 'kozukaminchopr6n', 'luminari', 'helveticaneue', 'kailasa', 'helvetica', 'systemfont', 'shreedevanagari714', 'gillsansmt', 'applebraille', 'adobedevanagari', 'krungthep', 'stixgeneral', 'verdana', 'sfcompactdisplay', 'baskerville', 'sertomalankara', 'rockwell', 'newpeninimmt', 'malayalamsangammn', 'palatinolinotype', 'mspmincho', 'euphemiaucas', 'gurmukhisangammn', 'ptsansnarrow', 'trattatello', 'consolas', 'mishafigold', 'arialhebrewscholar', 'pingfangtc', 'symbol', 'ptserif', 'ayuthaya', 'notonastaliqurduui', 'stixintegralsd', 'kohinoordevanagari', 'sertomardin', 'notonastaliqurdu', 'stixnonunicode', 'adobekaitistd', 'pingfangsc', 'pingfanghk', 'stencilstd', 'trebuchetms', 'heititc', 'times', 'kohinoorbangla', 'marlett', 'seravek', 'tamilmn', 'andalemono', 'kufistandardgkpua', 'estrangelotalada', 'meiryo', 'banglasangammn', 'adobeheitistd', 'alnilepua', 'cambria', 'sukhumvitset', 'msmincho', 'marion', 'cooperstd', 'brushscriptmt', 'charter', 'comicsansms', 'sinhalasangammn', 'mingliuhkscs', 'palatino', 'arialroundedmtbold', 'estrangeloquenneshrin', 'ptsans', 'kefa', 'chalkboard', 'arabicuidisplay', 'laosangammn', 'impact', 'luxisans', 'menlo', 'bigcaslon', 'simhei', 'helveticaneuedeskinterface', 'myriadpro', 'snellroundhand', 'stixintegralsup', 'bitstreamverasans', 'arialhebrewdeskinterface', 'adobesongstd', 'stixsizeonesym', 'adobefanheitistd', 'superclarendon', 'sfcompactrounded', 'chalkboardse', 'muna', 'perpetua', 'hiraginokakugothicinterface', 'dinalternate', 'adobenaskh', 'stixintegralssm', 'tahoma', 'luxiserif', 'sertojerusalemoutline', 'telugusangammn', 'arabicuitext', 'sfnstextcondensed', 'adobemingstd', 'twcenmt', 'ptserifcaption', 'kannadasangammn', 'candara', 'americantypewriter', 'msreferencesansserif', 'papyrus', 'hiraginokakugothicpron', 'mishafi', 'futura', 'estrangeloedessa', 'sinhalamn', 'kozukaminchopro', 'albayanpua', 'adobecaslonpro', 'gujaratisangammn', 'trajanpro', 'constantia', 'myanmarsangammn', 'copperplate', 'teamviewer12', 'lucidaconsole', 'chalkduster', 'microsoftyibaiti', 'khmersangammn', 'songtitc', 'microsofttaile', 'bodoni72smallcaps', 'itfdevanagarimarathi', 'hiraginokakugothicstdn', 'oriyamn', 'georgia', 'pmingliuextb', 'nadeempua', 'tektonpro', 'applesymbols', 'markerfelt', 'nuevastd', 'songtisc', 'herculanum', 'optima', 'kufistandardgk', 'ptmono', 'bodoni72', 'adobearabic', 'giddyupstd', 'luximono', 'applechancery', 'khmermn', 'arialunicodems', 'bitstreamveraserif', 'eastsyriacadiabene', 'mspgothic', 'mingliu', 'bodoni72oldstyle', 'devanagarimt', 'sertobatnan', 'aquakana', 'hiraginosansgbinterface', 'mshtakan', 'msgothic', 'blackoakstd', 'bradleyhand', 'estrangelonisibin', 'prestigeelitestd', 'wingdings3', 'wingdings2', 'myanmarmn', 'sertokharput', 'stixsizefivesym', 'gurmukhimn', 'kannadamn', 'munapua', 'devanagarisangammn', 'wingdings', 'dincondensed', 'nadeem', 'sanapua', 'thonburi', 'applemyungjo', 'arialhebrew', 'beirutpua', 'baghdadpua', 'gurmukhimt', 'savoyeletcc', 'geezapropua', 'zapfino', 'telugumn', 'banglamn', 'waseem', 'arialblack', 'sertourhoy', 'charlemagnestd', 'microsoftsansserif', 'gulim', 'savoyelet', 'decotypenaskh', 'batang', 'stsong', 'ocrastd', 'franklingothicbook', 'didot', 'applegothic', 'altarikh', 'adobefangsongstd', 'stixvariants', 'zapfdingbats', 'hiraginosansgb', 'farah', 'baghdad', 'gb18030bitmap', 'kokonor', 'sertojerusalem', 'silom', 'estrangeloturabdin', 'bookshelfsymbol7', 'noteworthy', 'stixsizetwosym', 'oriyasangammn', 'tamilsangammn', 'alnile', 'phosphate', 'cambriamath', 'sana', 'stixintegralsupd', 'simsun', 'sathu', 'estrangelonisibinoutline', 'mingliuextb', 'simsunextb', 'beirut', 'farahpua', 'brushscriptstd', 'eastsyriacctesiphon', 'diwankufipua', 'rosewoodstd', 'mongolianbaiti', 'diwanthuluth', 'stixintegralsupsm', 'gabriola', 'mingliuhkscsextb', 'adobemyungjostd', 'msreferencespecialty', 'keyboard', 'microsofthimalaya', 'mesquitestd', 'poplarstd', 'hiraginomarugothicpro', 'hiraginominchopro', 'hobostd', 'stixsizethreesym', 'bodoniornaments', 'lastresort', 'pmingliu', 'applecoloremoji', 'plantagenetcherokee', 'adobegothicstd'];
