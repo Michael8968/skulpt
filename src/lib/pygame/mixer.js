@@ -82,7 +82,9 @@ var music = function (globalScope) {
                 _sound.setAttribute('src', Soundpath);
                 _num = 0; //播放次数
 
-                // window.audios.push(_sound);
+                window.audios.push(_sound);
+                console.log('_sound', _sound);
+
             }
         },
         //播放背景乐文件
@@ -174,7 +176,7 @@ var initSound = function (self, filename) {
         self._sound.setAttribute('src', Soundpath);
         self._num = 0; //播放次数
 
-        // window.audios.push(self._sound);
+        window.audios.push(self._sound);
     }
 };
 initSound.co_name = new Sk.builtins['str']('__init__');

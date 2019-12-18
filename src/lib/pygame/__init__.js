@@ -16,6 +16,7 @@ Sk.insertEvent = function (eventName) {
             break;
         case "quit":
             console.log('Sk.insertEvent', eventName);
+            closeAllSound();
             e = [PygameLib.constants.QUIT, { key: PygameLib.constants.K_ESCAPE }];
             break;
     }
@@ -23,7 +24,7 @@ Sk.insertEvent = function (eventName) {
 };
 
 var PygameLib = {};
-
+window.audios = [];
 PygameLib.running = false;
 
 
@@ -115,6 +116,17 @@ function keyEventListener(event) {
     return false;
 }
 
+function closeAllSound() {
+    console.log('closeAllSound');
+    var sounds = window.audios; // document.getElementsByTagName('audio');
+    console.log('audios.length', sounds.length);
+    if (sounds && sounds.length > 0) {
+      sounds.forEach(function(sound){
+        console.log('sound', sound);
+        sound.pause();
+      });
+    }
+}
 // constants
 PygameLib.constants = {
     '__doc__': 'Set of functions from PyGame that are handy to have in\nthe local namespace for your module',
@@ -1054,6 +1066,7 @@ var $builtinmodule = function (name) {
     PygameLib.RectType = mod.Rect;
     mod.quit = new Sk.builtin.func(function () {
         PygameLib.running = false;
+        closeAllSound();
         // Sk.builtin.quit();
         if (Sk.quitHandler) {
             console.log('mod.quit');
@@ -1235,8 +1248,10 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = true)
             };
         } */
     }
-    self.main_canvas.width = self.width;
-    self.main_canvas.height = self.height;
+    // self.main_canvas.width = self.width;
+    // self.main_canvas.height = self.height;
+    self.main_canvas.width = 900;
+    self.main_canvas.height = 600;
     self.main_context = self.main_canvas.getContext("2d");
 
     self.offscreen_canvas = document.createElement('canvas');
@@ -1244,8 +1259,8 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = true)
 
     self.offscreen_canvas.width = self.width;
     self.offscreen_canvas.height = self.height;
-    self.main_canvas.setAttribute('width', self.width);
-    self.main_canvas.setAttribute('height', self.height);
+    // self.main_canvas.setAttribute('width', self.width);
+    // self.main_canvas.setAttribute('height', self.height);
     self.main_canvas.setAttribute('style', "border: 1px solid darkgray;");
     fillBlack(self.main_context, self.main_canvas.width, self.main_canvas.height);
     fillBlack(self.context2d, self.width, self.height);
@@ -1306,9 +1321,10 @@ get_flags.co_name = new Sk.builtins['str']('get_flags');
 get_flags.co_varnames = ['self'];
 
 function update(self) {
-    self.main_canvas.width = self.offscreen_canvas.width;
-    self.main_canvas.height = self.offscreen_canvas.height;
+    // self.main_canvas.width = self.offscreen_canvas.width;
+    // self.main_canvas.height = self.offscreen_canvas.height;
     // if (self.main_canvas.width > 0 && self.main_canvas.height > 0) {
+        // self.main_context.clearRect(0,0,self.main_canvas.width,self.main_canvas.height);
         self.main_context.drawImage(self.offscreen_canvas, 0, 0);
     // }
 }
@@ -1347,6 +1363,7 @@ function blit(self, source, dest, area, special_flags) {
       throw new Sk.builtin.TypeError("source.canvas无效");
     }
     var ctx = self.context2d;
+    ctx.save();
     // ctx.globalAlpha = Sk.ffi.remapToJs(source._blitAlpha);
     if (!isclip)
         {ctx.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);}
@@ -1358,6 +1375,7 @@ function blit(self, source, dest, area, special_flags) {
         ctx.drawImage(source.canvas, sx, sy, source.offscreen_canvas.width, source.offscreen_canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
         // self.context2d.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
     }
+    ctx.restore();
     return area;
     // return Sk.misceval.callsim(PygameLib.RectType,
     //     Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([source.offscreen_canvas.width, source.offscreen_canvas.height]))

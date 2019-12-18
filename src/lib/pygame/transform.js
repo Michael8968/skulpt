@@ -60,6 +60,46 @@ var $builtinmodule = function (name) {
     }
 
     mod.scale = new Sk.builtin.func(scale);
+    //创建Canvas
+    function createCanvas(size) {
+        var canvas = document.createElement("canvas");
+        canvas.width = size[0];
+        canvas.height = size[1];
+        return canvas;
+    }
+    function smoothscale(Surface, size, DestSurface) {
+      var _size = Sk.ffi.remapToJs(size);
+      var scale_x = _size[0];
+      var scale_y = _size[1];
+      if (typeof(DestSurface) != "undefined") {
+          DestSurface.canvas = createCanvas([scale_x, scale_y]);
+          var ctx = DestSurface.canvas.getContext("2d");
+          ctx.save();
+          ctx.scale(scale_x / Surface.offscreen_canvas.width, scale_y / Surface.offscreen_canvas.height);
+          ctx.drawImage(Surface.offscreen_canvas, 0, 0);
+          ctx.restore();
+          //尺寸调整
+          DestSurface.width = scale_x;
+          DestSurface.height = scale_y;
+          return DestSurface;
+      } else {
+          var _canvas = createCanvas([Surface.offscreen_canvas.width, Surface.offscreen_canvas.height]);
+          var _ctx = _canvas.getContext("2d");
+          _ctx.drawImage(Surface.offscreen_canvas, 0, 0);
+          Surface.width = scale_x;
+          Surface.height = scale_y;
+          var ctx = Surface.offscreen_canvas.getContext("2d");
+          ctx.clearRect(0, 0, Surface.offscreen_canvas.width, Surface.offscreen_canvas.height);  //清空画布
+          ctx.save();
+          ctx.scale(scale_x / Surface.offscreen_canvas.width, scale_y / Surface.offscreen_canvas.height);
+          ctx.drawImage(_canvas, 0, 0);
+          ctx.restore();
+          //尺寸调整
+          Surface.width = scale_x;
+          Surface.height = scale_y;
+          return Surface;
+      }
+    }
     mod.smoothscale = new Sk.builtin.func(scale);
     mod.rotate = new Sk.builtin.func(function (surf, angle) {
         if (Sk.abstr.typeName(surf) !== "Surface") {
