@@ -12,12 +12,14 @@ def draw_map(screen):
         for j in range(30):
             screen.blit(map_dict[map[i][j]][0], (0+30*j,0+30*i))
 
+lan_suf = pygame.Surface((670, 60))
+
 def draw_lan(screen, items, craft):
-    lan_suf = pygame.Surface((670, 60))
+    # lan_suf = pygame.Surface((670, 60))
     lan_suf.fill((100,100,100))
     for i in range(12):
         pygame.draw.rect(lan_suf, (255,255,255), (7.5+ i*55,5, 50,50))
-    #pygame.draw.rect(lan_suf, (0,0,0), (7.5+11*55, 5, 50,50))
+    ####pygame.draw.rect(lan_suf, (0,0,0), (7.5+11*55, 5, 50,50))
     lan_suf.blit(bag, (7.5+55*11,5))
     ii = 0
     for thing in items:
@@ -61,8 +63,9 @@ def drawing(suf,items):
     pygame.draw.rect(suf, (255,255,255), (460, 315, 90, 50))
     suf.blit(maked, (460,315))
 
-font = pygame.font.Font(None, 18)
+# font = pygame.font.Font(None, 18)
 def print_text(suf, x, y, text):
+    font = pygame.font.Font(None, 18)
     imgText = font.render(text, True, (0,0,0))
     suf.blit(imgText, (x,y))
 

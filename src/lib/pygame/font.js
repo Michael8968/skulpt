@@ -1,5 +1,6 @@
 $builtinmodule = function (name) {
     mod = {};
+    window.fonts = [];
     mod.__is_initialized = false;
     mod.Font = Sk.misceval.buildClass(mod, font_Font, "FontType", []);
     PygameLib.FontType = mod.Font;
@@ -47,6 +48,8 @@ $builtinmodule = function (name) {
 function font_Font($gbl, $loc) {
     $loc.__init__ = new Sk.builtin.func(function (self, filename, size) {
         Sk.builtin.pyCheckArgs('__init__', arguments, 2, 3, false, false);
+        // console.log('font_Font', filename, size);
+
         self.size = Sk.ffi.remapToJs(size);
         self.size = parseInt(self.size*2/3);
         if (self.size < 2) { self.size = 2; }
@@ -58,17 +61,29 @@ function font_Font($gbl, $loc) {
         self['underline'] = Sk.ffi.remapToPy(false);
         self.family = Sk.ffi.remapToJs(self['name']);
         if (typeof(self.family) == undefined || self.family == null || self.family.length <= 0) {self.family = "Arial"};
+        var found = false;
+        window.fonts.forEach(function(font) {
+          if (font.name === filename && font.size === size) {
+            self.sampleSurface =font.font.sampleSurface;
+            self.surface = font.font.surface;
+            self.text = font.font.text;
+            found = true;
+            console.log('font_Font', filename, size, self.text);
+          }
+        });
+        if (!found) {
+          var STRETCH_CONST = 1.1;
+          var h = STRETCH_CONST * Sk.ffi.remapToJs(self['sz']);
+          var w = 300;
+          // Create a dummy canvas in order to exploit its measureText() method
+          var t = Sk.builtin.tuple([w, h]);
+          console.log('font_Font', w, h);
+          self.sampleSurface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
+          self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
 
-        var STRETCH_CONST = 1.1;
-        var h = STRETCH_CONST * Sk.ffi.remapToJs(self['sz']);
-        var w = 300;
-        // Create a dummy canvas in order to exploit its measureText() method
-        var t = Sk.builtin.tuple([w, h]);
-        console.log('font_Font', w, h);
-        self.sampleSurface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
-        self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
-        self.text = '';
-
+          window.fonts.push({name: filename, size: size, font: self});
+          self.text = '';
+        }
         return Sk.builtin.none.none$;
     });
     $loc.__init__.co_name = new Sk.builtins['str']('__init__');
@@ -186,7 +201,7 @@ function renderFont(self, text, antialias, color, background) {
     var t = Sk.builtin.tuple([w, h]);
     // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
     // var ctx = s.offscreen_canvas.getContext("2d");
-    var ctx1 = self.sampleSurface.main_canvas.getContext("2d");
+    var ctx1 = self.sampleSurface.offscreen_canvas.getContext("2d");
     ctx1.font = fontName;
     w = ctx1.measureText(msg).width;
 
@@ -194,11 +209,12 @@ function renderFont(self, text, antialias, color, background) {
     // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
     // self.surface.offscreen_canvas.width = Sk.ffi.remapToPy(w);
     // self.surface.offscreen_canvas.height = Sk.ffi.remapToPy(h);
-    if (self.text === text) {
+    var msg0 = Sk.ffi.remapToJs(self.text);
+    if (msg0.length === msg.length) {
       ctx = self.surface.offscreen_canvas.getContext("2d");
     } else {
-      console.log('renderFont', w, h);
-      self.text = text;
+      console.log('renderFont', msg0, msg, msg0.length, msg.length);
+      self.text = Sk.ffi.remapToPy(msg);
       self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
       ctx = self.surface.offscreen_canvas.getContext("2d");
     }
@@ -213,7 +229,7 @@ function renderFont(self, text, antialias, color, background) {
     }
     ctx.font = fontName;
     var color_js = PygameLib.extract_color(color);
-    console.log('renderFont', msg, w, h, fontName, color_js);
+    // console.log('renderFont', msg, w, h, fontName, color_js);
     ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
     // ctx.fillText(msg, 0, 1 / STRETCH_CONST * h);
     // var textH = parseInt(self.size.substring(0, self.size.indexOf("px")));

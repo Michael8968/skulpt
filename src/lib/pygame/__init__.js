@@ -1394,6 +1394,29 @@ function convert(self) {
 convert.co_name = new Sk.builtins['str']('convert');
 convert.co_varnames = ['self'];
 
+//创建Surface的新副本，返回Surface的副本
+function subsurface(self,rect){
+  //判断area的Rect对象，并限定绘制范围
+  if (!isVaild(rect)) {
+    rect = Sk.misceval.callsim(PygameLib.RectType,
+      Sk.ffi.remapToPy(0),
+      Sk.ffi.remapToPy(0),
+      Sk.ffi.remapToPy(self.width),
+      Sk.ffi.remapToPy(self.height));
+  }
+  //判断rect，并限定绘制范围
+  var left = Sk.ffi.remapToJs(rect.left);
+  var top= Sk.ffi.remapToJs(rect.top);
+  var width = Sk.ffi.remapToJs(rect.width);
+  var height = Sk.ffi.remapToJs(rect.height);
+
+  var lsize = new Sk.builtin.tuple([width, height]);
+  var _surface = Sk.misceval.callsim(PygameLib.SurfaceType, lsize); //Create一个surface
+  return _surface;
+}
+subsurface.co_name = new Sk.builtins['str']('subsurface');
+subsurface.co_varnames = ['self', 'rect'];
+
 var surface$1 = function $Surface$class_outer(gbl, loc) {
     loc.__init__ = new Sk.builtins.function(init$1, gbl);
     loc.__repr__ = new Sk.builtins.function(repr$1, gbl);
@@ -1467,6 +1490,7 @@ var surface$1 = function $Surface$class_outer(gbl, loc) {
        }
        self._blitAlpha = Sk.ffi.remapToPy(1 - alpha/255);
     });
+    loc.subsurface = new Sk.builtins.function(subsurface, gbl);//创建一个引用其父级的新Surface
 };
 
 surface$1.co_name = new Sk.builtins['str']('Surface');
