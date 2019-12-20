@@ -46,7 +46,7 @@ var $builtinmodule = function (name) {
 
     });
     // mod.name = new Sk.builtin.func(function (idx) {
-    //     console.log('mod.name', idx);
+    //     // console.log('mod.name', idx);
     //     var i = Sk.ffi.remapToJs(idx);
     //     if (i < 0 || i >= 323) {
     //         return Sk.ffi.remapToPy("unknown key");

@@ -76,7 +76,7 @@ function event_EventType_f($gbl, $loc) {
             self[k] = Sk.ffi.remapToPy(dictjs[k]);
         }
         // var typejs = Sk.ffi.remapToJs(self['type']);
-        // console.log('event_EventType_f', self['type'], typejs);
+        // // console.log('event_EventType_f', self['type'], typejs);
         return Sk.builtin.none.none$;
     });
     $loc.__init__.co_name = new Sk.builtins['str']('__init__');

@@ -83,7 +83,7 @@ var music = function (globalScope) {
                 _num = 0; //播放次数
 
                 window.audios.push(_sound);
-                console.log('_sound', _sound);
+                // console.log('_sound', _sound);
 
             }
         },
@@ -162,7 +162,7 @@ var SoundClass = function (gbl) {
 
 //初始化Sound
 var initSound = function (self, filename) {
-    // console.log('initSound', filename);
+    // // console.log('initSound', filename);
     var soundJS = "";
     if (isValid(filename)) {
       soundJS = Sk.ffi.remapToJs(filename);
@@ -172,7 +172,7 @@ var initSound = function (self, filename) {
         self._sound.id = soundJS;
         // var Soundpath = Sk.GameGraphics.assets(Sk.audioPath+soundJS);
         var Soundpath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
-        console.log('Soundpath', Soundpath);
+        // console.log('Soundpath', Soundpath);
         self._sound.setAttribute('src', Soundpath);
         self._num = 0; //播放次数
 
@@ -208,7 +208,7 @@ var play = function (self, loops, maxtime, fade_ms) {
         if (self._maxtime > 0) {
             setTimeout(function () {
                 self._sound.pause();
-                console.log('pause', loops, maxtime, fade_ms);
+                // console.log('pause', loops, maxtime, fade_ms);
             }, self._maxtime);
         }
     }

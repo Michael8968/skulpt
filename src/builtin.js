@@ -893,8 +893,19 @@ Sk.builtin.jsmillis = function jsmillis () {
     return now.valueOf();
 };
 
-Sk.builtin.eval_ = function eval_ () {
-    throw new Sk.builtin.NotImplementedError("eval is not yet implemented");
+Sk.builtin.eval_ = function eval_ (evalcode) {
+    // throw new Sk.builtin.NotImplementedError("eval is not yet implemented");
+    var result = Sk.global["eval"](Sk.ffi.remapToJs(evalcode));
+    console.log('eval_', evalcode, result);
+    try {
+        return Sk.ffi.remapToPy(result);
+    } catch (err) {
+        if (err.constructor === Sk.asserts.AssertionError) {
+            return Sk.builtin.none.none$;
+        }
+
+        throw err;
+    }
     // var result = eval(code.v);
     // if (typeof result == "string")
     // {

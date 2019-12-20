@@ -40,7 +40,7 @@ var $builtinmodule = function (name) {
 };
 
 function time_Clock($gbl, $loc) {
-    // console.log('time_Clock', $gbl, $loc);
+    // // console.log('time_Clock', $gbl, $loc);
     $loc.__init__ = new Sk.builtin.func(function (self) {
         self['prevTime'] = Sk.builtin.none.none$;
         self['getTime'] = Sk.builtin.none.none$;

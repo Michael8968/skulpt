@@ -21,7 +21,7 @@ var $builtinmodule = function (name) {
     });
 
     function scale(surf, size, dest) {
-        // console.log('surf', surf);
+        // // console.log('surf', surf);
         if (Sk.abstr.typeName(surf) !== "Surface") {
             throw new Sk.builtin.TypeError("Wrong arguments");
         }

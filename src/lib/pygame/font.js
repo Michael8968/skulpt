@@ -48,7 +48,7 @@ $builtinmodule = function (name) {
 function font_Font($gbl, $loc) {
     $loc.__init__ = new Sk.builtin.func(function (self, filename, size) {
         Sk.builtin.pyCheckArgs('__init__', arguments, 2, 3, false, false);
-        // console.log('font_Font', filename, size);
+        // // console.log('font_Font', filename, size);
 
         self.size = Sk.ffi.remapToJs(size);
         self.size = parseInt(self.size*2/3);
@@ -68,7 +68,7 @@ function font_Font($gbl, $loc) {
             self.surface = font.font.surface;
             self.text = font.font.text;
             found = true;
-            console.log('font_Font', filename, size, self.text);
+            // // console.log('font_Font', filename, size, self.text);
           }
         });
         if (!found) {
@@ -77,7 +77,7 @@ function font_Font($gbl, $loc) {
           var w = 300;
           // Create a dummy canvas in order to exploit its measureText() method
           var t = Sk.builtin.tuple([w, h]);
-          console.log('font_Font', w, h);
+          // console.log('font_Font', w, h);
           self.sampleSurface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
           self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
 
@@ -210,10 +210,10 @@ function renderFont(self, text, antialias, color, background) {
     // self.surface.offscreen_canvas.width = Sk.ffi.remapToPy(w);
     // self.surface.offscreen_canvas.height = Sk.ffi.remapToPy(h);
     var msg0 = Sk.ffi.remapToJs(self.text);
-    if (msg0.length === msg.length) {
+    if (msg0 === msg) {
       ctx = self.surface.offscreen_canvas.getContext("2d");
     } else {
-      console.log('renderFont', msg0, msg, msg0.length, msg.length);
+      // // console.log('renderFont', msg0, msg, msg0.length, msg.length);
       self.text = Sk.ffi.remapToPy(msg);
       self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
       ctx = self.surface.offscreen_canvas.getContext("2d");
@@ -229,7 +229,7 @@ function renderFont(self, text, antialias, color, background) {
     }
     ctx.font = fontName;
     var color_js = PygameLib.extract_color(color);
-    // console.log('renderFont', msg, w, h, fontName, color_js);
+    // // console.log('renderFont', msg, w, h, fontName, color_js);
     ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
     // ctx.fillText(msg, 0, 1 / STRETCH_CONST * h);
     // var textH = parseInt(self.size.substring(0, self.size.indexOf("px")));

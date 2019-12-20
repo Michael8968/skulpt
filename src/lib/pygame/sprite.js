@@ -351,14 +351,14 @@ function drawgroup(self, Surface) {
 
     self.spritelist.forEach(function (sprite) {
         var img = sprite.image;
-        // console.log('sprite.image', sprite.image);
+        // // console.log('sprite.image', sprite.image);
         // var t = Sk.builtin.tuple([img.width, img.height]);
         // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
         // var ctx = s.offscreen_canvas.getContext("2d");
         // var rect = Sk.abstr.gattr(sprite, 'rect', false);
         // var image = Sk.abstr.gattr(sprite, 'image', false);
         var rect = sprite.rect;
-        // console.log('drawgroup', rect);
+        // // console.log('drawgroup', rect);
 
         var sx = Sk.ffi.remapToJs(rect.left);
         var sy = Sk.ffi.remapToJs(rect.top);

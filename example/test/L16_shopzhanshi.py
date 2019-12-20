@@ -676,6 +676,7 @@ while True:
     '''
     for value in show_dict.values():
         if n < 4:
+            print(value['image'])
             screen.blit(value['image'], (n*140 + 20, 405),Rect(0,0,100,100))
             print_text(font_zh, n*140 + 25, 525, value['name'], color=(0,0,0))
             print_text(font_zh, n*140 + 25, 550, value['price'], color=(255,0,0))
