@@ -519,7 +519,6 @@ var $builtinmodule = function(name) {
                 if (handlers && handlers.length) {
                     for (i = 0; i < handlers.length; i++) {
                         handlers[i].apply(args);
-                        // console.log("proto.fire", handlers[i], args);
                     }
                 }
             };
@@ -694,11 +693,6 @@ var $builtinmodule = function(name) {
 
                 removeLayer(this._paper);
                 this._paper = undefined;
-                // if (this._screen && this._screen._mode === "logo") {
-                //     this.setheading(0);
-                //     // this.rotate(0, 90);
-                //     // this._angle = 90;
-                // }
             };
 
             proto.$degrees = function(fullCircle) {
@@ -871,13 +865,6 @@ var $builtinmodule = function(name) {
                 180 - west    180 - south -> 270
                 270 - south   270 - west -> 180
                 */
-                // var _angle = angle;
-                // if (this._screen.getMode() == "logo") {
-                //     // _angle = 90 - angle;
-                //     // _angle = angle*-1;
-                //     console.log('proto.setheading', _angle);
-                // }
-                // console.log('$seth', this._screen.getMode(), angle, _angle);
                 pushUndo(this);
                 if(getScreen()._mode === "logo"){
                   angle = angle*-1;
@@ -886,8 +873,6 @@ var $builtinmodule = function(name) {
             };
 
             proto.$setheading = proto.$seth = function(angle) {
-                // pushUndo(this);
-                // return this.queueTurnTo(this._angle, angle);
                 return this.setheading(angle);
             };
 
@@ -1006,9 +991,7 @@ var $builtinmodule = function(name) {
             proto.$speed.co_varnames = ["speed"];
 
             proto.$pencolor = function(r, g, b, a) {
-                // console.log('proto.$pencolor', r,g,b,a);
                 if (r !== undefined) {
-                    // console.log('proto.$pencolor', r,g,b,a);
                     this._color = createColor(this._colorMode, r, g, b, a);
                     return this.addUpdate(undefined, this._shown, {
                         color: this._color
@@ -1201,7 +1184,6 @@ var $builtinmodule = function(name) {
             };
 
             proto.$shape = function(shape) {
-                // console.log('shape', shape);
                 if (shape && SHAPES[shape]) {
                     this._shape = shape;
                     return this.addUpdate(undefined, this._shown, {
@@ -1241,16 +1223,6 @@ var $builtinmodule = function(name) {
             proto.$window_height = function() {
                 return this._screen.$window_height();
             };
-
-            // proto.$tracer = function(n, delay) {
-            //     return this._screen.$tracer(n, delay);
-            // };
-            // proto.$tracer.minArgs = 0;
-            // proto.$tracer.co_varnames = ["n", "delay"];
-            //
-            // proto.$update = function() {
-            //     return this._screen.$update();
-            // };
 
             proto.$delay = function(delay) {
                 return this._screen.$delay(delay);
@@ -1362,18 +1334,6 @@ var $builtinmodule = function(name) {
             proto.bgLayer = function() {
                 return this._background || (this._background = createLayer(1));
             };
-
-            // proto.hitTest = function(mouseX, mouseY, localX, localY) {
-            //     var context = this.hitTestLayer();
-            //     clearLayer(context);
-            //     var turtles = getFrameManager().turtles();
-            //     if (turtles && turtles.length) {
-            //       drawTurtle(turtles[0].getState(), context);
-            //     }
-            //     var pixel = context.getImageData(mouseX,mouseY,1,1).data;
-            //     // check alpha first since it is most likely to have a value
-            //     return pixel[3] ||pixel[0] || pixel[1] || pixel[2];
-            // };
 
             proto.hitTestLayer = function() {
                 return this._hitTest || (this._hitTest = createLayer(0, true));
@@ -1488,7 +1448,6 @@ var $builtinmodule = function(name) {
             };
 
             proto.$tracer = function(frames, delay) {
-                // console.log('$tracer', frames, delay);
                 if (typeof frames === "boolean" && typeof delay === "undefined") {
                   // 开关动画
                   if (!frames) {
@@ -1626,9 +1585,7 @@ var $builtinmodule = function(name) {
 
             proto.$bgcolor = function(color, g, b, a) {
                 if (color !== undefined) {
-                    // console.log('proto.$bgcolor', color, g, b, a, this._colorMode);
                     this._bgcolor = createColor(this._colorMode, color, g, b, a);
-                    // console.log('proto.$bgcolor', this._colorMode, this._bgcolor);
                     clearLayer(this.bgLayer(), this._bgcolor);
                     return;
                 }
@@ -1832,7 +1789,6 @@ var $builtinmodule = function(name) {
             proto.$onkeyrelease.co_varnames = ["method", "keyValue"];
 
             proto.$onscreenclick = function(method, btn, add) {
-                // console.log("$onscreenclick", method, btn, add);
                 this.getManager("mousedown").addHandler(method, add);
             };
             proto.$onscreenclick.minArgs = 1;
@@ -1851,13 +1807,6 @@ var $builtinmodule = function(name) {
             proto.$ontimer.minArgs = 0;
             proto.$ontimer.co_varnames = ["method", "interval"];
 
-            // proto.$getcanvas = function() {
-            //     var turtles = getFrameManager().turtles();
-            //     var turtle = turtles[0];
-            //     console.log('turtles', turtles);
-            //     console.log('turtle', turtle);
-            //     return turtle;
-            // };
             proto.$winfo_width = function() {
                 return getWidth();
             };
@@ -1867,49 +1816,27 @@ var $builtinmodule = function(name) {
             };
             // turtle.mode("logo")
             /*
-      standard mode logo mode
-      0 - east      0 - north
-      90 - north    90 - east
-      180 - west    180 - south
-      270 - south   270 - west
-      */
+              standard mode logo mode
+              0 - east      0 - north
+              90 - north    90 - east
+              180 - west    180 - south
+              270 - south   270 - west
+            */
             proto.$mode = function(mode) {
-                // var width = getWidth();
-                // var height = getHeight();
                 if (mode == "logo") {
                     var spriteLayer = getScreen().spriteLayer();
                     var bgLayer = getScreen().bgLayer();
                     var hitTestLayer = getScreen().hitTestLayer();
                     if (spriteLayer) {
-                      // translate context to center of canvas
-                      // spriteLayer.translate(spriteLayer.canvas.width / 2, spriteLayer.canvas.height / 2);
                       spriteLayer.rotate( Math.PI / 2);
-                      // spriteLayer.scale(1, -1);
-                      // console.log('rotate spriteLayer');
                     }
                     if (bgLayer) {
-                      // bgLayer.translate(bgLayer.canvas.width / 2, bgLayer.canvas.height / 2);
                       bgLayer.rotate( Math.PI / 2);
-                      // bgLayer.scale(1, -1);
-                      // console.log('rotate bgLayer');
                     }
                     if (hitTestLayer) {
-                      // hitTestLayer.translate(hitTestLayer.canvas.width / 2, hitTestLayer.canvas.height / 2);
                       hitTestLayer.rotate( Math.PI / 2);
-                      // hitTestLayer.scale(1, -1);
-                    // console.log('rotate hitTestLayer');
                     }
                     this._mode = "logo";
-                    // var promise = getFrameManager().willRenderNext() ? Promise.resolve() : new InstantPromise();
-                    // promise = promise.then(function() {
-                    //     var turtles = getFrameManager().turtles();
-                    //     for (var i = 0; i < turtles.length; i++) {
-                    //         turtles[i].setheading(0);
-                    //         // turtles[i]._angle = 90;
-                    //         // console.log('$mode', i);
-                    //     }
-                    // });
-                    // console.log('$mode', this._mode, mode, turtles);
                 } else if (mode == "standard") {
                     this._mode = "standard";
                 } else {
@@ -1937,7 +1864,6 @@ var $builtinmodule = function(name) {
             proto.$bind = function(event, method, add) {
                 if (event === "<Motion>") {
                     this.getManager("mousemove").addHandler(method, add);
-                    // console.log("$bind", event, method);
                 } else {
                     this.getManager("mouseup").addHandler(method, add);
                 }
@@ -1992,7 +1918,6 @@ var $builtinmodule = function(name) {
         }
 
         function createLayer(zIndex, isHidden) {
-            // console.log('createLayer', zIndex, isHidden);
             var canvas = document.createElement("canvas"),
                 width = getWidth(),
                 height = getHeight(),
@@ -2439,7 +2364,6 @@ var $builtinmodule = function(name) {
             }
 
             if (color.constructor === Array && color.length) {
-                // console.log('createColor', color, turtleColorMode);
                 if (turtleColorMode === 255) { //mode is 255
                     for (i = 0; i < 3; i++) {
                         if (typeof color[i] === "number") {
@@ -2673,19 +2597,6 @@ var $builtinmodule = function(name) {
             }
         }
 
-        // function GetCanvasWrapper($gbl, $loc) {
-        //     $loc.__init__ = new Sk.builtin.func(function (self) {
-        //         self.instance = getScreen();
-        //     });
-        //
-        //     for(var key in Screen.prototype) {
-        //         if (/^\$[a-z_]+/.test(key)) {
-        //             addModuleMethod(getcanvas, $loc, key);
-        //         }
-        //     }
-        // }
-
-
         for (var key in Turtle.prototype) {
             if (/^\$[a-z_]+/.test(key)) {
                 addModuleMethod(Turtle, _module, key, ensureAnonymous);
@@ -2718,7 +2629,6 @@ var $builtinmodule = function(name) {
         _module.Turtle = Sk.misceval.buildClass(_module, TurtleWrapper, "Turtle", []);
         _module.Screen = Sk.misceval.buildClass(_module, ScreenWrapper, "Screen", []);
         _module.getcanvas = _module.Screen;
-        // _module.Screen = Sk.misceval.buildClass(_module, GetCanvasWrapper, "getcanvas", []);
 
         // Calling focus(false) will block turtle key/mouse events
         // until focus(true) is called again or until the turtle DOM target

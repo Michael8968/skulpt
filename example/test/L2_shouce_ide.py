@@ -254,7 +254,7 @@ def ask(screen, question,num_question):
             num += 1
             if num >= 3:
                 num = 2
-            display_box(screen, ''.join(result[num].path))
+            # display_box(screen, ''.join(result[num].path))
         elif len(result) and inkey == K_UP:
             num -= 1
             if num <= -1:

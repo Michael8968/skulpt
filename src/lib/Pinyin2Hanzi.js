@@ -3,10 +3,6 @@ var Pinyin2HanziLib = {};
 var $builtinmodule = function(name) {
   var mod = {};
 
-  // for (k in pinyinLib) {
-  //     mod[k] = Sk.ffi.remapToPy(pinyinLib[k]);
-  // }
-
   mod.Result = Sk.misceval.buildClass(mod, result_type_f, "Result", []);
   Pinyin2HanziLib.ResultType = mod.Result;
 
@@ -20,19 +16,12 @@ var $builtinmodule = function(name) {
 
   mod.dag = Sk.misceval.buildClass(mod, dag_type_f, "dag", []);
   Pinyin2HanziLib.DagType = mod.dag;
-  // return {
-  //   DefaultDagParams : Sk.misceval.callsim(Pinyin2Hanzi.DefaultDagParams,1),
-  //   dag : Sk.misceval.callsim(Pinyin2Hanzi.dag)
-  // };
 
   return mod;
 };
 
 function result_type_f($gbl, $loc) {
   $loc.__init__ = new Sk.builtin.func(function(self, score, path) {
-    // Sk.abstr.sattr(self, 'score', score, false);
-    // Sk.abstr.sattr(self, 'path', path, false);
-    console.log("result_type_f", score, path);
     self["score"] = Sk.ffi.remapToPy(score);
     self["path"] = Sk.ffi.remapToPy(path);
     return Sk.builtin.none.none$;
@@ -44,16 +33,8 @@ function result_type_f($gbl, $loc) {
     return Sk.ffi.remapToPy("<result>");
   });
 
-  // $loc.path = new Sk.builtin.func(function(self) {
-  //   var path = self["path"];
-  //   console.log("$loc.path", path, path.v[0]);
-  //   return path.v.length ? path.v[0] : "";
-  // });
-
   var path_getter = new Sk.builtin.func(function(self) {
     var path = self["path"];
-    console.log("$loc.path", path, path.v[0]);
-    // return path.v[0];
     return path.v.length ? path.v[0] : "";
   });
   var path_setter = new Sk.builtin.func(function(self, val) {
@@ -87,8 +68,6 @@ function defaultDagParams_type_f($gbl, $loc) {
 }
 
 function dag_type_f($gbl, $loc) {
-  // $loc.__init__ = new Sk.builtin.func(function (self) {
-  // });
   $loc.__init__ = new Sk.builtin.func(function(
     self,
     dagParams,
@@ -97,9 +76,6 @@ function dag_type_f($gbl, $loc) {
     log
   ) {
     Sk.builtin.pyCheckArgs("__init__", arguments, 3, 5, false, false);
-    // console.log('dag', dagParams);
-    // console.log('dag', pinyinList);
-    // console.log('dag', pathNum);
     var jsListpinyin = Sk.ffi.remapToJs(pinyinList);
     var pinyinStr = "";
     for (var i = 0; i < jsListpinyin.length; i++) {
@@ -112,12 +88,8 @@ function dag_type_f($gbl, $loc) {
           var hanzi = Pinyin2HanziLib.pinyinLib[i].hanzi[j];
           var list1 = [];
           for (var k = 0; k < hanzi.path.length; k++) {
-            // var str1 = Sk.ffi.remapToPy(hanzi.path[k]);
             list1.push(hanzi.path[k]);
           }
-          // var l1 = new Sk.builtin.list(list1);
-          // console.log('hanzi.score', hanzi.score);
-          // console.log('list1', list1);
           resultList.push(
             new Sk.misceval.callsim(
               Pinyin2HanziLib.ResultType,
@@ -130,9 +102,6 @@ function dag_type_f($gbl, $loc) {
     }
 
     self["results"] = new Sk.builtin.list(resultList);
-    // return Sk.ffi.remapToPy(_buffer);
-    // self['results'] = Sk.ffi.remapToPy(_buffer);
-    // console.log('results', self['results']);
     return Sk.builtin.none.none$;
   });
   $loc.__init__.co_name = new Sk.builtins["str"]("__init__");
@@ -150,7 +119,6 @@ function dag_type_f($gbl, $loc) {
 
   $loc.__getitem__ = new Sk.builtin.func(function(self, k) {
     var results = self["results"];
-    // var jsresults = Sk.ffi.remapToJs(results);
     var index = Sk.ffi.remapToJs(k);
     var result = results.v[index];
     var item = result ? new Sk.misceval.callsim(
