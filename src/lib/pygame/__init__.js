@@ -87,9 +87,9 @@ var createKeyboardEvent = function (event) {
             return [keyPGConstant, { key: PygameLib.constants.K_DOWN }];
         default:
             var difference = 0;
-            if ((event.which <= 90) && (event.which >= 65))
-                difference = 32;
-            // console.log('createKeyboardEvent', event.which);
+            if ((event.which <= 90) && (event.which >= 65)) {
+              difference = 32;
+            }
             return [keyPGConstant, { key: (event.which + difference)}];
     }
 };
@@ -98,7 +98,6 @@ function keyEventListener(event) {
     var e = createKeyboardEvent(event);
     if(e[0] == PygameLib.constants.KEYDOWN) {
       PygameLib.pressedKeys[e[1].key] = true;
-      // console.log('keyEventListener', e[1].key);
     }
     else if ((e[0] == PygameLib.constants.KEYUP))
         {delete PygameLib.pressedKeys[e[1].key]}
@@ -117,12 +116,9 @@ function keyEventListener(event) {
 }
 
 function closeAllSound() {
-    // console.log('closeAllSound');
     var sounds = window.audios; // document.getElementsByTagName('audio');
-    // console.log('audios.length', sounds.length);
     if (sounds && sounds.length > 0) {
       sounds.forEach(function(sound){
-        // console.log('sound', sound);
         sound.pause();
       });
     }
@@ -1067,7 +1063,6 @@ var $builtinmodule = function (name) {
     mod.quit = new Sk.builtin.func(function () {
         PygameLib.running = false;
         closeAllSound();
-        // Sk.builtin.quit();
         if (Sk.quitHandler) {
             // console.log('mod.quit');
             // throw new Sk.builtin.SystemExit('quit');
@@ -1139,8 +1134,6 @@ function pygame_init() {
     PygameLib.running = true;
     PygameLib.repeatKeys = false;
     PygameLib.mouseData = { "button": [0, 0, 0], "pos": [0, 0], "rel": [0, 0] };
-    // // console.log('font_m', font_m);
-    // var locals = PygameLib.constants;
 }
 
 var mouseEventListener = function (event) {
@@ -1230,9 +1223,6 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
         window.addEventListener("keyup", keyEventListener);
         self.main_canvas.width = self.width;
         self.main_canvas.height = self.height;
-        // console.log('main_js', main_js);
-        // console.log('Sk.main_canvas.width', Sk.main_canvas.width);
-        // console.log('Sk.main_canvas.height', Sk.main_canvas.height);
 
         /*if (fullscreen) {
             self.width = window.innerWidth;
@@ -1256,12 +1246,8 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
     } else {
       self.main_canvas.width = Sk.main_canvas.width;
       self.main_canvas.height = Sk.main_canvas.height;
-      // console.log('self.main_canvas.width', self.main_canvas.width);
-      // console.log('self.main_canvas.height', self.main_canvas.height);
     }
 
-    // self.main_canvas.width = 900;
-    // self.main_canvas.height = 600;
     self.main_context = self.main_canvas.getContext("2d");
 
     self.offscreen_canvas = document.createElement('canvas');
@@ -1333,21 +1319,12 @@ get_flags.co_varnames = ['self'];
 function update(self) {
     // self.main_canvas.width = self.offscreen_canvas.width;
     // self.main_canvas.height = self.offscreen_canvas.height;
-    // if (self.main_canvas.width > 0 && self.main_canvas.height > 0) {
-        // self.main_context.clearRect(0,0,self.main_canvas.width,self.main_canvas.height);
-        self.main_context.drawImage(self.offscreen_canvas, 0, 0);
-    // }
+    self.main_context.drawImage(self.offscreen_canvas, 0, 0);
 }
 
 update.co_name = new Sk.builtins['str']('update');
 update.co_varnames = ['self'];
 
-// function blit(self, other, pos) {
-//     var target_pos_js = Sk.ffi.remapToJs(pos);
-//     self.context2d.drawImage(other.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
-//     return Sk.misceval.callsim(PygameLib.RectType,
-//         Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([other.offscreen_canvas.width, other.offscreen_canvas.height]))
-// }
 function blit(self, source, dest, area, special_flags) {
     var target_pos_js = [0, 0]; // Sk.ffi.remapToJs(pos);
     if (Sk.builtin.checkIterable(dest)) {
@@ -1356,7 +1333,6 @@ function blit(self, source, dest, area, special_flags) {
         target_pos_js[0] = Sk.ffi.remapToJs(dest.left);
         target_pos_js[1] = Sk.ffi.remapToJs(dest.top);
     }
-    // // console.log('blit', target_pos_js, pos);
     //判断area的Rect对象，并限定绘制范围
     var isclip = false;
     if (!isVaild(area)) {
@@ -1367,7 +1343,6 @@ function blit(self, source, dest, area, special_flags) {
             Sk.ffi.remapToPy(source.offscreen_canvas.height));
     } else {
         isclip = true;
-        console.log('blit area', area);
     }
     //获取将要被绘制的画布并绘制
     if (!source.offscreen_canvas) {
@@ -1384,20 +1359,10 @@ function blit(self, source, dest, area, special_flags) {
         var swidth = Sk.ffi.remapToJs(area.width);
         var sheight = Sk.ffi.remapToJs(area.height);
         ctx.drawImage(source.offscreen_canvas, sx, sy, source.offscreen_canvas.width, source.offscreen_canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
-        // self.context2d.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
     }
     ctx.restore();
     return area;
-    // return Sk.misceval.callsim(PygameLib.RectType,
-    //     Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([source.offscreen_canvas.width, source.offscreen_canvas.height]))
 }
-
-// function blit(self, other, pos) {
-//     var target_pos_js = Sk.ffi.remapToJs(pos);
-//     self.context2d.drawImage(other.offscreen_canvas, target_pos_js[0], target_pos_js[1]);
-//     return Sk.misceval.callsim(PygameLib.RectType,
-//         Sk.builtin.tuple([0, 0]), Sk.builtin.tuple([other.offscreen_canvas.width, other.offscreen_canvas.height]))
-// }
 
 function convert(self) {
     return self;
@@ -1682,11 +1647,11 @@ function color_type_f($gbl, $loc) {
             r = g = b = l; // achromatic
         } else {
             function hue2rgb(p, q, t) {
-                if (t < 0) t += 1;
-                if (t > 1) t -= 1;
-                if (t < 1 / 6) return p + (q - p) * 6 * t;
-                if (t < 1 / 2) return q;
-                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                if (t < 0) {t += 1;}
+                if (t > 1) {t -= 1;}
+                if (t < 1 / 6) {return p + (q - p) * 6 * t;}
+                if (t < 1 / 2) {return q;}
+                if (t < 2 / 3) {return p + (q - p) * (2 / 3 - t) * 6;}
                 return p;
             }
 
@@ -1799,8 +1764,6 @@ function color_type_f($gbl, $loc) {
 
 //pygame.Rect
 function rect_type_f($gbl, $loc) {
-    //Rect(Surface, color, Rect, width=0) -> Rect
-    //Rect((left, top), (width, height)) -> Rect
     $loc.__init__ = new Sk.builtin.func(function (self, a, b, c, d) {
         Sk.builtin.pyCheckArgs('__init__', arguments, 3, 5, false, false);
         if (Sk.abstr.typeName(a) === "tuple" && Sk.abstr.typeName(b) === "tuple") {
@@ -2385,17 +2348,6 @@ function rect_type_f($gbl, $loc) {
     });
 
     function do_rects_intersect(self, rect) {
-        // var argx = get_left(argrect);
-        // var argy = get_top(argrect);
-        // var argw = get_width(argrect);
-        // var argh = get_height(argrect);
-        // var selfx = get_left(self);
-        // var selfy = get_top(self);
-        // var selfw = get_width(self);
-        // var selfh = get_height(self);
-        // return (selfx < argx + argw && selfy < argy + argh &&
-        //     selfx + selfw > argx && selfy + selfh > argy);
-        //     var rect1, rect2, maxX, maxY, minX, minY = {};
         rect1 = {};
         rect1.x = Sk.ffi.remapToJs(rect.left);
         rect1.y = Sk.ffi.remapToJs(rect.top);

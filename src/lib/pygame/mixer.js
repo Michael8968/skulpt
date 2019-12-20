@@ -46,16 +46,6 @@ function makeModule(locs) {
 var notImplemented = new Sk.builtin.func(function () {
     throw new Sk.builtin.NotImplementedError("Not yet implemented");
 });
-//构造事件对象
-// function mixer() {
-    // mixer_locs.Sound = SoundClass(mixer_locs);
-    // mixer_locs.Sound.$isclass = true;
-    // mixer_locs.Channel = ChannelClass(mixer_locs);
-    // mixer_locs.Channel.$isclass = true;
-    //
-    // mixer_locs.music = makeModule(music(globalScope));
-    // return mixer_locs;
-// }
 
 //====================== music ========================
 var music = function (globalScope) {

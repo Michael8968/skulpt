@@ -21,7 +21,7 @@ var $builtinmodule = function (name) {
         var pressed = new Array(PygameLib.constants.K_LAST+1).fill(false);
         for(var key = 0; key< pressed.length; key ++) {
             if(PygameLib.pressedKeys[key])
-                pressed[key] = true
+                {pressed[key] = true}
         }
         return Sk.ffi.remapToPy(pressed);
     });
@@ -45,14 +45,6 @@ var $builtinmodule = function (name) {
         }
 
     });
-    // mod.name = new Sk.builtin.func(function (idx) {
-    //     // console.log('mod.name', idx);
-    //     var i = Sk.ffi.remapToJs(idx);
-    //     if (i < 0 || i >= 323) {
-    //         return Sk.ffi.remapToPy("unknown key");
-    //     }
-    //     return Sk.ffi.remapToPy(keyToName[i]);
-    // });
     mod.name_getter = new Sk.builtin.func(function (idx) {
         var i = Sk.ffi.remapToJs(idx);
         if (i < 0 || i >= 323) {

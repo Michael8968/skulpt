@@ -1,12 +1,6 @@
 var $builtinmodule = function (name) {
     mod = {};
     mod.flip = new Sk.builtin.func(function (surf, xbool, ybool) {
-        // if (Sk.abstr.typeName(surf) !== "Surface") {
-        //     throw new Sk.builtin.TypeError("Wrong arguments");
-        // }
-        // if (Sk.abstr.typeName(xbool) !== "bool" || Sk.abstr.typeName(ybool) !== "bool") {
-        //     throw new Sk.builtin.TypeError("Wrong arguments");
-        // }
         var t = Sk.builtin.tuple([surf.width, surf.height]);
         var ret = Sk.misceval.callsim(PygameLib.SurfaceType, t);
         ret.context2d.save();
@@ -21,7 +15,6 @@ var $builtinmodule = function (name) {
     });
 
     function scale(surf, size, dest) {
-        // // console.log('surf', surf);
         if (Sk.abstr.typeName(surf) !== "Surface") {
             throw new Sk.builtin.TypeError("Wrong arguments");
         }
@@ -48,14 +41,6 @@ var $builtinmodule = function (name) {
         if (dest !== undefined && dest !== Sk.builtins.none.none$) {
             dest.context2d.drawImage(ret.offscreen_canvas, 0, 0);
         }
-        // surf.offscreen_canvas.width = w;
-        // surf.offscreen_canvas.height = h;
-        // var ctx = surf.offscreen_canvas.getContext("2d");
-        // ctx.clearRect(0, 0, surf.width, surf.height);  //清空画布
-        // ctx.save();
-        // ctx.scale(xs, ys);
-        // ctx.drawImage(ret.offscreen_canvas, 0, 0);
-        // ctx.restore();
         return ret;
     }
 

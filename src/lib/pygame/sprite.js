@@ -351,23 +351,12 @@ function drawgroup(self, Surface) {
 
     self.spritelist.forEach(function (sprite) {
         var img = sprite.image;
-        // // console.log('sprite.image', sprite.image);
-        // var t = Sk.builtin.tuple([img.width, img.height]);
-        // var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
-        // var ctx = s.offscreen_canvas.getContext("2d");
-        // var rect = Sk.abstr.gattr(sprite, 'rect', false);
-        // var image = Sk.abstr.gattr(sprite, 'image', false);
         var rect = sprite.rect;
-        // // console.log('drawgroup', rect);
-
         var sx = Sk.ffi.remapToJs(rect.left);
         var sy = Sk.ffi.remapToJs(rect.top);
         var swidth = Sk.ffi.remapToJs(rect.width);
         var sheight = Sk.ffi.remapToJs(rect.height);
-        // ctx.drawImage(sprite.canvas, sx, sy, swidth, sheight);
-        // ctx.drawImage(Sk.main_canvas, sx, sy, swidth, sheight);
         ctx.drawImage(img.offscreen_canvas, sx, sy, swidth, sheight);
-        // ctx.drawImage(img.main_canvas, sx, sy, swidth, sheight);
     });
 }
 
@@ -383,7 +372,6 @@ function clear(self, background) {
     var g = color_Js3[1];
     var b = color_Js3[2];
     //获取将要被绘制的画布并绘制
-    // var ctx = self.image.canvas.getContext("2d");
     var ctx = self.image.offscreen_canvas.getContext("2d");
     ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
     self.spritelist.forEach(function (sprite) {
