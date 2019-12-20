@@ -19,7 +19,7 @@ var $builtinmodule = function(name)
   var NEED_HARDWARE = '' +
     "It doesn't appear your computer can support WebGL.<br/>" +
     '<a href="http://get.webgl.org">Click here for more information.</a>';
-  
+
   var create3DContext = function(canvas) {
     var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
     var gl = null;
@@ -94,6 +94,7 @@ var $builtinmodule = function(name)
   mod.Context = Sk.misceval.buildClass(mod, function($gbl, $loc) {
     $loc.__init__ = new Sk.builtin.func(
       function(self, canvasid) {
+        // console.log('mod.Context', canvasid);
         var canvas = document.getElementById(canvasid.v);
         var gl = setupWebGL(canvasid.v, canvas)
         if (!gl) {
@@ -101,13 +102,20 @@ var $builtinmodule = function(name)
         }
 
         self.gl = gl;
-
-        // Copy symbolic constants and functions from native WebGL, encapsulating where necessary.       
+        // console.log('mod.Context 1', gl.__proto__);
+        // Copy symbolic constants and functions from native WebGL, encapsulating where necessary.
         for (var k in gl.__proto__) {
+          // console.log('mod.Context 2', k);
+          if ("canvas" === k || "drawingBufferWidth" === k || "drawingBufferHeight" === k) {
+            continue;
+          }
           if (typeof gl.__proto__[k] === 'number') {
+            // console.log('mod.Context 3', k);
             Sk.abstr.objectSetItem(self['$d'], new Sk.builtin.str(k), gl.__proto__[k]);
+            // console.log('mod.Context 4', k);
           }
           else if (typeof gl.__proto__[k] === "function") {
+            // console.log('mod.Context 5', k);
             switch(k) {
               case 'bufferData': {
               }
@@ -147,11 +155,14 @@ var $builtinmodule = function(name)
             }
           }
         }
-
+        // console.log('mod.Context 2');
         gl.clearColor(100.0/255.0, 149.0/255.0, 237.0/255.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
+        // console.log('mod.Context 3');
       }
     );
+    $loc.__init__.co_name = new Sk.builtins['str']('__init__');
+    $loc.__init__.co_varnames = ['self', 'canvasid'];
 
     $loc.tp$getattr = Sk.builtin.object.prototype.GenericGetAttr;
 
@@ -205,9 +216,9 @@ var $builtinmodule = function(name)
 
     $loc.uniformMatrix4fv = new Sk.builtin.func(
       function(self, location, transpose, values) {
-//        console.log("location  " + (typeof location));
-//        console.log("transpose " + (typeof transpose));
-//        console.log("values.v  " + (typeof values.v));
+       // console.log("location  " + (typeof location));
+       console.log("transpose " , transpose);
+       // console.log("values.v  " + (typeof values.v));
         self.gl.uniformMatrix4fv(Sk.builtin.asnum$(location), transpose, values.v);
       }
     );
@@ -286,7 +297,7 @@ var $builtinmodule = function(name)
 
     $loc.perspective = new Sk.builtin.func(
       function(self, fov, aspect, near, far) {
-        
+
         var t = Math.tan(Math.PI * 0.5 - 0.5 * (Sk.builtin.asnum$(fov) * Math.PI / 180));
         var a = Sk.builtin.asnum$(aspect)
         var n = Sk.builtin.asnum$(near)

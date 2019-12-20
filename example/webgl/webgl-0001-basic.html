@@ -17,23 +17,32 @@
     <form>
       <textarea id="code" name="code" rows="40" cols="120">
 import webgl
-
+print(1)
 gl = webgl.Context("my-canvas")
-
+print(2)
 vs = gl.createShader(gl.VERTEX_SHADER)
+print(3)
 gl.shaderSource(vs, "attribute vec3 aVertexPosition; void main(void) { gl_Position = vec4(aVertexPosition, 1.0); }")
+print(4)
 gl.compileShader(vs)
-print "Vertex shader COMPILE_STATUS: " + str(gl.getShaderParameter(vs, gl.COMPILE_STATUS))
+print(5)
+print("Vertex shader COMPILE_STATUS: " + str(gl.getShaderParameter(vs, gl.COMPILE_STATUS)))
+print(6)
 fs = gl.createShader(gl.FRAGMENT_SHADER)
+print(7)
 gl.shaderSource(fs, "void main(void) { gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); }")
+print(8)
 gl.compileShader(fs)
-print "Fragment shader COMPILE_STATUS: " + str(gl.getShaderParameter(fs, gl.COMPILE_STATUS))
+print(9)
+print("Fragment shader COMPILE_STATUS: ")
+print(str(gl.getShaderParameter(fs, gl.COMPILE_STATUS)))
 
 program = gl.createProgram()
 gl.attachShader(program, vs)
 gl.attachShader(program, fs)
 gl.linkProgram(program)
-print "Program LINK_STATUS: " + str(gl.getProgramParameter(program, gl.LINK_STATUS))
+print("Program LINK_STATUS: " )
+print(str(gl.getProgramParameter(program, gl.LINK_STATUS)))
 gl.useProgram(program)
 
 triangleVertices = [-0.5,  0.5, 0.0,
@@ -69,16 +78,17 @@ gl.drawArrays(gl.TRIANGLES, 0, 6)
         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
           throw "File not found: '" + x + "'";
         }
+        console.log("builtinRead", x);
         return Sk.builtinFiles["files"][x];
       }
-
+      
       function runit() {
         var prog = document.getElementById("code").value;
         // Clear the output
         document.getElementById("my-output").innerHTML = '';
         Sk.canvas = "my-canvas";
         Sk.pre = "my-output";
-        Sk.configure({"output":outputHandler, "read":builtinRead});
+        Sk.configure({"output":outputHandler, "read":builtinRead, __future__: Sk.python3});
         try {
            eval(Sk.importMainWithBody("<stdin>", false, prog));
         }
