@@ -1,5 +1,5 @@
 {
-  "name": "skulpt",
+  "name": "skulpt-all-dream",
   "version": "1.0.0",
   "description": "Skulpt is a Javascript implementation of Python 2.x. Python that runs in your browser!",
   "keywords": [
@@ -41,7 +41,7 @@
     "name": "Brad Miller"
   },
   "license": "MIT",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "acorn": "^6.1.1",
     "babel-minify": "^0.5.0",
