@@ -97,11 +97,17 @@ turtle.done()
           if (
             Sk.builtinFiles === undefined ||
             Sk.builtinFiles["files"][x] === undefined
-          )
+          ) {
             throw "File not found: '" + x + "'";
+            console.log("File not found: ", x);
+          }
+          console.log("File found: ", x);
           return Sk.builtinFiles["files"][x];
         }
-        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "mycanvas";
+        console.log("Sk", Sk);
+        var TurtleGraphics = Sk.TurtleGraphics || (Sk.TurtleGraphics = {});
+        console.log("TurtleGraphics", TurtleGraphics);
+        TurtleGraphics.target = "mycanvas";
 
         Sk.configure({
           // __future__: Sk.python3,

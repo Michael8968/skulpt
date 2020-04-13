@@ -12,7 +12,10 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.js"></script>
     <script src="../dist/skulpt.min.js" type="text/javascript"></script>
     <script src="../dist/skulpt-stdlib.js" type="text/javascript"></script>
@@ -266,6 +269,10 @@
         output.innerHTML = output.innerHTML + text;
       }
 
+      function exceptionHandler(text) {
+        console.log("exceptionHandler", text);
+      }
+
       function clearOutput() {
         var output = document.getElementById("output");
         output.innerHTML = "";
@@ -365,21 +372,38 @@
         // prog = prog.replace('QUIT', 'pygame.QUIT')
         // console.log(prog);
 
-        Sk.misceval.asyncToPromise(function() {
-          try {
-            return Sk.importMainWithBody("<stdin>", false, prog, true);
-          } catch (e) {
-            console.error(e);
-            alert(e);
-            // process.exit();
-          }
-        });
+        Sk.misceval
+          .asyncToPromise(function() {
+            try {
+              return Sk.importMainWithBody("<stdin>", false, prog, true);
+            } catch (e) {
+              console.log(e.toString());
+              alert(e);
+              // process.exit();
+            }
+          })
+          .catch(function(err) {
+            console.log(err);
+            // Create stacktrace message
+            var error = [];
+            if (err.traceback) {
+              for (let i = 0; i < err.traceback.length; i++) {
+                error[i] = {
+                  line: err.traceback[i].lineno,
+                  column: err.traceback[i].colno
+                };
+              }
+            }
+            console.log("error", error);
+            alert(err);
+          });
       }
 
       (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "mycanvas";
       Sk.configure({
         read: builtinRead,
         output: printString,
+        uncaughtException: exceptionHandler,
         __future__: Sk.python3,
         inputfunTakesPrompt: true
         // read: function(filename) {
@@ -416,7 +440,7 @@
         runCode();
       });
 
-      var sourcePath = "./test/L2_shouce_ide.py";
+      var sourcePath = "./test/L23_wuziqi.py";
       if (window.location.search.substring(1).length > 0) {
         sourcePath = "./test/" + window.location.search.substring(1);
       }
