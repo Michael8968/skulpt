@@ -402,7 +402,8 @@ var $builtinmodule = function(name) {
                 var managers = this._managers[type],
                     moveManagers = this._managers["mousemove"],
                     computed = false,
-                    x, y, localX, localY, i;
+                    x, y, localX, localY, i,
+                    clientX, clientY;
 
                 function computeCoordinates() {
                     if (computed) {return;}
@@ -413,13 +414,15 @@ var $builtinmodule = function(name) {
                     localX = x * world.xScale + world.llx;
                     localY = y * world.yScale + world.ury;
                     computed = true;
+                    clientX = Math.round(e.clientX - rect.left);
+                    clientY = Math.round(e.clientY - rect.top);
                 }
 
                 if ((type === "mousedown" || type === "mouseup") && moveManagers && moveManagers.length) {
                     computeCoordinates();
                     this._curPosition = {
-                        "x": localX,
-                        "y": localY
+                        "x": clientX,
+                        "y": clientY
                     };
                     for (i = moveManagers.length; --i >= 0;) {
                         if (moveManagers[i].test(x, y, localX, localY)) {
@@ -431,8 +434,8 @@ var $builtinmodule = function(name) {
                 if ((type === "mousemove") && moveManagers && moveManagers.length) {
                     computeCoordinates();
                     this._curPosition = {
-                        "x": localX,
-                        "y": localY
+                        "x": clientX,
+                        "y": clientY
                     };
                     for (i = moveManagers.length; --i >= 0;) {
                         if (moveManagers[i].test(x, y, localX, localY)) {
@@ -444,15 +447,17 @@ var $builtinmodule = function(name) {
                 if (managers && managers.length) {
                     computeCoordinates();
                     this._curPosition = {
-                        "x": localX,
-                        "y": localY
+                        "x": clientX,
+                        "y": clientY
                     };
                     for (i = managers.length; --i >= 0;) {
                         if (type === "mousemove" && managers[i].canMove() && managers[i].test(x, y, localX, localY)) {
                             managers[i].trigger([localX, localY]);
+                            // console.log('mousemove localX, localY', localX, localY);
                         } else if (type === "mousedown" && managers[i].test(x, y, localX, localY)) { //For onclick event
                             managers[i].trigger([localX, localY]);
                         } else {
+                            // console.log('mousemove this._curPosition', this._curPosition);
                             managers[i].trigger([this._curPosition]);
                         }
                     }
@@ -624,7 +629,7 @@ var $builtinmodule = function(name) {
                     .then(function(heading) {
                         self._angle = heading.angle;
                         self._radians = heading.radians;
-                        console.log('self._angle', self._angle);
+                        // console.log('self._angle', self._angle);
                     });
             };
 
@@ -807,7 +812,7 @@ var $builtinmodule = function(name) {
             proto.$goto_$rw$ = proto.$setpos = proto.$setposition = function(x, y) {
                 var coords = getCoordinates(x, y);
 
-                console.log('$goto_$rw$', coords);
+                // console.log('$goto_$rw$', coords);
 
                 pushUndo(this);
 
@@ -2057,7 +2062,7 @@ var $builtinmodule = function(name) {
             if (color) {
                 context.fillStyle = color;
                 context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-                console.log('clearLayer', color, context.canvas.width, context.canvas.height);
+                // console.log('clearLayer', color, context.canvas.width, context.canvas.height);
             } else {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             }
