@@ -3,6 +3,7 @@ var $builtinmodule = function (name) {
     mod.load = new Sk.builtin.func(function (filename) {
         function imageExists(imageUrl) {
             var http = new XMLHttpRequest();
+            http.setRequestHeader('Accept-Ranges', 'bytes');
             http.open('HEAD', imageUrl, false);
             http.send();
             return http.status == 200;
