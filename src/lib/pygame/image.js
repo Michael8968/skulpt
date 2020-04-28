@@ -8,6 +8,16 @@ var $builtinmodule = function (name) {
             http.send();
             return http.status == 200;
         }
+        if (!imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename)) && window.pygameImages) {
+          // const found = array1.find(element => element > 10);
+          var found = window.pygameImages.find(function(element){
+            return element.name == filename;
+          })
+          console.log('image.js', filename, found);
+          if (found && found.url) {
+            filename = found.url;
+          }
+        }
 
         if (imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename))) {
             return Sk.misceval.promiseToSuspension(new Promise(function (resolve) {
