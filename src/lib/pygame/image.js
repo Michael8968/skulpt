@@ -3,17 +3,17 @@ var $builtinmodule = function (name) {
     mod.load = new Sk.builtin.func(function (filename) {
         function imageExists(imageUrl) {
             var http = new XMLHttpRequest();
-            http.setRequestHeader('Accept-Ranges', 'bytes');
             http.open('HEAD', imageUrl, false);
+            http.setRequestHeader('Accept-Ranges', 'bytes');
             http.send();
             return http.status == 200;
         }
         if (!imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename)) && window.pygameImages) {
-          // const found = array1.find(element => element > 10);
+          var jsFilename = Sk.ffi.remapToJs(filename)
           var found = window.pygameImages.find(function(element){
-            return element.name == filename;
+            return element.name == Sk.ffi.remapToJs(jsFilename);
           })
-          console.log('image.js', filename, found);
+        //   console.log('image.js', jsFilename, found);
           if (found && found.url) {
             filename = found.url;
           }
