@@ -25,8 +25,8 @@ var $builtinmodule = function(name) {
             Types = {},
             _defaultSetup = {
                 target: "turtle", // DOM element or id of parent container
-                width: 600, // if set to 0 it will use the target width
-                height: 600, // if set to 0 it will use the target height
+                width: 800, // if set to 0 it will use the target width
+                height: 800, // if set to 0 it will use the target height
                 worldWidth: 0, // if set to 0 it will use config.width
                 worldHeight: 0, // if set to 0 it will use config.height
                 animate: true, // enabled/disable all animated rendering
