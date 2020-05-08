@@ -1,1 +1,0 @@
-# Skulpt repository for npm

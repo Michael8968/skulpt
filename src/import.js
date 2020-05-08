@@ -27,7 +27,7 @@ Sk.importSearchPathForName = function(name, ext, searchPath) {
           if (
             filename.indexOf(".py") > 0 &&
             filename.indexOf(
-              "https://all-dream.com/pythonWeb/pages/moodle/lesson/"
+              "/lesson/"
             ) >= 0
           ) {
             if (filename.indexOf("__init__.py") > 0) {
@@ -189,7 +189,7 @@ Sk.importSetUpPath = function(canSuspend) {
     paths = [
       new Sk.builtin.str("src/builtin"),
       new Sk.builtin.str("src/lib"),
-      new Sk.builtin.str("https://all-dream.com/pythonWeb/pages/moodle/lesson"),
+      new Sk.builtin.str("./lesson"),
       new Sk.builtin.str(".")
     ];
     for (i = 0; i < Sk.syspath.length; ++i) {
