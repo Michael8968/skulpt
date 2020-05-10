@@ -349,6 +349,7 @@ var $builtinmodule = function(name) {
                 var frames = this._frames,
                     animationFrame = this._animationFrame,
                     turtles = this._turtles,
+                    paper = this._paper,
                     sprites = getScreen().spriteLayer(),
                     turtle, i;
 
@@ -362,13 +363,19 @@ var $builtinmodule = function(name) {
                                 frames[i]();
                             }
                         }
-                        clearLayer(sprites);
+                        // sprites.save();
+
+                        var undoImage = new Image();
+                        undoImage.src = paper.canvas.toDataURL();
+                        clearLayer(sprites, false, undoImage);
+                        undoImage = null;
                         for (i = 0; i < turtles.length; i++) {
                             turtle = turtles[i];
                             if (turtle.getState().shown) {
                                 drawTurtle(turtle.getState(), sprites);
                             }
                         }
+                        // sprites.restore();
                         resolve();
                     });
                 });
@@ -676,7 +683,7 @@ var $builtinmodule = function(name) {
                 this._shown = true;
                 this._down = true;
                 this._color = "black";
-                this._fill = "black";
+                this._fill = "white";
                 this._shape = "classic";
                 this._size = 1;
                 this._filling = false;
@@ -1931,6 +1938,8 @@ var $builtinmodule = function(name) {
 
             canvas.width = width;
             canvas.height = height;
+            canvas.id=`turtle_${zIndex}`
+            // canvas.style.background = "white";
             canvas.style.position = "relative";
             canvas.style.display = "block";
             canvas.style.setProperty("margin-top", offset);
@@ -2054,7 +2063,7 @@ var $builtinmodule = function(name) {
             }
         }
 
-        function clearLayer(context, color, image) {
+        function clearLayer(context, color, image, full = false) {
             if (!context) {return;}
 
             context.save();
@@ -2068,7 +2077,13 @@ var $builtinmodule = function(name) {
             }
 
             if (image) {
-                context.drawImage(image, 0, 0);
+                if (full) {
+                    var width = context.canvas.width;
+                    var height = context.canvas.height;
+                    context.drawImage(image, 0, 0, width, height);
+                } else {
+                    context.drawImage(image, 0, 0);
+                }
             }
 
             context.restore();
