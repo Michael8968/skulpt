@@ -669,6 +669,12 @@ var $builtinmodule = function(name) {
                   if (this._screen._mode === "logo") {
                     this._paper.rotate( Math.PI / 2);
                   }
+                  // this._paper.canvas.style.background = "white";
+                  this._paper.save();
+                  this._paper.setTransform(1, 0, 0, 1, 0, 0);
+                  this._paper.fillStyle = 'white';
+                  this._paper.fillRect(0, 0, this._paper.canvas.width, this._paper.canvas.height);
+                  this._paper.restore();
                   return this._paper;
                 }
                 // return this._paper || (this._paper = createLayer(2));
@@ -2070,7 +2076,7 @@ var $builtinmodule = function(name) {
             if (color) {
                 context.fillStyle = color;
                 context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-                // console.log('clearLayer', color, context.canvas.width, context.canvas.height);
+                console.log('clearLayer', color, context.canvas.id, context.canvas.width, context.canvas.height);
             } else {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             }
