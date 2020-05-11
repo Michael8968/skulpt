@@ -349,8 +349,9 @@ var $builtinmodule = function(name) {
                 var frames = this._frames,
                     animationFrame = this._animationFrame,
                     turtles = this._turtles,
-                    paper = this._paper,
+                    paper = this._turtles[0].getPaper(),
                     sprites = getScreen().spriteLayer(),
+                    // bgcolor = getScreen()._bgcolor,
                     turtle, i;
 
                 this._frames = [];
@@ -363,19 +364,17 @@ var $builtinmodule = function(name) {
                                 frames[i]();
                             }
                         }
-                        // sprites.save();
-
-                        var undoImage = new Image();
-                        undoImage.src = paper.canvas.toDataURL();
-                        clearLayer(sprites, false, undoImage);
-                        undoImage = null;
+                        var paperImage = new Image();
+                        paperImage.src = paper ? paper.canvas.toDataURL() : null;
+                        clearLayer(sprites, false , paperImage);
+                        paperImage = null;
+                        // clearLayer(sprites);
                         for (i = 0; i < turtles.length; i++) {
                             turtle = turtles[i];
                             if (turtle.getState().shown) {
                                 drawTurtle(turtle.getState(), sprites);
                             }
                         }
-                        // sprites.restore();
                         resolve();
                     });
                 });
