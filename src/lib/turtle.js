@@ -364,11 +364,11 @@ var $builtinmodule = function(name) {
                                 frames[i]();
                             }
                         }
-                        var paperImage = new Image();
-                        paperImage.src = paper ? paper.canvas.toDataURL() : null;
-                        clearLayer(sprites, false , paperImage);
-                        paperImage = null;
-                        // clearLayer(sprites);
+                        // var paperImage = new Image();
+                        // paperImage.src = paper ? paper.canvas.toDataURL() : null;
+                        // clearLayer(sprites, false , paperImage);
+                        // paperImage = null;
+                        clearLayer(sprites);
                         for (i = 0; i < turtles.length; i++) {
                             turtle = turtles[i];
                             if (turtle.getState().shown) {
