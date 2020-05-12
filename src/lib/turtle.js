@@ -670,6 +670,7 @@ var $builtinmodule = function(name) {
                     this._paper.rotate( Math.PI / 2);
                   }
                   // this._paper.canvas.style.background = "white";
+                  // var bgcolor = getScreen()._bgcolor;
                   this._paper.save();
                   this._paper.setTransform(1, 0, 0, 1, 0, 0);
                   this._paper.fillStyle = 'white';
@@ -688,7 +689,7 @@ var $builtinmodule = function(name) {
                 this._shown = true;
                 this._down = true;
                 this._color = "black";
-                this._fill = "white";
+                this._fill = "black";
                 this._shape = "classic";
                 this._size = 1;
                 this._filling = false;
@@ -2076,7 +2077,7 @@ var $builtinmodule = function(name) {
             if (color) {
                 context.fillStyle = color;
                 context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-                console.log('clearLayer', color, context.canvas.id, context.canvas.width, context.canvas.height);
+                // console.log('clearLayer', color, context.canvas.id, context.canvas.width, context.canvas.height);
             } else {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
             }
