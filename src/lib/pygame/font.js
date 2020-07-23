@@ -53,7 +53,8 @@ function font_Font($gbl, $loc) {
         self.size = parseInt(self.size*2/3);
         if (self.size < 2) { self.size = 2; }
         // self.size = parseInt(self.size*2/3) + "px"; //获取字体的2/3
-        self['name'] = filename;
+        var fontName = Sk.ffi.remapToJs(filename);
+        self['name'] = fontName.replace('.ttf', '');;
         self['sz'] = Sk.ffi.remapToPy(self.size);
         self['bold'] = Sk.ffi.remapToPy(false);
         self['italic'] = Sk.ffi.remapToPy(false);
@@ -62,7 +63,7 @@ function font_Font($gbl, $loc) {
         if (typeof(self.family) == undefined || self.family == null || self.family.length <= 0) {self.family = "Arial"};
         var found = false;
         window.fonts.forEach(function(font) {
-          if (font.name === filename && font.size === size) {
+          if (font.name === fontName && font.size === size) {
             self.sampleSurface =font.font.sampleSurface;
             self.surface = font.font.surface;
             self.text = font.font.text;
@@ -79,7 +80,7 @@ function font_Font($gbl, $loc) {
           self.sampleSurface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
           self.surface = Sk.misceval.callsim(PygameLib.SurfaceType, t, false);
 
-          window.fonts.push({name: filename, size: size, font: self});
+          window.fonts.push({name: fontName, size: size, font: self});
           self.text = '';
         }
         return Sk.builtin.none.none$;
