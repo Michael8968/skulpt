@@ -54,6 +54,7 @@ function font_Font($gbl, $loc) {
         if (self.size < 2) { self.size = 2; }
         // self.size = parseInt(self.size*2/3) + "px"; //获取字体的2/3
         var fontName = Sk.ffi.remapToJs(filename);
+        if (!fontName) {fontName = 'fangsong'}
         self['name'] = fontName.replace('.ttf', '');;
         self['sz'] = Sk.ffi.remapToPy(self.size);
         self['bold'] = Sk.ffi.remapToPy(false);
