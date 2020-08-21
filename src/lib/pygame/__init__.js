@@ -1137,6 +1137,7 @@ function pygame_init() {
 }
 
 var mouseEventListener = function (event) {
+    // console.log('mouseEventListener', event);
 
     var totalOffsetX = 0;
     var totalOffsetY = 0;
@@ -1149,11 +1150,14 @@ var mouseEventListener = function (event) {
     }
     while (currentElement = currentElement.offsetParent)
 
-    canvasX = event.clientX - totalOffsetX;
-    canvasY = event.clientY - totalOffsetY;
+    var clientX = event.clientX || (event.touches[0] && event.touches[0].clientX)
+    var clientY = event.clientY || (event.touches[0] && event.touches[0].clientY)
+
+    canvasX = clientX - totalOffsetX;
+    canvasY = clientY - totalOffsetY;
 
     var button = event.button;
-    var _mouseButton = [0, 0, 0];    // 当前鼠标按键状态
+    var _mouseButton = [1, 0, 0];    // 当前鼠标按键状态
     if (event.buttons & (1 << 0)) {
         _mouseButton = [1, 0, 0]; // 左键
     }
@@ -1163,7 +1167,7 @@ var mouseEventListener = function (event) {
     if (event.buttons & (1 << 2)) {
         _mouseButton = [0, 0, 1]; // 中间
     }
-    if (event.type === "mousedown") {
+    if (event.type === "mousedown" || event.type === "touchstart") {
         var e = [PygameLib.constants.MOUSEBUTTONDOWN,
             {
                 key: PygameLib.constants.MOUSEBUTTONDOWN,
@@ -1171,7 +1175,7 @@ var mouseEventListener = function (event) {
                 button: _mouseButton
             }];
         PygameLib.mouseData["button"][button] = 1;
-    } else if (event.type === "mouseup") {
+    } else if (event.type === "mouseup" || event.type === "touchend") {
         var e = [PygameLib.constants.MOUSEBUTTONUP,
             {
                 key: PygameLib.constants.MOUSEBUTTONUP,
@@ -1179,7 +1183,7 @@ var mouseEventListener = function (event) {
                 button: _mouseButton
             }];
         PygameLib.mouseData["button"][button] = 0;
-    } else if (event.type === "mousemove") {
+    } else if (event.type === "mousemove" || event.type === "touchmove") {
         var leftButton = 0;
         var rightButton = 0;
         var middleButton = 0;
@@ -1214,11 +1218,15 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
     self.height = Math.round(tuple_js[1]);
     self.main_canvas = document.createElement("canvas");
     self._blitAlpha = Sk.ffi.remapToPy(1.0);
+    // console.log('main_js', main_js);
     if (main_js) {
         self.main_canvas = Sk.main_canvas;
         self.main_canvas.addEventListener('mousedown', mouseEventListener);
         self.main_canvas.addEventListener('mouseup', mouseEventListener);
         self.main_canvas.addEventListener('mousemove', mouseEventListener);
+        self.main_canvas.addEventListener('touchstart', mouseEventListener);
+        self.main_canvas.addEventListener('touchend', mouseEventListener);
+        self.main_canvas.addEventListener('touchmove', mouseEventListener);
         window.addEventListener("keydown", keyEventListener);
         window.addEventListener("keyup", keyEventListener);
         self.main_canvas.width = self.width;

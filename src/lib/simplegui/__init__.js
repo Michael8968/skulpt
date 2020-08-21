@@ -338,7 +338,7 @@ var $builtinmodule = function(name) {
       text = Sk.ffi.unwrapo(text);
       // Disallow non-printing characters
       if (textRE.test(text)) {
-        console.log("textRE.test", textRE, text);
+        // console.log("textRE.test", textRE, text);
         throw new Sk.builtin.ValueError(
           "text may not contain non-printing characters"
         );
@@ -873,7 +873,7 @@ var $builtinmodule = function(name) {
         ",dialog=yes";
       var params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
       self.frame_window = window.open("", "myframe", windowFeatures);
-      console.log('windowFeatures', windowFeatures);
+      // console.log('windowFeatures', windowFeatures);
       // Build empty document
       // Escape title
       // var jstitle = title.html$deentify();
@@ -989,12 +989,18 @@ var $builtinmodule = function(name) {
         self.canvas.removeEventListener("mousemove", mousemove);
         self.canvas.removeEventListener("mouseup", mousedone);
         self.canvas.removeEventListener("mouseout", mousedone);
+
+        self.canvas.removeEventListener("touchmove", mousemove);
+        self.canvas.removeEventListener("touchend", mousedone);
       };
       self.canvas.onmousedown = function(evt) {
         if (self.mousedraghandler) {
           self.canvas.addEventListener("mousemove", mousemove);
           self.canvas.addEventListener("mouseup", mousedone);
           self.canvas.addEventListener("mouseout", mousedone);
+
+          self.canvas.addEventListener("touchmove", mousemove);
+          self.canvas.addEventListener("touchend", mousedone);
         }
       };
       // Add elements to frame
