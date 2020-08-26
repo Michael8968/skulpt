@@ -696,7 +696,7 @@ var $builtinmodule = function(name) {
                 this._undoBuffer = [];
                 this._speed = 3;
                 this._computed_speed = 5;
-                this._colorMode = 255; // 1.0;
+                this._colorMode = 1.0;
                 this._state = undefined;
 
                 for (var key in this._managers) {
@@ -2391,6 +2391,14 @@ var $builtinmodule = function(name) {
 
             if (color.constructor === Array && color.length) {
                 if (turtleColorMode === 255) { //mode is 255
+                    for (i = 0; i < 3; i++) {
+                      if (color[i] !== parseInt(color[i])) {
+                        throw new Sk.builtin.ValueError('RGB颜色值不能为浮点数:'+color[i]);
+                      }
+                      if (typeof color[i] === "number" && (color[i] < 0 || color[i] >= 256)) {
+                        throw new Sk.builtin.ValueError('RGB颜色值必须位数字且在范围0~255之内:'+color[i]);
+                      }
+                    }
                     for (i = 0; i < 3; i++) {
                         if (typeof color[i] === "number") {
                             color[i] = Math.max(0, Math.min(255, parseInt(color[i])));

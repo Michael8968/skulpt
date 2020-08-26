@@ -42,7 +42,7 @@ Sk.python2 = {
     bankers_rounding: false,
     python_version: false,
     dunder_next: false,
-    dunder_round: false,   
+    dunder_round: false,
     exceptions: false,
     no_long_type: false,
     ceil_floor_int: false,
@@ -307,8 +307,40 @@ Sk.debugout = function (args) {
     }
 }());
 
+function showEnterBox(ltitle, lstrip) {
+  return new Promise(function(resolve, reject) {
+    $("#dialog").dialog({
+      autoOpen: true,
+      title: ltitle,
+      buttons: {
+        确定: function() {
+          $(this).dialog("close");
+          var txt = $("#dialog #usercontent").val();
+          if (lstrip) {
+            txt = $.trim(txt);
+          }
+          resolve(txt);
+        },
+        取消: function() {
+          $(this).dialog("close");
+          reject();
+        }
+      },
+      modal: true
+    });
+    $(".ui-dialog-titlebar-close").click(function() {
+      reject();
+    });
+  });
+}
+
+
 Sk.inputfun = function (args) {
-    return window.prompt(args);
+    // return window.prompt(args);
+    $("#dialog .content").text(args);//弹出文本
+    $("#dialog .attach").show();
+    $("#dialog .attach").html("<input id='usercontent' type='text' value=''>");
+    return showEnterBox("请输入",true);
 };
 
 // Information about method names and their internal functions for
@@ -335,7 +367,7 @@ Sk.setup_method_mappings = function () {
             "classes": [Sk.builtin.list],
             2: null,
             3: "clear"
-        },        
+        },
         "copy$": {
             "classes": [Sk.builtin.list],
             2: null,
