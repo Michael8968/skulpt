@@ -1158,14 +1158,30 @@ var mouseEventListener = function (event) {
 
     var button = event.button;
     var _mouseButton = [1, 0, 0];    // 当前鼠标按键状态
-    if (event.buttons & (1 << 0)) {
-        _mouseButton = [1, 0, 0]; // 左键
-    }
-    if (event.buttons & (1 << 1)) {
-        _mouseButton = [0, 1, 0]; // 右键
-    }
-    if (event.buttons & (1 << 2)) {
-        _mouseButton = [0, 0, 1]; // 中间
+    // if (event.buttons & (1 << 0)) {
+    //     _mouseButton = [1, 0, 0]; // 左键
+    // }
+    // if (event.buttons & (1 << 1)) {
+    //     _mouseButton = [0, 1, 0]; // 中间
+    // }
+    // if (event.buttons & (1 << 2)) {
+    //     _mouseButton = [0, 0, 1]; // 右键
+    // }
+    switch (event.button) {
+      case 0:
+        // log.textContent = 'Left button clicked.';
+         _mouseButton = [1, 0, 0]; // 左键
+        break;
+      case 1:
+        // log.textContent = 'Middle button clicked.';
+        _mouseButton = [0, 1, 0]; // 中间
+        break;
+      case 2:
+        // log.textContent = 'Right button clicked.';
+        _mouseButton = [0, 0, 1]; // 右键
+        break;
+      default:
+        console.error(`Unknown button code: ${e.button}`);
     }
     if (event.type === "mousedown" || event.type === "touchstart") {
         var e = [PygameLib.constants.MOUSEBUTTONDOWN,
@@ -1187,14 +1203,31 @@ var mouseEventListener = function (event) {
         var leftButton = 0;
         var rightButton = 0;
         var middleButton = 0;
-        if (event.buttons & (1 << 0)) {
+        // if (event.buttons & (1 << 0)) {
+        //     leftButton = 1;
+        // }
+        // if (event.buttons & (1 << 1)) {
+        //     rightButton = 1;
+        // }
+        // if (event.buttons & (1 << 2)) {
+        //     middleButton = 1;
+        // }
+        switch (event.button) {
+          case 0:
+            // log.textContent = 'Left button clicked.';
             leftButton = 1;
-        }
-        if (event.buttons & (1 << 1)) {
-            rightButton = 1;
-        }
-        if (event.buttons & (1 << 2)) {
+            break;
+          case 1:
+            // log.textContent = 'Middle button clicked.';
             middleButton = 1;
+            break;
+          case 2:
+            // log.textContent = 'Right button clicked.';
+            rightButton = 1;
+            break;
+          default:
+            // log.textContent = `Unknown button code: ${e.button}`;
+            console.error(`Unknown button code: ${e.button}`);
         }
         var e = [PygameLib.constants.MOUSEMOTION,
         {
