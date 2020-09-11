@@ -33,6 +33,18 @@ Sk.importSearchPathForName = function(name, ext, searchPath) {
             if (filename.indexOf("__init__.py") > 0) {
               return undefined;
             }
+            var foundExclude = false
+            Sk.excludeFiles.map(function(excludeFile) {
+              if (filename.indexOf(excludeFile) >= 0) {
+                // console.log('excludeFiles', excludeFile, filename, packagePath);
+                foundExclude = true
+                return undefined;
+              }
+            })
+            if (foundExclude) {
+              return '';
+            }
+            // console.log('XMLHttpRequest', filename, packagePath);
             var request = new XMLHttpRequest();
             request.open("GET", filename, false);
             request.send(null);
@@ -51,7 +63,7 @@ Sk.importSearchPathForName = function(name, ext, searchPath) {
       ),
       function(code) {
         if (code !== undefined) {
-          // console.log('Sk.importSearchPathForName', filename, code);
+          // console.log('Sk.importSearchPathForName', filename, packagePath);
           // This will cause the iterFor() to return the specified value
           return new Sk.misceval.Break({
             filename: filename,

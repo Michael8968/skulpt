@@ -669,13 +669,11 @@ var $builtinmodule = function(name) {
                   if (this._screen._mode === "logo") {
                     this._paper.rotate( Math.PI / 2);
                   }
-                  // this._paper.canvas.style.background = "white";
-                  // var bgcolor = getScreen()._bgcolor;
-                  this._paper.save();
-                  this._paper.setTransform(1, 0, 0, 1, 0, 0);
-                  this._paper.fillStyle = 'white';
-                  this._paper.fillRect(0, 0, this._paper.canvas.width, this._paper.canvas.height);
-                  this._paper.restore();
+                  // this._paper.save();
+                  // this._paper.setTransform(1, 0, 0, 1, 0, 0);
+                  // this._paper.fillStyle = 'white';
+                  // this._paper.fillRect(0, 0, this._paper.canvas.width, this._paper.canvas.height);
+                  // this._paper.restore();
                   return this._paper;
                 }
                 // return this._paper || (this._paper = createLayer(2));
@@ -1605,6 +1603,7 @@ var $builtinmodule = function(name) {
                 if (color !== undefined) {
                     this._bgcolor = createColor(this._colorMode, color, g, b, a);
                     clearLayer(this.bgLayer(), this._bgcolor);
+                    // console.log('$bgcolor', this._bgcolor);
                     return;
                 }
 
