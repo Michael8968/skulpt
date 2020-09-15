@@ -72,7 +72,8 @@ function time_Clock($gbl, $loc) {
         self['fpsArray'] = Sk.ffi.remapToPy(arr);
         self['fpsIdx'] = Sk.ffi.remapToPy(idx);
         if (framerate !== undefined) {
-            var timeout = 1000 / Sk.ffi.remapToJs(framerate);
+            var timeout = parseInt(1000 / Sk.ffi.remapToJs(framerate)) - mills;
+            if (timeout <= 0) {timeout = 25;}
             return new Sk.misceval.promiseToSuspension(
                 new Promise(function (resolve) {
                     var f = function () {
