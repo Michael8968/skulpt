@@ -59,9 +59,13 @@ var get_event = function (types) {
         var dict = new Sk.builtin.dict(kvs);
         var e = Sk.misceval.callsim(PygameLib.EventType, type, dict);
         list.push(e);
+
+        // var index = PygameLib.eventQueue.indexOf(queue[i]);
+        // PygameLib.eventQueue = PygameLib.eventQueue.slice(index);
+        // console.log('PygameLib.eventQueue', PygameLib.eventQueue);
+
     }
     queue.splice(0);
-
     return new Sk.builtin.list(list);
 }
 

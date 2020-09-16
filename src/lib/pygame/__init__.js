@@ -1118,7 +1118,7 @@ function pygame_init() {
     var mixer_m = Sk.importModule("pygame.mixer", false, false);
     var transform_m = Sk.importModule("pygame.transform", false, false);
     var sprite_m = Sk.importModule("pygame.sprite", false, false);
-    PygameLib.initial_time = new Date();
+    PygameLib.initial_time = (new Date()).getTime();
     pygame_m.$d['display'] = display_m.$d['display'];
     pygame_m.$d['event'] = display_m.$d['event'];
     pygame_m.$d['draw'] = display_m.$d['draw'];
