@@ -669,11 +669,11 @@ var $builtinmodule = function(name) {
                   if (this._screen._mode === "logo") {
                     this._paper.rotate( Math.PI / 2);
                   }
-                  // this._paper.save();
-                  // this._paper.setTransform(1, 0, 0, 1, 0, 0);
+                  this._paper.save();
+                  this._paper.setTransform(1, 0, 0, 1, 0, 0);
                   // this._paper.fillStyle = 'white';
                   // this._paper.fillRect(0, 0, this._paper.canvas.width, this._paper.canvas.height);
-                  // this._paper.restore();
+                  this._paper.restore();
                   return this._paper;
                 }
                 // return this._paper || (this._paper = createLayer(2));
