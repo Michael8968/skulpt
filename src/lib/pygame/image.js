@@ -8,21 +8,30 @@ var $builtinmodule = function (name) {
             http.send();
             return http.status == 200;
         }
-        if (!imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename)) && window.pygameImages) {
-          var jsFilename = Sk.ffi.remapToJs(filename)
-          var found = window.pygameImages.find(function(element){
-            return element.name == Sk.ffi.remapToJs(jsFilename);
-          })
-        //   console.log('image.js', jsFilename, found);
-          if (found && found.url) {
-            filename = found.url;
-          }
+        // check file real name first
+        var jsFilename = Sk.ffi.remapToJs(filename)
+        var found = window.pygameImages.find(function(element){
+          return element.name == Sk.ffi.remapToJs(jsFilename);
+        })
+        console.log('image.js', jsFilename, found);
+        if (found && found.url) {
+          jsFilename = found.url;
         }
+        // if (!imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename)) && window.pygameImages) {
+        //   var jsFilename = Sk.ffi.remapToJs(filename)
+        //   var found = window.pygameImages.find(function(element){
+        //     return element.name == Sk.ffi.remapToJs(jsFilename);
+        //   })
+        // //   console.log('image.js', jsFilename, found);
+        //   if (found && found.url) {
+        //     filename = found.url;
+        //   }
+        // }
 
-        if (imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename))) {
+        if (imageExists(Sk.imgPath + jsFilename)) {
             return Sk.misceval.promiseToSuspension(new Promise(function (resolve) {
                 var img = new Image();
-                img.src = Sk.imgPath + Sk.ffi.remapToJs(filename);
+                img.src = Sk.imgPath + jsFilename;
                 img.onload = function () {
                     var t = Sk.builtin.tuple([img.width, img.height]);
                     var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
