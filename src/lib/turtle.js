@@ -1872,7 +1872,7 @@ var $builtinmodule = function(name) {
             proto.$numinput = function(title, text, defaultText) {
                 return new Promise(function(resolve) {
                     var result = window.prompt(text, defaultText);
-                    resolve(result ? parseInt(result) : result);
+                    resolve(result ? parseFloat(result) : result);
                 });
             };
             proto.$numinput.minArgs = 2;

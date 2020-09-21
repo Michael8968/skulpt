@@ -10,13 +10,16 @@ var $builtinmodule = function (name) {
         }
         // check file real name first
         var jsFilename = Sk.ffi.remapToJs(filename)
-        var found = window.pygameImages.find(function(element){
-          return element.name == Sk.ffi.remapToJs(jsFilename);
-        })
-        console.log('image.js', jsFilename, found);
-        if (found && found.url) {
-          jsFilename = found.url;
+        if (window.pygameImages) {
+          var found = window.pygameImages.find(function(element){
+            return element.name == Sk.ffi.remapToJs(jsFilename);
+          })
+          // console.log('image.js', jsFilename, found);
+          if (found && found.url) {
+            jsFilename = found.url;
+          }
         }
+
         // if (!imageExists(Sk.imgPath + Sk.ffi.remapToJs(filename)) && window.pygameImages) {
         //   var jsFilename = Sk.ffi.remapToJs(filename)
         //   var found = window.pygameImages.find(function(element){

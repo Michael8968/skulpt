@@ -207,7 +207,7 @@ Pinyin2HanziLib.pinyinLib = [
     ]
   },
   {
-    pinyin: "meili ",
+    pinyin: "meili",
     hanzi: [
       { path: ["美丽"], score: 1 },
       { path: ["魅力"], score: 2 },

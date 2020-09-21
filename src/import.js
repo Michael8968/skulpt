@@ -33,16 +33,16 @@ Sk.importSearchPathForName = function(name, ext, searchPath) {
             if (filename.indexOf("__init__.py") > 0) {
               return undefined;
             }
-            var foundExclude = false
-            Sk.excludeFiles.map(function(excludeFile) {
-              if (filename.indexOf(excludeFile) >= 0) {
+            var foundExclude = {}
+            Sk.excludeFiles.map(function(item) {
+              if (filename.indexOf(item.filename) >= 0) {
                 // console.log('excludeFiles', excludeFile, filename, packagePath);
-                foundExclude = true
-                return undefined;
+                foundExclude = item
+                return item;
               }
             })
-            if (foundExclude) {
-              return '';
+            if (foundExclude && foundExclude.content) {
+              return foundExclude.content;
             }
             // console.log('XMLHttpRequest', filename, packagePath);
             var request = new XMLHttpRequest();
