@@ -30,11 +30,11 @@ var $builtinmodule = function (name) {
         //     filename = found.url;
         //   }
         // }
-
-        if (imageExists(Sk.imgPath + jsFilename)) {
+        var imagePath = jsFilename.includes(window.location.protocol) ?  jsFilename : Sk.imgPath + jsFilename;
+        if (imageExists(imagePath)) {
             return Sk.misceval.promiseToSuspension(new Promise(function (resolve) {
                 var img = new Image();
-                img.src = Sk.imgPath + jsFilename;
+                img.src = imagePath;
                 img.onload = function () {
                     var t = Sk.builtin.tuple([img.width, img.height]);
                     var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
