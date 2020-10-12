@@ -85,6 +85,18 @@ var createKeyboardEvent = function (event) {
             return [keyPGConstant, { key: PygameLib.constants.K_RIGHT }];
         case 40:
             return [keyPGConstant, { key: PygameLib.constants.K_DOWN }];
+        case 188:
+            return [keyPGConstant, { key: PygameLib.constants.K_COMMA }];
+        case 190:
+            return [keyPGConstant, { key: PygameLib.constants.K_PERIOD }];
+        case 186:
+            return [keyPGConstant, { key: PygameLib.constants.K_SEMICOLON }];
+        case 189:
+            return [keyPGConstant, { key: PygameLib.constants.K_MINUS }];
+        case 219:
+            return [keyPGConstant, { key: PygameLib.constants.K_LEFTBRACKET }];
+        case 221:
+            return [keyPGConstant, { key: PygameLib.constants.K_RIGHTBRACKET }];
         default:
             var difference = 0;
             if ((event.which <= 90) && (event.which >= 65)) {
