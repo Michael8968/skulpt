@@ -1441,6 +1441,8 @@ function subsurface(self,rect){
 
   var lsize = new Sk.builtin.tuple([width, height]);
   var _surface = Sk.misceval.callsim(PygameLib.SurfaceType, lsize); //Create一个surface
+  var ctx = _surface.offscreen_canvas.getContext("2d");
+  ctx.drawImage(self.offscreen_canvas, left,top);
   return _surface;
 }
 subsurface.co_name = new Sk.builtins['str']('subsurface');
