@@ -1162,8 +1162,8 @@ var mouseEventListener = function (event) {
     }
     while (currentElement = currentElement.offsetParent)
 
-    var clientX = event.clientX || (event.touches[0] && event.touches[0].clientX)
-    var clientY = event.clientY || (event.touches[0] && event.touches[0].clientY)
+    var clientX = event.clientX || (event.touches && event.touches[0] && event.touches[0].clientX)
+    var clientY = event.clientY || (event.touches && event.touches[0] && event.touches[0].clientY)
 
     canvasX = clientX - totalOffsetX;
     canvasY = clientY - totalOffsetY;

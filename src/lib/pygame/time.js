@@ -79,35 +79,35 @@ function time_Clock($gbl, $loc) {
             var timeout = parseInt(1000 / Sk.ffi.remapToJs(framerate)) - mills;
             if (timeout <= 0) {timeout = 25;}
             //延迟 delaytime 毫秒
-            var susp = new Sk.misceval.Suspension();
-            susp.resume = function () {
-                return Sk.builtin.none.none$;
-            }
-            susp.data = {
-                type: "Sk.promise", promise: new Promise(function (resolve) {
-                    var f = function () {
-                        self['rawTime'] = Sk.ffi.remapToPy((new Date()).getTime() - currTime);
-                        resolve(mills);
-                    };
-                    // if (PygameLib.running) {
-                    //     Sk.setTimeout(f, timeout);
-                    // }
-                    Sk.setTimeout(f, timeout);
-                    // Sk.setTimeout(resolve, timeout);
-                })
-            };
-            return susp;
-            // return new Sk.misceval.promiseToSuspension(
-            //     new Promise(function (resolve) {
+            // var susp = new Sk.misceval.Suspension();
+            // susp.resume = function () {
+            //     return Sk.builtin.none.none$;
+            // }
+            // susp.data = {
+            //     type: "Sk.promise", promise: new Promise(function (resolve) {
             //         var f = function () {
             //             self['rawTime'] = Sk.ffi.remapToPy((new Date()).getTime() - currTime);
             //             resolve(mills);
             //         };
-            //
-            //         if (PygameLib.running) {
-            //             Sk.setTimeout(f, timeout);
-            //         }
-            //     }));
+            //         // if (PygameLib.running) {
+            //         //     Sk.setTimeout(f, timeout);
+            //         // }
+            //         Sk.setTimeout(f, timeout);
+            //         // Sk.setTimeout(resolve, timeout);
+            //     })
+            // };
+            // return susp;
+            return new Sk.misceval.promiseToSuspension(
+                new Promise(function (resolve) {
+                    var f = function () {
+                        self['rawTime'] = Sk.ffi.remapToPy((new Date()).getTime() - currTime);
+                        resolve(mills);
+                    };
+
+                    if (PygameLib.running) {
+                        Sk.setTimeout(f, timeout);
+                    }
+                }));
         }
         self['rawTime'] = Sk.ffi.remapToPy(Date.now() - currTime);
         return Sk.ffi.remapToPy(mills);

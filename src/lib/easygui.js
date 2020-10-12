@@ -104,7 +104,9 @@ function isValid(o) {
 }
 
 function getResImage(filename){
-    return Sk.imgPath + Sk.ffi.remapToJs(filename);
+    var jsFilename = Sk.ffi.remapToJs(filename);
+    var imagePath = jsFilename.includes(window.location.protocol) ?  jsFilename : Sk.imgPath + jsFilename;
+    return imagePath;
 }
 
 //===============================================
@@ -189,7 +191,7 @@ function showEnterBox(ltitle,lstrip){
 		        "确定": function() {
 		          $( this ).dialog( "close" );
 		          var txt = $("#dialog #usercontent").val();
-		          if(lstrip) txt = $.trim(txt);
+		          if(lstrip) {txt = $.trim(txt);}
 		          resolve(txt);
 		        },
 		         "取消": function() {
