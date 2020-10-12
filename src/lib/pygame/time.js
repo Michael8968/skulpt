@@ -8,7 +8,7 @@ var $builtinmodule = function (name) {
 
     mod.get_ticks = new Sk.builtin.func(function () {
       if (PygameLib.initial_time > 0) {
-        return Sk.ffi.remapToPy((new Date()).getTime() - PygameLib.initial_time);
+        return Sk.ffi.remapToPy(Date.now() - PygameLib.initial_time);
       } else {
         return Sk.ffi.remapToPy(0);
       }
@@ -51,33 +51,19 @@ function time_Clock($gbl, $loc) {
         self['rawTime'] = Sk.ffi.remapToPy(0);
         self['fpsArray'] = Sk.ffi.remapToPy([]);
         self['fpsIdx'] = Sk.ffi.remapToPy(0);
+        self._last = Date.now();
         return Sk.builtin.none.none$;
     }, $gbl);
     $loc.__init__.co_name = new Sk.builtins['str']('__init__');
 
     $loc.tick = new Sk.builtin.func(function (self, framerate) {
+        var _now = Date.now();
+        var interval = _now - self._last;
+        self._last = _now;
 
-        var currTime = (new Date()).getTime();
-        var mills = 0;
-        if (Sk.ffi.remapToJs(self['prevTime']) !== null) {
-            var prevTime = Sk.ffi.remapToJs(self['prevTime']);
-            mills = (currTime - prevTime);
-        }
-        self['prevTime'] = Sk.ffi.remapToPy(currTime);
-        self['getTime'] = Sk.ffi.remapToPy(mills);
-        var arr = Sk.ffi.remapToJs(self['fpsArray']);
-        var idx = Sk.ffi.remapToJs(self['fpsIdx']);
-        if (arr.length < 10) {
-            arr.push(mills);
-        } else {
-            arr[idx] = mills;
-        }
-        idx = (idx + 1) % 10;
-        self['fpsArray'] = Sk.ffi.remapToPy(arr);
-        self['fpsIdx'] = Sk.ffi.remapToPy(idx);
-        if (framerate !== undefined) {
-            var timeout = parseInt(1000 / Sk.ffi.remapToJs(framerate)) - mills;
-            if (timeout <= 0) {timeout = 25;}
+        if (framerate !== undefined && Sk.ffi.remapToJs(framerate) > 0) {
+            var delaytime = parseInt(1000 / Sk.ffi.remapToJs(framerate)) - interval;
+            if (delaytime <= 0) {delaytime = 25;}
             //延迟 delaytime 毫秒
             // var susp = new Sk.misceval.Suspension();
             // susp.resume = function () {
@@ -85,32 +71,79 @@ function time_Clock($gbl, $loc) {
             // }
             // susp.data = {
             //     type: "Sk.promise", promise: new Promise(function (resolve) {
-            //         var f = function () {
-            //             self['rawTime'] = Sk.ffi.remapToPy((new Date()).getTime() - currTime);
-            //             resolve(mills);
-            //         };
-            //         // if (PygameLib.running) {
-            //         //     Sk.setTimeout(f, timeout);
-            //         // }
-            //         Sk.setTimeout(f, timeout);
-            //         // Sk.setTimeout(resolve, timeout);
+            //         Sk.setTimeout(resolve, delaytime);
             //     })
             // };
             // return susp;
             return new Sk.misceval.promiseToSuspension(
                 new Promise(function (resolve) {
                     var f = function () {
-                        self['rawTime'] = Sk.ffi.remapToPy((new Date()).getTime() - currTime);
-                        resolve(mills);
+                        self['rawTime'] = Sk.ffi.remapToPy(Date.now() - _now);
+                        resolve(interval);
                     };
 
                     if (PygameLib.running) {
-                        Sk.setTimeout(f, timeout);
+                        Sk.setTimeout(f, delaytime);
                     }
                 }));
+        } else {
+          self['rawTime'] = Sk.ffi.remapToPy(Date.now() - _now);
+          return Sk.ffi.remapToPy(interval);
         }
-        self['rawTime'] = Sk.ffi.remapToPy(Date.now() - currTime);
-        return Sk.ffi.remapToPy(mills);
+        // var currTime = Date.now();
+        // var mills = 0;
+        // if (Sk.ffi.remapToJs(self['prevTime']) !== null) {
+        //     var prevTime = Sk.ffi.remapToJs(self['prevTime']);
+        //     mills = (currTime - prevTime);
+        // }
+        // self['prevTime'] = Sk.ffi.remapToPy(currTime);
+        // self['getTime'] = Sk.ffi.remapToPy(mills);
+        // var arr = Sk.ffi.remapToJs(self['fpsArray']);
+        // var idx = Sk.ffi.remapToJs(self['fpsIdx']);
+        // if (arr.length < 10) {
+        //     arr.push(mills);
+        // } else {
+        //     arr[idx] = mills;
+        // }
+        // idx = (idx + 1) % 10;
+        // self['fpsArray'] = Sk.ffi.remapToPy(arr);
+        // self['fpsIdx'] = Sk.ffi.remapToPy(idx);
+        // if (framerate !== undefined) {
+        //     var timeout = parseInt(1000 / Sk.ffi.remapToJs(framerate)) - mills;
+        //     if (timeout <= 0) {timeout = 25;}
+        //     //延迟 delaytime 毫秒
+        //     // var susp = new Sk.misceval.Suspension();
+        //     // susp.resume = function () {
+        //     //     return Sk.builtin.none.none$;
+        //     // }
+        //     // susp.data = {
+        //     //     type: "Sk.promise", promise: new Promise(function (resolve) {
+        //     //         var f = function () {
+        //     //             self['rawTime'] = Sk.ffi.remapToPy(Date.now() - currTime);
+        //     //             resolve(mills);
+        //     //         };
+        //     //         // if (PygameLib.running) {
+        //     //         //     Sk.setTimeout(f, timeout);
+        //     //         // }
+        //     //         Sk.setTimeout(f, timeout);
+        //     //         // Sk.setTimeout(resolve, timeout);
+        //     //     })
+        //     // };
+        //     // return susp;
+        //     return new Sk.misceval.promiseToSuspension(
+        //         new Promise(function (resolve) {
+        //             var f = function () {
+        //                 self['rawTime'] = Sk.ffi.remapToPy(Date.now() - currTime);
+        //                 resolve(mills);
+        //             };
+        //
+        //             if (PygameLib.running) {
+        //                 Sk.setTimeout(f, timeout);
+        //             }
+        //         }));
+        // }
+        // self['rawTime'] = Sk.ffi.remapToPy(Date.now() - currTime);
+        // return Sk.ffi.remapToPy(mills);
     }, $gbl);
     $loc.tick.co_name = new Sk.builtins['str']('tick');
     $loc.tick.co_varnames = ['framerate'];

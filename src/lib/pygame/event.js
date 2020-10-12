@@ -30,7 +30,34 @@ var $builtinmodule = function (name) {
             Sk.setTimeout(f, 10);
         }));
     });
-    mod.poll = mod.wait;
+    // mod.poll = mod.wait;
+    mod.poll = new Sk.builtin.func(function () {
+        return new Sk.misceval.promiseToSuspension(new Promise(function (resolve) {
+            var f = function () {
+                if (PygameLib.eventQueue.length) {
+                    var event = PygameLib.eventQueue.splice(0, 1)[0];
+                    var type = Sk.ffi.remapToPy(event[0]);
+                    var dictjs = event[1];
+                    kvs = [];
+                    for (k in dictjs) {
+                        kvs.push(Sk.ffi.remapToPy(k));
+                        kvs.push(Sk.ffi.remapToPy(dictjs[k]));
+                    }
+                    var dict = new Sk.builtin.dict(kvs);
+                    var e = Sk.misceval.callsim(PygameLib.EventType, type, dict);
+                    resolve(e);
+                }
+                else {
+                  var type = Sk.ffi.remapToPy('');
+                  var dict = new Sk.builtin.dict([]);
+                  var e = Sk.misceval.callsim(PygameLib.EventType, type, dict);
+                  resolve(e);
+                }
+            };
+
+            Sk.setTimeout(f, 10);
+        }));
+    });
     return mod;
 };
 
