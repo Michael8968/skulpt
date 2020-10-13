@@ -1844,6 +1844,8 @@ var $builtinmodule = function(name) {
                     var spriteLayer = getScreen().spriteLayer();
                     var bgLayer = getScreen().bgLayer();
                     var hitTestLayer = getScreen().hitTestLayer();
+                    var turtles = getFrameManager().turtles();
+
                     if (spriteLayer) {
                       spriteLayer.rotate( Math.PI / 2);
                     }
@@ -1852,6 +1854,14 @@ var $builtinmodule = function(name) {
                     }
                     if (hitTestLayer) {
                       hitTestLayer.rotate( Math.PI / 2);
+                    }
+                    if (turtles) {
+                      for (var i = turtles.length; --i >= 0;) {
+                          var paperLayer = turtles[i].getPaper();
+                          if (paperLayer) {
+                            paperLayer.rotate( Math.PI / 2);
+                          }
+                      }
                     }
                     this._mode = "logo";
                 } else if (mode == "standard") {
