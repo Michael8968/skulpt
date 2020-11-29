@@ -20,7 +20,7 @@ var $builtinmodule = function (name) {
         } else {
             throw new Sk.builtin.TypeError("invalid position argument for set_pos");
         }
-        PygameLib.mouseData["pos"] = [x, y];
+        PygameLib.mouseData["pos"] = [parseInt(x), parseInt(y)];
     });
     mod.set_visible = new Sk.builtin.func(function (b) {
         if (Sk.ffi.remapToJs(b)) {

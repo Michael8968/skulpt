@@ -1419,7 +1419,7 @@ var mouseEventListener = function (event) {
             rel: [event.movementX, event.movementY],
             buttons: [leftButton, middleButton, rightButton]
         }];
-        PygameLib.mouseData["pos"] = [canvasX, canvasY];
+        PygameLib.mouseData["pos"] = [parseInt(canvasX), parseInt(canvasY)];
         PygameLib.mouseData["rel"] = [event.movementX, event.movementY];
     }
     PygameLib.eventQueue.unshift(e);
