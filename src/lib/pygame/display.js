@@ -25,6 +25,8 @@ var $builtinmodule = function (name) {
             mod.surface = Sk.misceval.callsim(PygameLib.SurfaceType, size, false, true);
         }
 
+        window.size = Sk.ffi.remapToJs(size);
+
         PygameLib.surface = mod.surface;
         return mod.surface;
     });
@@ -39,6 +41,7 @@ var $builtinmodule = function (name) {
     });
     mod.set_caption = new Sk.builtin.func(function (caption) {
         PygameLib.caption = Sk.ffi.remapToJs(caption);
+        window.gameTitle = PygameLib.caption;
         if (Sk.title_container) {
             Sk.title_container.innerText = PygameLib.caption;
         }
