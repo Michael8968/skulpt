@@ -53,6 +53,8 @@ var music = function (globalScope) {
     var _sound = null;
     var _num = 0;
     var _loops = 0;//循环次数
+    var _count = 0;
+    var _soundPath = '';
 
     return {
         __doc__: 'pygame播放背景音乐',
@@ -68,12 +70,15 @@ var music = function (globalScope) {
                 _sound = document.createElement('audio');
                 _sound.id = soundJS;
                 // var Soundpath = Sk.GameGraphics.assets(soundJS);
-                var Soundpath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
-                _sound.setAttribute('src', Soundpath);
+                _soundPath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
+                _sound.setAttribute('src', _soundPath);
                 _num = 0; //播放次数
 
-                window.audios.push(_sound);
+                _count = window.audios.push(_sound);
                 // console.log('_sound', _sound);
+                if (window.audioEventHandler) {
+                  window.audioEventHandler(_count, _soundPath)
+                }
 
             }
         },
@@ -94,6 +99,9 @@ var music = function (globalScope) {
                         _num++;
                     }
                 };
+                if (window.audioEventHandler) {
+                  window.audioEventHandler(_count, _soundPath, 'play', _loops)
+                }
             }
         },
         //重新开始背景乐
@@ -103,6 +111,9 @@ var music = function (globalScope) {
         stop: function stop() {
             if (isValid(_sound)) {
               _sound.pause();
+              if (window.audioEventHandler) {
+                window.audioEventHandler(_count, _soundPath, 'pause')
+              }
             }
         },
         //继续背景乐播放
@@ -112,6 +123,9 @@ var music = function (globalScope) {
         fadeout: function fadeout(time) {
             if (isValid(_sound)) {
               _sound.pause();
+              if (window.audioEventHandler) {
+                window.audioEventHandler(_count, _soundPath, 'pause')
+              }
             }
         },
         //设置音量
@@ -122,6 +136,9 @@ var music = function (globalScope) {
                 }
                 _sound.volume = Volume;
                 _sound.load();
+                if (window.audioEventHandler) {
+                  window.audioEventHandler(_count, _soundPath, 'set_volume', Volume)
+                }
             }
         },
         //获取音量
@@ -161,12 +178,15 @@ var initSound = function (self, filename) {
         self._sound = document.createElement('audio');
         self._sound.id = soundJS;
         // var Soundpath = Sk.GameGraphics.assets(Sk.audioPath+soundJS);
-        var Soundpath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
+        self._soundPath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
         // console.log('Soundpath', Soundpath);
-        self._sound.setAttribute('src', Soundpath);
+        self._sound.setAttribute('src', self._soundPath);
         self._num = 0; //播放次数
 
-        window.audios.push(self._sound);
+        self._count = window.audios.push(self._sound);
+        if (window.audioEventHandler) {
+          window.audioEventHandler(self._count, self._soundPath)
+        }
     }
 };
 initSound.co_name = new Sk.builtins['str']('__init__');
@@ -194,11 +214,17 @@ var play = function (self, loops, maxtime, fade_ms) {
                 self._num++;
             }
         };
+        if (window.audioEventHandler) {
+          window.audioEventHandler(self._count, self._soundPath, 'play', self._loops)
+        }
         //定时器
         if (self._maxtime > 0) {
             setTimeout(function () {
                 self._sound.pause();
                 // console.log('pause', loops, maxtime, fade_ms);
+                if (window.audioEventHandler) {
+                  window.audioEventHandler(self._count, self._soundPath, 'pause')
+                }
             }, self._maxtime);
         }
     }
@@ -213,6 +239,9 @@ play.$defaults = [new Sk.builtin.int_(0), new Sk.builtin.int_(0), new Sk.builtin
 var stop = function (self) {
     if (isValid(self._sound)) {
       self._sound.pause();
+      if (window.audioEventHandler) {
+        window.audioEventHandler(self._count, self._soundPath, 'pause')
+      }
     }
 }
 
@@ -223,6 +252,9 @@ stop.co_varnames = ['self'];
 var fadeout = function (self) {
     if (isValid(self._sound)) {
       self._sound.pause();
+      if (window.audioEventHandler) {
+        window.audioEventHandler(self._count, self._soundPath, 'pause')
+      }
     }
 }
 
@@ -237,6 +269,9 @@ var set_volume = function (self, value) {
         }
         self._sound.volume = Volume;
         self._sound.load();
+        if (window.audioEventHandler) {
+          window.audioEventHandler(self._count, self._soundPath, 'set_volume', Volume)
+        }
     }
 }
 
