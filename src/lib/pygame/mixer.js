@@ -66,12 +66,14 @@ var music = function (globalScope) {
             if (isValid(filename)) {
               soundJS = Sk.ffi.remapToJs(filename);
             }
-            if (soundJS.length > 0) {
+
+            if (soundJS.length > 0 && !document.getElementById(soundJS)) {
                 _sound = document.createElement('audio');
                 _sound.id = soundJS;
                 // var Soundpath = Sk.GameGraphics.assets(soundJS);
                 _soundPath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
                 _sound.setAttribute('src', _soundPath);
+                _sound.load();
                 _num = 0; //播放次数
 
                 _count = window.audios.push(_sound);
@@ -90,7 +92,7 @@ var music = function (globalScope) {
                     _loops = Sk.ffi.remapToJs(loops);//播放次数
                 }
                 _sound.loop = false;
-                _sound.load();
+                // _sound.load();
                 _sound.play();
                 _num++;
                 _sound.onended = function () {//重复次数
@@ -135,7 +137,7 @@ var music = function (globalScope) {
                   Volume = Sk.ffi.remapToJs(value);
                 }
                 _sound.volume = Volume;
-                _sound.load();
+                // _sound.load();
                 if (window.audioEventHandler) {
                   window.audioEventHandler(_count, _soundPath, 'set_volume', Volume)
                 }
@@ -174,13 +176,14 @@ var initSound = function (self, filename) {
     if (isValid(filename)) {
       soundJS = Sk.ffi.remapToJs(filename);
     }
-    if (soundJS.length > 0) {
+    if (soundJS.length > 0 && !document.getElementById(soundJS)) {
         self._sound = document.createElement('audio');
         self._sound.id = soundJS;
         // var Soundpath = Sk.GameGraphics.assets(Sk.audioPath+soundJS);
         self._soundPath = Sk.audioPath + Sk.ffi.remapToJs(soundJS);
         // console.log('Soundpath', Soundpath);
         self._sound.setAttribute('src', self._soundPath);
+        self._sound.load();
         self._num = 0; //播放次数
 
         self._count = window.audios.push(self._sound);
@@ -205,7 +208,7 @@ var play = function (self, loops, maxtime, fade_ms) {
             self._maxtime = Sk.ffi.remapToJs(maxtime);//播放时长毫秒
         }
         self._sound.loop = false;
-        self._sound.load();
+        // self._sound.load();
         self._sound.play();
         self._num++;
         self._sound.onended = function () {//重复次数
@@ -268,7 +271,7 @@ var set_volume = function (self, value) {
           Volume = Sk.ffi.remapToJs(value);
         }
         self._sound.volume = Volume;
-        self._sound.load();
+        // self._sound.load();
         if (window.audioEventHandler) {
           window.audioEventHandler(self._count, self._soundPath, 'set_volume', Volume)
         }
