@@ -33,15 +33,25 @@ var $builtinmodule = function (name) {
         var imagePath = jsFilename.includes(window.location.protocol) ?  jsFilename : Sk.imgPath + jsFilename;
         if (imageExists(imagePath)) {
             return Sk.misceval.promiseToSuspension(new Promise(function (resolve) {
-                var img = new Image();
-                img.src = imagePath;
-                img.onload = function () {
-                    var t = Sk.builtin.tuple([img.width, img.height]);
-                    var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
-                    var ctx = s.offscreen_canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0);
-                    resolve(s);
-                };
+                if (window.PIXI && window.appPixi) {
+                  // PIXI.BaseTexture.from
+                  var texture = PIXI.BaseTexture.from(imagePath)
+                  var t = Sk.builtin.tuple([texture.width, texture.height]);
+                  var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
+                  // var ctx = s.offscreen_canvas.getContext("2d");
+                  // ctx.drawImage(img, 0, 0);
+                  resolve(s);
+                } else {
+                  var img = new Image();
+                  img.src = imagePath;
+                  img.onload = function () {
+                      var t = Sk.builtin.tuple([img.width, img.height]);
+                      var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
+                      var ctx = s.offscreen_canvas.getContext("2d");
+                      ctx.drawImage(img, 0, 0);
+                      resolve(s);
+                  };
+                }
             }));
         }
         else

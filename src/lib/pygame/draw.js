@@ -25,7 +25,6 @@ var bbox = function (min_h, max_h, min_w, max_w) {
 //pygame.draw.rect()
 //rect(Surface, color, Rect, width=0) -> Rect
 var draw_rect = function (surface, color, rect, width = 0) {
-    var ctx = surface.context2d;
     var color_js = PygameLib.extract_color(color);
     var width_js = Sk.ffi.remapToJs(width);
     var rect_js = PygameLib.extract_rect(rect);
@@ -34,18 +33,36 @@ var draw_rect = function (surface, color, rect, width = 0) {
     var top = rect_js[1];
     var width = rect_js[2];
     var height = rect_js[3];
-
-    if (width_js) {
-        ctx.lineWidth = width_js;
-        ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.strokeRect(left, top, width, height);
+    if (window.PIXI && window.appPixi) {
+      var graphics = new PIXI.Graphics();
+      var colorHex = PIXI.utils.rgb2hex([color_js[0], color_js[1], color_js[2]]);
+      var alpha = color_js[3] / 255;
+      if (width_js) {
+        // lineStyle (width, color, alpha, alignment, native)
+        graphics.lineStyle(width_js, colorHex, alpha);
+        graphics.drawRect (left, top, width, height)
+      } else {
+        // beginFill (color, alpha)
+        graphics.beginFill(colorHex, alpha);
+        graphics.drawRect(left, top, width, height);
+        graphics.endFill();
+      }
+      window.appPixi.addChild(graphics);
     } else {
-        ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.fillRect(left, top, width, height);
-    }
+      var ctx = surface.context2d;
 
-    return Sk.misceval.callsim(PygameLib.RectType, Sk.builtin.tuple([left, top]), Sk.builtin.tuple([width, height]));
-};
+      if (width_js) {
+          ctx.lineWidth = width_js;
+          ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.strokeRect(left, top, width, height);
+      } else {
+          ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.fillRect(left, top, width, height);
+      }
+
+      return Sk.misceval.callsim(PygameLib.RectType, Sk.builtin.tuple([left, top]), Sk.builtin.tuple([width, height]));
+    }
+  };
 
 //pygame.draw.polygon()
 //polygon(Surface, color, pointlist, width=0) -> Rect
@@ -56,20 +73,38 @@ var draw_polygon = function (surface, color, pointlist, width = 0) {
 //pygame.draw.circle()
 //circle(Surface, color, pos, radius, width=0) -> Rect
 var draw_circle = function (surface, color, pos, radius, width = 0) {
-    var ctx = surface.context2d;
     var width_js = Sk.ffi.remapToJs(width);
     var center = Sk.ffi.remapToJs(pos);
     var rad = Sk.ffi.remapToJs(radius);
     var color_js = PygameLib.extract_color(color);
-    ctx.beginPath();
-    ctx.arc(center[0], center[1], rad, 0, 2 * Math.PI);
-    if (width_js) {
-        ctx.lineWidth = width_js;
-        ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.stroke();
+    if (window.PIXI && window.appPixi) {
+      var graphics = new PIXI.Graphics();
+      var colorHex = PIXI.utils.rgb2hex([color_js[0], color_js[1], color_js[2]]);
+      var alpha = color_js[3] / 255;
+      if (width_js) {
+        // lineStyle (width, color, alpha, alignment, native)
+        graphics.lineStyle(width_js, colorHex, alpha);
+        // drawCircle (x, y, radius)
+        graphics.drawCircle(center[0], center[1], rad);
+      } else {
+        // beginFill (color, alpha)
+        graphics.beginFill(colorHex, alpha);
+        graphics.drawCircle(center[0], center[1], rad);
+        graphics.endFill();
+      }
+      window.appPixi.addChild(graphics);
     } else {
-        ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.fill();
+      var ctx = surface.context2d;
+      ctx.beginPath();
+      ctx.arc(center[0], center[1], rad, 0, 2 * Math.PI);
+      if (width_js) {
+          ctx.lineWidth = width_js;
+          ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.stroke();
+      } else {
+          ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.fill();
+      }
     }
 
     return bbox(center[1] - rad, center[1] + rad, center[0] - rad, center[0] + rad);
@@ -89,7 +124,6 @@ var draw_ellipse = function (surface, color, rect, width = 0) {
 
 //help function
 var draw_oval = function (surface, color, rect, start_angle, stop_angle, width, ellipse = false) {
-    var ctx = surface.context2d;
     var width_js = Sk.ffi.remapToJs(width);
     var color_js = PygameLib.extract_color(color);
     var rect_js = PygameLib.extract_rect(rect);
@@ -100,17 +134,46 @@ var draw_oval = function (surface, color, rect, start_angle, stop_angle, width, 
     center[0] = rect_js[0] + rect_js[2] / 2;
     center[1] = rect_js[1] + rect_js[3] / 2;
 
-    ctx.beginPath();
+    if (window.PIXI && window.appPixi) {
+      var graphics = new PIXI.Graphics();
+      var colorHex = PIXI.utils.rgb2hex([color_js[0], color_js[1], color_js[2]]);
+      var alpha = color_js[3] / 255;
+      if (width_js) {
+        // lineStyle (width, color, alpha, alignment, native)
+        graphics.lineStyle(width_js, colorHex, alpha);
+        if (ellipse) {
+          // drawEllipse (x, y, width, height)
+          graphics.drawEllipse(center[0], center[1], rect_js[2] / 2, rect_js[3] / 2);
+        } else {
+          // arc (cx, cy, radius, startAngle, endAngle, anticlockwise)
+          graphics.arc(center[0], center[1], rect_js[2] / 2, -angles[0], -angles[1]);
+        }
+      } else {
+        graphics.beginFill(colorHex, alpha);
+        if (ellipse) {
+          // drawEllipse (x, y, width, height)
+          graphics.drawEllipse(center[0], center[1], rect_js[2] / 2, rect_js[3] / 2);
+        } else {
+          // arc (cx, cy, radius, startAngle, endAngle, anticlockwise)
+          graphics.arc(center[0], center[1], rect_js[2] / 2, -angles[0], -angles[1]);
+        }
+        graphics.endFill();
+      }
+      window.appPixi.addChild(graphics);
+    } else {
+      var ctx = surface.context2d;
+      ctx.beginPath();
 
-    ctx.ellipse(center[0], center[1], rect_js[2] / 2, rect_js[3] / 2, 0, -angles[0], -angles[1], true);
+      ctx.ellipse(center[0], center[1], rect_js[2] / 2, rect_js[3] / 2, 0, -angles[0], -angles[1], true);
 
-    if (width_js) {
-        ctx.lineWidth = width_js;
-        ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.stroke();
-    } else if (ellipse) {
-        ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.fill();
+      if (width_js) {
+          ctx.lineWidth = width_js;
+          ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.stroke();
+      } else if (ellipse) {
+          ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.fill();
+      }
     }
 
     return Sk.misceval.callsim(PygameLib.RectType, Sk.builtin.tuple([rect_js[0], rect_js[1]]), Sk.builtin.tuple([rect_js[2], rect_js[3]]));
@@ -123,7 +186,6 @@ var draw_line = function (surface, color, start_pos, end_pos, width = 1) {
     var start_pos_js = Sk.ffi.remapToJs(start_pos);
     var end_pos_js = Sk.ffi.remapToJs(end_pos);
     var color_js = PygameLib.extract_color(color);
-    var ctx = surface.context2d;
     var ax = start_pos_js[0];
     var ay = start_pos_js[1];
     var bx = end_pos_js[0];
@@ -154,39 +216,72 @@ var draw_lines = function (surface, color, closed, pointlist, width = 1) {
     var closed_js = Sk.ffi.remapToJs(closed);
     var pointlist_js = Sk.ffi.remapToJs(pointlist);
     var color_js = PygameLib.extract_color(color);
-    var ctx = surface.context2d;
-    if (!width_js) {
-        ctx.beginPath();
-        ctx.lineWidth = width_js;
-        var first_point = pointlist_js[0];
-        var max_h = first_point[1], max_w = first_point[0];
-        var min_h = first_point[1], min_w = first_point[0];
-        ctx.moveTo(first_point[0], first_point[1]);
+    var first_point = pointlist_js[0];
+    var max_h = first_point[1], max_w = first_point[0];
+    var min_h = first_point[1], min_w = first_point[0];
+
+    if (window.PIXI && window.appPixi) {
+      var graphics = new PIXI.Graphics();
+      var colorHex = PIXI.utils.rgb2hex([color_js[0], color_js[1], color_js[2]]);
+      var alpha = color_js[3] / 255;
+      if (width_js) {
+        // lineStyle (width, color, alpha, alignment, native)
+        graphics.lineStyle(width_js, colorHex, alpha);
+
+        graphics.startPoly();
+        graphics.moveTo(first_point[0], first_point[1]);
+
         for (var i = 0; i < pointlist_js.length; i++) {
-            ctx.lineTo(pointlist_js[i][0], pointlist_js[i][1]);
+            // lineTo (x, y)
+            graphics.lineTo(pointlist_js[i][0], pointlist_js[i][1]);
             max_w = Math.max(max_w, pointlist_js[i][0]);
             min_w = Math.min(min_w, pointlist_js[i][0]);
             max_h = Math.max(max_h, pointlist_js[i][1]);
             min_h = Math.min(min_h, pointlist_js[i][1]);
         }
         if (closed_js) {
-            ctx.closePath();
+            graphics.finishPoly();
         }
-    }
-    else {
-        for (var i = 0; i < pointlist_js.length - 1; i++) {
-            draw_line(surface, color, Sk.builtin.tuple([pointlist_js[i][0], pointlist_js[i][1]]), Sk.builtin.tuple([pointlist_js[i + 1][0], pointlist_js[i + 1][1]]), width);
-        }
-        return bbox(0, 0, 0, 0);
+      } else {
+        graphics.beginFill(colorHex, alpha);
+        // drawPolygon (path)
+        graphics.drawPolygon(pointlist_js)
+        graphics.endFill();
+      }
+      window.appPixi.addChild(graphics);
+    } else {
+      var ctx = surface.context2d;
+      if (!width_js) {
+          ctx.beginPath();
+          ctx.lineWidth = width_js;
+          ctx.moveTo(first_point[0], first_point[1]);
+          for (var i = 0; i < pointlist_js.length; i++) {
+              ctx.lineTo(pointlist_js[i][0], pointlist_js[i][1]);
+              max_w = Math.max(max_w, pointlist_js[i][0]);
+              min_w = Math.min(min_w, pointlist_js[i][0]);
+              max_h = Math.max(max_h, pointlist_js[i][1]);
+              min_h = Math.min(min_h, pointlist_js[i][1]);
+          }
+          if (closed_js) {
+              ctx.closePath();
+          }
+      }
+      else {
+          for (var i = 0; i < pointlist_js.length - 1; i++) {
+              draw_line(surface, color, Sk.builtin.tuple([pointlist_js[i][0], pointlist_js[i][1]]), Sk.builtin.tuple([pointlist_js[i + 1][0], pointlist_js[i + 1][1]]), width);
+          }
+          return bbox(0, 0, 0, 0);
+      }
+
+      if (width_js) {
+          ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.stroke();
+      } else {
+          ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
+          ctx.fill();
+      }
     }
 
-    if (width_js) {
-        ctx.strokeStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.stroke();
-    } else {
-        ctx.fillStyle = 'rgba(' + color_js[0] + ', ' + color_js[1] + ', ' + color_js[2] + ', ' + color_js[3] + ')';
-        ctx.fill();
-    }
     return bbox(min_h, max_h, min_w, max_w);
 };
 
