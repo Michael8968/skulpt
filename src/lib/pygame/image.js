@@ -40,6 +40,7 @@ var $builtinmodule = function (name) {
                     var s = Sk.misceval.callsim(PygameLib.SurfaceType, t);
                     var ctx = s.offscreen_canvas.getContext("2d");
                     ctx.drawImage(img, 0, 0);
+                    console.log('image.load -> ', img.width, img.height, jsFilename, );
                     resolve(s);
                 };
             }));

@@ -149,10 +149,10 @@ var $builtinmodule = function (name) {
             throw new Sk.builtin.TypeError("Wrong arguments");
         }
         var rr = PygameLib.extract_rect(rect);
-        var x1 = rr[0];
-        var y1 = rr[1];
-        var x2 = rr[0] + rr[2];
-        var y2 = rr[1] + rr[3];
+        var x1 = Math.floor(rr[0]);
+        var y1 = Math.floor(rr[1]);
+        var x2 = Math.floor(rr[0] + rr[2]);
+        var y2 = Math.floor(rr[1] + rr[3]);
         var w = surf.width;
         var h = surf.height;
         var rw = w - x2;

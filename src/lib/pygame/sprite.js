@@ -99,11 +99,12 @@ var SpriteClass = function (gbl) {
 
 //初始化Sprite
 var initSprite = function (self) {
-    self.offscreen_canvas = document.createElement('canvas');
-    self.context2d = self.offscreen_canvas.getContext("2d");
-
-    self.offscreen_canvas.width = self.width;
-    self.offscreen_canvas.height = self.height;
+    // console.log('initSprite -> ', self.width, self.height)
+    // self.offscreen_canvas = document.createElement('canvas');
+    // self.context2d = self.offscreen_canvas.getContext("2d");
+    //
+    // self.offscreen_canvas.width = self.width;
+    // self.offscreen_canvas.height = self.height;
 
     return Sk.builtin.none.none$;
 };
@@ -356,7 +357,7 @@ function drawgroup(self, Surface) {
         var sy = Sk.ffi.remapToJs(rect.top);
         var swidth = Sk.ffi.remapToJs(rect.width);
         var sheight = Sk.ffi.remapToJs(rect.height);
-        ctx.drawImage(img.offscreen_canvas, sx, sy, swidth, sheight);
+        ctx.drawImage(img.offscreen_canvas, Math.floor(sx), Math.floor(sy), Math.floor(swidth), Math.floor(sheight));
     });
 }
 

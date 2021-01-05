@@ -1432,9 +1432,9 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
     var main_js = Sk.ffi.remapToJs(main);
     self.width = Math.round(tuple_js[0]);
     self.height = Math.round(tuple_js[1]);
-    self.main_canvas = document.createElement("canvas");
     self._blitAlpha = Sk.ffi.remapToPy(1.0);
     // console.log('main_js', main_js);
+
     if (main_js) {
         self.main_canvas = Sk.main_canvas;
         self.main_canvas.addEventListener('mousedown', mouseEventListener);
@@ -1447,6 +1447,8 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
         window.addEventListener("keyup", keyEventListener);
         self.main_canvas.width = self.width;
         self.main_canvas.height = self.height;
+
+        self.main_canvas.setAttribute('style', "border: 1px solid darkgray;");
 
         /*if (fullscreen) {
             self.width = window.innerWidth;
@@ -1468,11 +1470,16 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
             };
         } */
     } else {
-      self.main_canvas.width = Sk.main_canvas.width;
-      self.main_canvas.height = Sk.main_canvas.height;
+      self.main_canvas = document.createElement("canvas");
+      // self.main_canvas.width = Sk.main_canvas.width;
+      // self.main_canvas.height = Sk.main_canvas.height;
+      self.main_canvas.width = self.width;
+      self.main_canvas.height = self.height;
     }
 
     self.main_context = self.main_canvas.getContext("2d");
+    fillBlack(self.main_context, self.main_canvas.width, self.main_canvas.height);
+
 
     self.offscreen_canvas = document.createElement('canvas');
     self.context2d = self.offscreen_canvas.getContext("2d");
@@ -1481,8 +1488,6 @@ var init$1 = function $__init__123$(self, size, fullscreen = false, main = false
     self.offscreen_canvas.height = self.height;
     // self.main_canvas.setAttribute('width', self.width);
     // self.main_canvas.setAttribute('height', self.height);
-    self.main_canvas.setAttribute('style', "border: 1px solid darkgray;");
-    fillBlack(self.main_context, self.main_canvas.width, self.main_canvas.height);
     fillBlack(self.context2d, self.width, self.height);
     return Sk.builtin.none.none$;
 
@@ -1576,13 +1581,13 @@ function blit(self, source, dest, area, special_flags) {
     ctx.save();
     // ctx.globalAlpha = Sk.ffi.remapToJs(source._blitAlpha);
     if (!isclip)
-        {ctx.drawImage(source.offscreen_canvas, target_pos_js[0], target_pos_js[1]);}
+        {ctx.drawImage(source.offscreen_canvas, Math.floor(target_pos_js[0]), Math.floor(target_pos_js[1]));}
     else {
         var sx = Sk.ffi.remapToJs(area.left);
         var sy = Sk.ffi.remapToJs(area.top);
         var swidth = Sk.ffi.remapToJs(area.width);
         var sheight = Sk.ffi.remapToJs(area.height);
-        ctx.drawImage(source.offscreen_canvas, sx, sy, source.offscreen_canvas.width, source.offscreen_canvas.height, target_pos_js[0], target_pos_js[1], swidth, sheight);
+        ctx.drawImage(source.offscreen_canvas, Math.floor(sx), Math.floor(sy), source.offscreen_canvas.width, source.offscreen_canvas.height, Math.floor(target_pos_js[0]), Math.floor(target_pos_js[1]), swidth, sheight);
     }
     ctx.restore();
     return area;
@@ -1613,7 +1618,7 @@ function subsurface(self,rect){
   var lsize = new Sk.builtin.tuple([width, height]);
   var _surface = Sk.misceval.callsim(PygameLib.SurfaceType, lsize); //Create一个surface
   var ctx = _surface.offscreen_canvas.getContext("2d");
-  ctx.drawImage(self.offscreen_canvas, left,top);
+  ctx.drawImage(self.offscreen_canvas, Math.floor(left), Math.floor(top));
   return _surface;
 }
 subsurface.co_name = new Sk.builtins['str']('subsurface');
@@ -1647,7 +1652,7 @@ var surface$1 = function $Surface$class_outer(gbl, loc) {
     loc.scroll = new Sk.builtin.func(function (self, dx, dy) {
         var x = Sk.ffi.remapToJs(dx);
         var y = Sk.ffi.remapToJs(dy);
-        self.context2d.drawImage(self.offscreen_canvas, x, y);
+        self.context2d.drawImage(self.offscreen_canvas, Math.floor(x), Math.floor(y));
         return Sk.builtin.none.none$;
     });
     loc.get_at = new Sk.builtin.func(function (self, coordinates) {
