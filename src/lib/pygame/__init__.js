@@ -1333,24 +1333,16 @@ var mouseEventListener = function (event) {
     }
     while (currentElement = currentElement.offsetParent)
 
-    var clientX = event.clientX || (event.touches && event.touches[0] && event.touches[0].clientX)
-    var clientY = event.clientY || (event.touches && event.touches[0] && event.touches[0].clientY)
+    var clientX = event.clientX || (event.changedTouches && event.changedTouches[0] && event.changedTouches[0].clientX)
+    var clientY = event.clientY || (event.changedTouches && event.changedTouches[0] && event.changedTouches[0].clientY)
 
     canvasX = clientX - totalOffsetX;
     canvasY = clientY - totalOffsetY;
 
-    var button = event.button;
+    var button = event.button || 0;
     var _mouseButton = [1, 0, 0];    // 当前鼠标按键状态
-    // if (event.buttons & (1 << 0)) {
-    //     _mouseButton = [1, 0, 0]; // 左键
-    // }
-    // if (event.buttons & (1 << 1)) {
-    //     _mouseButton = [0, 1, 0]; // 中间
-    // }
-    // if (event.buttons & (1 << 2)) {
-    //     _mouseButton = [0, 0, 1]; // 右键
-    // }
-    switch (event.button) {
+
+    switch (button) {
       case 0:
         // log.textContent = 'Left button clicked.';
          _mouseButton = [1, 0, 0]; // 左键
@@ -1364,7 +1356,7 @@ var mouseEventListener = function (event) {
         _mouseButton = [0, 0, 1]; // 右键
         break;
       default:
-        console.error(`Unknown button code: ${e.button}`);
+        console.error(`Unknown button code: ${event.button}`);
     }
     if (event.type === "mousedown" || event.type === "touchstart") {
         var e = [PygameLib.constants.MOUSEBUTTONDOWN,
@@ -1386,16 +1378,7 @@ var mouseEventListener = function (event) {
         var leftButton = 0;
         var rightButton = 0;
         var middleButton = 0;
-        // if (event.buttons & (1 << 0)) {
-        //     leftButton = 1;
-        // }
-        // if (event.buttons & (1 << 1)) {
-        //     rightButton = 1;
-        // }
-        // if (event.buttons & (1 << 2)) {
-        //     middleButton = 1;
-        // }
-        switch (event.button) {
+        switch (button) {
           case 0:
             // log.textContent = 'Left button clicked.';
             leftButton = 1;
@@ -1409,8 +1392,7 @@ var mouseEventListener = function (event) {
             rightButton = 1;
             break;
           default:
-            // log.textContent = `Unknown button code: ${e.button}`;
-            console.error(`Unknown button code: ${e.button}`);
+            console.error(`Unknown button code: ${event.button}`);
         }
         var e = [PygameLib.constants.MOUSEMOTION,
         {
