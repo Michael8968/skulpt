@@ -1,10 +1,11 @@
 {
-  "name": "skulpt-all-dream",
-  "version": "1.0.2",
+  "name": "@all-dream/skulpt",
+  "version": "1.0.6",
   "description": "Skulpt is a Javascript implementation of Python 2.x. Python that runs in your browser!",
   "keywords": [
     "skulpt"
   ],
+  "main": "dist/skulpt.min.js",
   "scripts": {
     "help": "node support/build/help.js",
     "regenparser": "node support/build/regenparser.js",
