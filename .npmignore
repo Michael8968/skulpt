@@ -1,0 +1,10 @@
+/doc
+/debugger
+/example
+/gen
+/node_modules
+/publish
+/repl
+/src
+/support
+*.py

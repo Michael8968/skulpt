@@ -23,7 +23,6 @@ Sk.importSearchPathForName = function(name, ext, searchPath) {
     return Sk.misceval.chain(
       Sk.misceval.tryCatch(
         function() {
-          // https://all-dream.com/pythonWeb/pages/moodle/lesson/
           if (
             filename.indexOf(".py") > 0 &&
             filename.indexOf(
